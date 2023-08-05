@@ -6,6 +6,50 @@
 										C ve Sistem Programcıları Derneği
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
+	05.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java, hem programlama diline hem de ortamına (platform) verilen bir isimdir. Genel olarak kursumuzda Java dendiğinde
+	programlama dili anlaşılacaktır. Ayrıca Java ortamı için JavaSE'de kullanılacaktır. Aslında JavaSE de genel bir 
+	terimdir.
+
+	Java Ortamının Temel Özellikler:
+	- Arakodlu çalışma sistemi: C ve C++ gibi dillerde yazılan programdan üretilen dosya (executable file) 
+	sistem düzeyinde (donanım, isletim sistemi vs.) çalışabilir. Örneğin, Windows işletim sistemi için üretilmiş
+	bir program, Mac OS işletim sisteminde doğrudan çalıştırılamaz. O sistem için çalışabilir dosyanın ayrıca üretilmesi
+	gerekir. Java'da yazılan programdan üretilen kod geneldir ve herhangi bir sisteme özgü değildir. Kendine ait
+	standart formatı vardır. Bu şekilde üretilen dosyalara genel olarak "ara kod (intermediate code)" denir. Java özelinde
+	bu arakoda "byte code" denir. Bu durumda byte code'u işletim sistemi çalıştıramaz. İşte bu durumda bu kodu çalıştıran
+	işletim sistemine özgü ayrı bir program kullanılır. Bu programa genel olarak "Java Virtual Machine (JVM)" denir. Aslında
+	sistem düzeyinde çalışan program budur. JVM arakodu yorumlayarak makine koduna (machine code) dönüştürür. Bu işleme 
+	"Just In Time Compilation (JIT)" denir. Böylesi bir tasarımın en büyük avantajı programın taşınabilirliğidir. Yani
+	Java programcısı, programını bir kez yazar ve bir kez byte code'unu üretir ve bu byte her sistemde çalıştırılabilir.
+	Şüphesiz bu durumun da istisnaları vardır. Ancak unutulmamalıdır ki, arakodlu çalışma sistemi görece yavaştır. Ancak
+	bu yavaşlık Java'nın hedeflediği uygulamalar açısından önemsizdir. Geliştirme ve çalıştırma anlamında şu temel kavramlar
+	önemlidir:
+		- JVM (Java Virtual Machine): Byte code'u yorumlayarak aşağı seviyeli makine koduna dönüştürür. Aslında JVM
+		byte code'un nasıl yorumlayanacağına yönelik soyut bir kavramdır.
+
+		- JRE (Java Runtime Environment): genel olarak Java ile yazılmış bir uygulamayı çalıştırmak için gereken araçları ve 
+		uygulamaları içeren bir pakettir. Yani Java ile yazılmış bir programın çalıştırılabilmesi için JRE gereklidir.
+
+		- JDK (Java Development Kit): Geliştirme (development) için kullanılan araçları barındıran bir pakettir. JDK içerisinde
+		geliştirme yaparken kullanılmak üzere çalıştırma araçları da bulunur. 
+
+		Ticari kullanımlarda Java 11 ile birlikte bir takım değişiklikler yapılmıştır. Şu şekilde özetlenebilir: Genel olarak geliştirme ortamı
+		ücretsizdir, çalıştırma ortamı ücretli olabilir ancak ücretsiz olanları da vardır. Bu konuların detayları vardır. Bu 
+		bölümde ele alınmayacaktır. Örneğin Oracle firmasının JRE'si ücretlidir ancak Open JRE denilen tamamen ücretsiz bir
+		ortam da mevcuttur.
+
+		Arakodlu çalışma sisteminin yukarıda anlatılan avantajına "Write Once Run Anywhere (WORA)" da denilmektedir.	
+
+	- Hızlı uygulama geliştirme ortamı: 
+	- Geniş bir sınıf kütüphanesi:
+	- Güvenli çalışma ortamı:
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
