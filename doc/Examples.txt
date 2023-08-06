@@ -104,8 +104,43 @@
 	java kodunu byte üretilmeden çalıştırabilmektedir. Yorumlayıcı ile kullanılan diller derleyici ile kullanılan dillere
 	göre daha yavaş olma eğilimindedir.
 
+	Anahtar Notlar: Bir uygulama tek bir java dosyasından oluşmak zorunda değildir. Hatta bir Java uygulaması yalnızca
+	java kodlarından da oluşmak zorunda değildir. Bu durumda farklı java dosyaları ayrı derlenir. Hatta aynı dosyada
+	bulunan sınıflar da ayrı derlenir. Bir ürün aslında tüm birimlerinin uygun şekilde derlenmesi ve ele alınmasıyla
+	elde edilir. Bu işleme genel olarak "build" terimi kullanılır. Build işlemi yalnızca derleme işlemi değildir. Yani
+	bir uygulamanın ürün olarak elde edilmesi süreci "build" işlemidir. Burada anlatılanların da detayları zamanla
+	ele alınacaktır.
 
+	İşletim Sistemi (Operating System): Makinenin donanımını yöneten, bilgisayar ile kullanıcı arasında bir köprü oluşturan
+	yazılımdır. Br işletim sisteminin pek çok görevi vardır. Programları çalıştırmak, çeşitli cihazları ve aygıtları yönetmek,
+	dosyaları ve dizinleri (directory) organize etmek vb. görevler sayılabilir. İşletim sistemleri genel olarak iki gruba
+	ayrılabilir: masaüstü işletim sistemleri (desktop operating systems), mobil işletim sistemleri (mobile operating systems).
+	Şüphesiz başka çeşit işletim sistemleri de vardır. Popüler masaüstü işletim sistemleri Windows, Mac OS X, Unix ve Linux
+	gibi işlemleridir. Popüler mobil işletim sistemleri Android ve IOS'dur.
+
+	Açık kaynak kodlu yazılım, özgür yazılım ve mülkiyete sahip yazılım: Özgür yazılım (free software) ve açık kaynak kodlu
+	(open source) yazılımlar arasında farklar olsa genel olarak aşağıdaki ortak özelliklere sahiptirler:
+		- Bedavadır. Kullanılabilmesi için herhangi bir lisans gerekmez.
+		- Kaynak kodlar sahiplenilemez. Kaynak koda ekleme yapıldığında ya da bir kaynak kod kullanıldığında kodlar kapatılamaz.
+		Onların da açılması gerekir.
+		- Çoğaltılabilir, izin almadan kullanılabilir.
+
+	Bunun tam tersi olarak mülkiyete sahip (propriatery) yazlımlardır. Bu yazılımlar para verilerek kullanılır ve izin
+	almadan çoğaltılamaz
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	IDE (Integrated Development Environment): Derleyicler ve yorumlayıcılar komut satırından çalışan ve basit arayüzlere
+	sahip programlardır. Aslında teorik olarak bir uygulamadaki tüm Java dosyaları ve diğer dosyalar basit bir editör programla
+	yazılıp komut satırından derlenebilir. Ancak bu uygulama büyüdükçe zahmetli olmaya başlar. Bu da programcıya zaman
+	kaybettirir. Bu amaçla pratikte yazılm geliştirmeyi kolaylaştırmak için IDE denilen yazılımlar kullanılır. IDE'lerde
+	örneğin bir takım yardımlar veren editörler, tasarım araçları, test araçları, debug araçları vb. programcının geliştirme
+	sırasında kullandığı araçlar bulunur. Java ile uygulama geliştirmede iki tane IDE yoğun olarak kullanılmaktadır:
+	Eclipse, IntelliJIDEA. Biz kursumuzda belirli bir zaman (yaklaşık kursun yarısına kadar) Eclipse, sonrasında IntelliJIDEA
+	kullanacağız.
+----------------------------------------------------------------------------------------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 
