@@ -11,18 +11,18 @@
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Java, hem programlama diline hem de ortamına (platform) verilen bir isimdir. Genel olarak kursumuzda Java dendiğinde
-	programlama dili anlaşılacaktır. Ayrıca Java ortamı için JavaSE'de kullanılacaktır. Aslında JavaSE de genel bir 
+	programlama dili anlaşılacaktır. Ayrıca Java ortamı için JavaSE'de kullanılacaktır. Aslında JavaSE de genel bir
 	terimdir.
 
 	Java Ortamının Temel Özellikler:
-	- Arakodlu çalışma sistemi: C ve C++ gibi dillerde yazılan programdan üretilen dosya (executable file) 
+	- Arakodlu çalışma sistemi: C ve C++ gibi dillerde yazılan programdan üretilen dosya (executable file)
 	sistem düzeyinde (donanım, isletim sistemi vs.) çalışabilir. Örneğin, Windows işletim sistemi için üretilmiş
 	bir program, Mac OS işletim sisteminde doğrudan çalıştırılamaz. O sistem için çalışabilir dosyanın ayrıca üretilmesi
 	gerekir. Java'da yazılan programdan üretilen kod geneldir ve herhangi bir sisteme özgü değildir. Kendine ait
 	standart formatı vardır. Bu şekilde üretilen dosyalara genel olarak "ara kod (intermediate code)" denir. Java özelinde
 	bu arakoda "byte code" denir. Bu durumda byte code'u işletim sistemi çalıştıramaz. İşte bu durumda bu kodu çalıştıran
 	işletim sistemine özgü ayrı bir program kullanılır. Bu programa genel olarak "Java Virtual Machine (JVM)" denir. Aslında
-	sistem düzeyinde çalışan program budur. JVM arakodu yorumlayarak makine koduna (machine code) dönüştürür. Bu işleme 
+	sistem düzeyinde çalışan program budur. JVM arakodu yorumlayarak makine koduna (machine code) dönüştürür. Bu işleme
 	"Just In Time Compilation (JIT)" denir. Böylesi bir tasarımın en büyük avantajı programın taşınabilirliğidir. Yani
 	Java programcısı, programını bir kez yazar ve bir kez byte code'unu üretir ve bu byte her sistemde çalıştırılabilir.
 	Şüphesiz bu durumun da istisnaları vardır. Ancak unutulmamalıdır ki, arakodlu çalışma sistemi görece yavaştır. Ancak
@@ -31,22 +31,80 @@
 		- JVM (Java Virtual Machine): Byte code'u yorumlayarak aşağı seviyeli makine koduna dönüştürür. Aslında JVM
 		byte code'un nasıl yorumlayanacağına yönelik soyut bir kavramdır.
 
-		- JRE (Java Runtime Environment): genel olarak Java ile yazılmış bir uygulamayı çalıştırmak için gereken araçları ve 
+		- JRE (Java Runtime Environment): genel olarak Java ile yazılmış bir uygulamayı çalıştırmak için gereken araçları ve
 		uygulamaları içeren bir pakettir. Yani Java ile yazılmış bir programın çalıştırılabilmesi için JRE gereklidir.
 
 		- JDK (Java Development Kit): Geliştirme (development) için kullanılan araçları barındıran bir pakettir. JDK içerisinde
-		geliştirme yaparken kullanılmak üzere çalıştırma araçları da bulunur. 
+		geliştirme yaparken kullanılmak üzere çalıştırma araçları da bulunur.
 
 		Ticari kullanımlarda Java 11 ile birlikte bir takım değişiklikler yapılmıştır. Şu şekilde özetlenebilir: Genel olarak geliştirme ortamı
-		ücretsizdir, çalıştırma ortamı ücretli olabilir ancak ücretsiz olanları da vardır. Bu konuların detayları vardır. Bu 
+		ücretsizdir, çalıştırma ortamı ücretli olabilir ancak ücretsiz olanları da vardır. Bu konuların detayları vardır. Bu
 		bölümde ele alınmayacaktır. Örneğin Oracle firmasının JRE'si ücretlidir ancak Open JRE denilen tamamen ücretsiz bir
 		ortam da mevcuttur.
 
-		Arakodlu çalışma sisteminin yukarıda anlatılan avantajına "Write Once Run Anywhere (WORA)" da denilmektedir.	
+		Arakodlu çalışma sisteminin yukarıda anlatılan avantajına "Write Once Run Anywhere (WORA)" da denilmektedir.
 
-	- Hızlı uygulama geliştirme ortamı: 
-	- Geniş bir sınıf kütüphanesi:
-	- Güvenli çalışma ortamı:
+	- Hızlı uygulama geliştirme ortamı: Java hızlı uygulama geliştirme (rapid application development) ortamı sunar. Bu anlamda
+	ürün elde edilmesi daha çabuk olabilmektedir ve aynı zamanda öğrenmesi de görece kolay olabilmektedir.
+
+	- Geniş bir sınıf kütüphanesi: Java'da (JavaSE'de) geniş bir sınıf kütüphanesi vardır. Veritabanı işlemleri, web programlama
+	vb. için gereken bir çok sınıf hazır olarak bulunmaktadır.
+
+	- Güvenli çalışma ortamı: Java'da yazılan programların, programcının yaptığı hatalardan dolayı sisteme zarar verme olasıkları
+	çok çok azdır. Bu da güvenli bir çalışma ortamı sunmasına yol açar.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	06.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Programlama Dillerinin Sınıflandırılması: Programlama dilleri çeşitli şekillerde sınıflandırılabilse de genel olarak
+	3 şekilde sınıflandırma eğilimi söz konusudur:
+	1. Seviyelerine (level) göre sınıflandırma: Programlama dilinin seviyesi onun insan algısına yakınlığının ölçüsüdür. Yüksek
+	seviyeli diller (high level languages) hem dil özellikleri, hem de uygulama geliştirme anlamında insan algısına yakınlıkları
+	dolayısıyla daha kolay öğrenebilirler. Düşük seviyeli diller (low level languages) makineye daha yakın dillerdir. Olabilecek
+	en düşük seviyeli dil makine dilidir.
+
+	2. Kullanım alanlarına göre sınıflandırma: Dilin hangi alanlarda kullanılabileceğine göre sınıflandırmadır. Bazı diller
+	birden fazla alanda kullanılabilirler. Bazı diller ise sadece bir alanda kullanılabilirler. Bu anlamda genel amaçlı diller,
+	bilimsel ve mühendislik dilleri, veritabanı dilleri, yapay zeka dilleri, oyun ve animasyon dilleri vb. alanlar için diller
+	söz konusu olabilmektedir.
+
+	3. Programlama modeline göre sınıflandırma: Bir programı yazarken kullanılan genel model (paradigm) önemlidir. Bazı dillerde
+	sınıf yoktur. Program çeşitli alt programların (function) bir araya getirilmesiyle yazılır. Bu modele "procedurel model"
+	denir. Bazı dillerde sınıflar vardır ve programlar sınıflar kullanılarak yazılır. Başka bir çok kavramla birlikte sınıflar
+	kullanılarak yazılan programlama modeline "nesne yönelimli model (object oriented model)" denir. Bazı dillerde programlar
+	matematiksel formül yazıyormuş gibi yazılmaktadır. Bu tarz programlama modeline "fonksiyonel (functional)" model denir.
+	Bazı diller birden fazla modeli desteklerler. Bu tarz dillere "multi paradigm languages" denilmektedir. Birden fazla modeli
+	destekleyen diller, modellerin tüm özelliklerini desteklemeyebilir.
+
+	Bu durumda Java, bilimsel ve mühendislik uygulamalarında, web uygulamalarında, yapay zeka uygulamalarında, mobil
+	programlamada vb. kullanılabilen genel amaçlı, yüksek seviyeli, nesne yönelimli programlama modeli ile uygulama
+	geliştirilebilen ve özellikle Java 8 ile birlike fonksiyonel programlama modelini de belirli ölçüde destekleyen
+	"multi paradigm" bir dildir.
+
+	Anahtar Notlar: Bir dilin bir çok alanda kullanılabilmesi, o dilin tüm alanlarında pratikte kullanılacağı anlamına gelmez.
+	Bir alanda daha etkin kullanılabilen bir dil varsa o dil daha fazla tercih edilebilir.
+
+	Anahtar Notlar: Yukarıda anlatılan kavramların detayları vardır. Zaman içerisinde anlaşılacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Temel Kavramlar:
+	Çevirici Programlar, Derleyiciler ve Yorumlayıcılar: Bir dilde yazılmış programı başka bir dile çeviren programlara
+	çevirici programlar (translator) denir. Çevirici programlarda bir kaynak dil (source language) ve bir hedef dil (target/destination language)
+	vardır. Kaynak dil yüksek seviyeli, hedef dil düşük seviyeli bir programlama diliyse bu durumda çevirici programa
+	derleyici (compiler) denir. Örneğin Java programlama dilinden Kotlin programlama diline dönüştürme yapan program
+	bir translator, Java programlama dilinden byte code'a dönüştürme yapan program ise bir compiler'dır. JVM'in byte code'u
+	makine kodu makine koduna çevirme faaliyeti de bir derleme işlemidir. Bu sebeple buna JIT compilation denir. Bazı
+	dillerde yazılan programlar herhangi bir kod üretilmeden çalıştırılırlar. Bu tarz dillerde yazılmış programları
+	herhangi bir kod üretmeden çalıştıran programlara "interpreter" denir. Bazı diller hem derleyici hem yorumlayıcı ile
+	kullanılabilirler. Java pratikte derleyici ile kullanılan Java 11 ile birlikte "java" programı yorumlayıcı olarak da
+	java kodunu byte üretilmeden çalıştırabilmektedir. Yorumlayıcı ile kullanılan diller derleyici ile kullanılan dillere
+	göre daha yavaş olma eğilimindedir.
+
+
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
