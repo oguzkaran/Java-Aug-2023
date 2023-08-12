@@ -101,7 +101,7 @@
 	dillerde yazılan programlar herhangi bir kod üretilmeden çalıştırılırlar. Bu tarz dillerde yazılmış programları
 	herhangi bir kod üretmeden çalıştıran programlara "interpreter" denir. Bazı diller hem derleyici hem yorumlayıcı ile
 	kullanılabilirler. Java pratikte derleyici ile kullanılan Java 11 ile birlikte "java" programı yorumlayıcı olarak da
-	java kodunu byte üretilmeden çalıştırabilmektedir. Yorumlayıcı ile kullanılan diller derleyici ile kullanılan dillere
+	java kodunu byte code üretilmeden çalıştırabilmektedir. Yorumlayıcı ile kullanılan diller derleyici ile kullanılan dillere
 	göre daha yavaş olma eğilimindedir.
 
 	Anahtar Notlar: Bir uygulama tek bir java dosyasından oluşmak zorunda değildir. Hatta bir Java uygulaması yalnızca
@@ -173,16 +173,150 @@
 
 	6. Komut yorumlayıcı programda aşağıdaki biçimde byte code çalıştırılır:
 		java csd.App
+
+	Anahtar Notlar: Yukarıdaki maddelerdek,i bazı zorunluluklar ilerideki konularda anlaşılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
 class App {
-	public static void main(String [] args)
+	public static void main(String [] args) 
 	{
 		System.out.println("Hello, World");
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Dil Kavramı: İletişimde kullanılan semboller topluluğudur. Bir dilin kurallarına "gramer" denir.  Gramerin pek çok
+	bileşeni vardır. Bunlardan en önemlileri "sentaks (syntax) ve semantik (semaintic)" kavramlarıdır. Bir olgunun dil
+	olabilmesi için en az sentaks ve semantiğesahip olması gerekir. Tersine sentaks ve semantiğe sahip olan bir olgu dildir. 
+
+	Sentaks (sözdizim) doğru yazılmış ve doğru dizilmiş öğelere ilişkin kurallardır:
+		"I am from Turkey"
+	cümlesi sentaks olarak doğru yazılmıştır. Burada örneğin cümle "I from am Turkey" olarak yazılsaydı sentaks olarak
+	hatalı olurdu. Java olarak bakarsak, örneğin
+		System.out.println("Hello, World"); 
+	cümlesinde noktalı virgül olmazsa sentaks hatası yapılmış olur. 
+
+	Dildeki doğru yazılmış ve dizilmiş öğelerin ne anlam ifade ettiğine yönelik kurallara semantik kurallar denir. 
+
+	Anahtar Notlar: Gramer'in daha çok doğal dillere özgü morfoloji gib başka bileşenleri de bulunur
+
+	Bilgisayar Dilleri ve Programlama Dilleri: Bilgisayar sistemlerinde kullanılmak üzere tasarlanmış dillere bilgisayar 
+	dilleri (computer languages) denir. Bir bilgisayar dilinde akış (flow) öğesi de varsa programlama dili (programming language)
+	denir. Her programlama dili bir bilgisayar dilidir, her bilgisayar dili programlama dili değildir. Örneğin HTML, XML
+	dilleri bilgisayar dilleridir ancak programlama dilleri değildir. Java'da bir akış olduğundan, programlama dilidir dolayısıyla
+	bilgisayar dilidir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Boşluk karakterleri (whitespace characters): Klavyeden basıldığında boşluk hissi veren karakterlerdir. Bu anlamda
+	SPACE, ENTER ve TAB karakterleri klavyedeki tipik boşluk karakterleridir. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Atom (Token): Programlam dilinin parçalanamayan en küçük birimine denir. Burada parçalama terimi genel olarak boşluk
+	karakterleri ile ayırma anlamında düşünülebilir. Java'da atomlar şunlardır:
+	1. Anahtar Sözcükler (keywords/reserved words): Dile ait olan, herhangi bir şekilde tanıtılması gerekmeyen ve doğrudan
+	değişken ismi olarak kullanılamayan atomlardır. Örneğin package, class, public, static, void.
+
+	2. Değişkenler (variables/identifiers): İsmini programcının belirlediği ve isimlendirmesinde çeşitli kuralların bulunduğu
+	atomlardır. Örneğin: csd, App, main, String, args, System, out, println.
+
+	3. Sabitler (literals/constants): Program içerisinde doğrudan yazılan değerlere denir. Örneğin x = 10 ifadesinde 10 
+	bir sabittir. 
+
+	4. Operatörler (operators): Belirli işleme yol açan ve bu işlem sonucunda değer üreten atomlardır. 
+	Örneğin, nokta (.), metot çağırma (()) operatörleri.
+
+	5. String'ler (string literals/strings): İki tane iki tırnak (double quote) arasındaki yazılara tırnaklarıyla birlikte
+	string denir. Örneğin, "Hello, World".
+
+	6. Ayraçlar (delimiters/punctuators): Yukarıdakiler dışında kalan diğer atomlardır. Örneğin:;, {}, (), [].
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da kod yazma kuralları:
+	1. Atomlar arasında istenildiği kadar boşluk(whitespace) bırakılabilir
+	2. Anahtar sözcükler ve değişken atomlar dışında, atomlar istenildiği kadar bitişik (aralarında boşluk olmayacak şekilde)
+	yazılabilir. İki anahtar sözcük, iki değişken atom VEYA bir anahtar sözcük ve bir değişken atom bitişik yazılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	
+	Atomlar arasında istenildiği kadar boşluk bırakılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	
+
+
+
+
+
+
+public static 
+
+
+
+
+
+
+
+
+
+void main(String [
+
+
+
+
+
+
+] args)
+	{
+		System.out
+
+
+
+
+
+.println("Hello, World");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar sözcükler ve değişken atomlar dışında, atomlar istenildiği kadar bitişik (aralarında boşluk olmayacak şekilde)
+	yazılabilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;class App{public static void main(String[]args){System.out.println("Hello, World");}}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki anahtar sözcük, iki değişken atom VEYA bir anahtar sözcük ve bir değişken atom bitişik yazılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+packagecsd;class App{public static void main(String [] args){System.out.println("Hello, World");}} //error
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Yukarıdaki iki kural aslında programcının okunabilir/algılanabilir (readable) kodlar yazabilmesini
+	sağlar. Bu anlamda şirketlerin kendilerine özgü yazım stillerini içeren kuralları bulunabilir. Bu kurallara 
+	İnglizce olarak "coding convention" ya da "code style guide" gibi terimler kullanılabilir. Buradaki yazım stilleri
+	şirketten şirkete farklılıklar ya da benzerlikler içerebilir. Burada C ve Sistem Programcıları Derneği'nin 
+	yazım stili ile yazılacaktır. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Java'da "derleme zamanı (compile time)" ve "çalışma zamanı (run time)" denilen iki önemli kavram vardır.
+	Derleme zamanı, derleme sürecine ilişkin işlemlere denir. Çalışma zamanı ise, byte code'un çalıştırılması sürecine 
+	ilişkin işlemlere denir. Bu kavramlar birbirleriyle ilişkili olsalar da, ayrı kavramlardır. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	13.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyicinin Teşhis Mesajları (Diagnostics):
+	1. Gerçek hatalar (Errors):
+	2. Uyarılar (Warnings):
+	3. Ölümcül hatalar (fatal errors):
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 /*----------------------------------------------------------------------------------------------------------------------
