@@ -154,12 +154,34 @@
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Aşağıdaki programı çalıştırmak için JDK kurulu olan bir bilgisayarda aşağıdaki işlemlerin yapılması gerekir:
-	1. Herhangi bir dizinde (directory/folder) csd isimli bir dizin açılır
+	1. Herhangi bir dizinde (directory/folder) csd isimli bir dizin açılır. Buradaki csd isminin tamamı küçük harf olacak
+	şekilde yapılmalıdır.
+
 	2. csd dizini içerisinde App.java isimli bir dosya açılır. Windows sisteminde uzantılar gizlenmişse görünür hale getirilip
-	uzantının .java olduğuna dikkat ediniz
+	uzantının .java olduğuna dikkat ediniz. Buradaki dosya isminin de büyük küçük harf duyarlı olarak yazılması gerekir
+
 	3. Komut yorumlayıcı program (command prompt or terminal) ile ilgili dizine geçilir. Dizin geçişleri için tüm sistemlerde
 	aynı olan cd (change directory) komutu kullanılabilir. Örneğin: cd Dropbox/CSD/Kurslar/Java-Aug-2023/src/src-console
+
+	4. Harhangi bir editör program ile App.java dosyasında aşağıdaki programı yazınız
+
+	5. Komut yorumlayıcı programda, csd'nin bulunduğu dizinde aşağıdaki komutları çalıştırarak derleme işlemi yapılır:
+		javac csd/App.java -> Windows dışı sistemler için
+		javac csd\App.java -> Windows sistemi için
+	Derleme işleminde herhangi bir hata (error) mesajı alınmazsa derleme işlemi başarılıdır ve App.class isminde byte code
+	üretilir
+
+	6. Komut yorumlayıcı programda aşağıdaki biçimde byte code çalıştırılır:
+		java csd.App
 ----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.println("Hello, World");
+	}
+}
 
 
 
