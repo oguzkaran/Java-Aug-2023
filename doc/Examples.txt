@@ -313,9 +313,24 @@ packagecsd;class App{public static void main(String [] args){System.out.println(
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
 	Derleyicinin Teşhis Mesajları (Diagnostics):
-	1. Gerçek hatalar (Errors):
-	2. Uyarılar (Warnings):
-	3. Ölümcül hatalar (fatal errors):
+	1. Gerçek hatalar (Errors): Dilin sentaks ya da semantik kurallarına uyulmamasından dolayı verilen mesajlardır. Bu durumda
+	"byte code" üretilmez. Programcının bu hataları düzeltip derlemesi gerekir.
+
+	2. Uyarılar (Warnings): Byte code'un üretimine engel olmayan, olası programlama ve mantık hatalarının bildirilmesi
+	için verilen mesajlardır. Programcı bu uyarılar kesinlikle dikkate almalıdır. Özel bir durum yoksa uyarı mesajlarının
+	oluşumuna yol açan kodlar düzeltilmeldir. Bazı durumlarda derleyicinin uyarı mesajı vermediği ancak IDE'nin kullandığı
+	bir "static kod analizi aracı" konfigürasyonları gereği uyarı verebilir. Bunlar da dikkate alınmalıdır. Ancak hepsinin
+	düzeltilmesi gerekmez.
+
+	3. Ölümcül hatalar (fatal errors): Derleme işleminin bile tamamlanmasını engelleyen hatalardır. Bu durumda programcının
+	yazdığı kod açısından yapacak birşeyi yoktur. Çünkü kod henüz derlenmemiş bile olabilir. Programcının ölümcül hataya 
+	yol açan durumu ortadan kaldırması gerekir. Örneğin diskte yer kalmaması, derlenecek dosyanın bulunanaması gibi durumlar
+	ölümcül hatalara yol açar
+
+	Programın çalışma zamanı sırasında oluşan hatalı durumlara genel olarak "exception" denir. Exception işlemleri
+	ileride "exception handling" isimli bölümde ele alınacaktır. Bu konu ele alınana kadar exception oluştuğunda
+	"program sonlanır" olarak anlaşılacaktır. Exception terimi yerine "run time error" da kullanılmaktadır. "error" dendiğinde
+	"compile time error" anlaşılır
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
