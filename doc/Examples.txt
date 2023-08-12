@@ -140,6 +140,27 @@
 	kullanacağız.
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	12.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	JDK'nın kurulumu için işletim sistemine göre aşağıdaki şu link'den ilgili "installer" indirilebilir: 
+	https://www.oracle.com/tr/java/technologies/downloads/. Burada LTS olması açısından 17 seçilebilir. Ya da en son
+	versiyon seçilebilir. Dersin tarihinde en son versiyon JDK 20 'dir. Kursumuzda Java 17 özellikleri de konular
+	içerisinde ele alınacağından en az Java 17 kurulumu önerilir. Java 17 öncesinde en az Java 11 olmalıdır. Kurulum
+	aşamasından sonra java ve javac programları -version seçeneği ile çalıştırılarak versiyon kontrolü yapılabilir. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki programı çalıştırmak için JDK kurulu olan bir bilgisayarda aşağıdaki işlemlerin yapılması gerekir:
+	1. Herhangi bir dizinde (directory/folder) csd isimli bir dizin açılır
+	2. csd dizini içerisinde App.java isimli bir dosya açılır. Windows sisteminde uzantılar gizlenmişse görünür hale getirilip
+	uzantının .java olduğuna dikkat ediniz
+	3. Komut yorumlayıcı program (command prompt or terminal) ile ilgili dizine geçilir. Dizin geçişleri için tüm sistemlerde
+	aynı olan cd (change directory) komutu kullanılabilir. Örneğin: cd Dropbox/CSD/Kurslar/Java-Aug-2023/src/src-console
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
