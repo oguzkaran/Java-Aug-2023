@@ -314,17 +314,17 @@ packagecsd;class App{public static void main(String [] args){System.out.println(
 /*----------------------------------------------------------------------------------------------------------------------
 	Derleyicinin Teşhis Mesajları (Diagnostics):
 	1. Gerçek hatalar (Errors): Dilin sentaks ya da semantik kurallarına uyulmamasından dolayı verilen mesajlardır. Bu durumda
-	"byte code" üretilmez. Programcının bu hataları düzeltip derlemesi gerekir.
+	"byte code" üretilmez. Programcının bu hataları düzeltip kodu derlemesi gerekir.
 
 	2. Uyarılar (Warnings): Byte code'un üretimine engel olmayan, olası programlama ve mantık hatalarının bildirilmesi
-	için verilen mesajlardır. Programcı bu uyarılar kesinlikle dikkate almalıdır. Özel bir durum yoksa uyarı mesajlarının
+	için verilen mesajlardır. Programcı bu uyarıları kesinlikle dikkate almalıdır. Özel bir durum yoksa uyarı mesajlarının
 	oluşumuna yol açan kodlar düzeltilmeldir. Bazı durumlarda derleyicinin uyarı mesajı vermediği ancak IDE'nin kullandığı
-	bir "static kod analizi aracı" konfigürasyonları gereği uyarı verebilir. Bunlar da dikkate alınmalıdır. Ancak hepsinin
-	düzeltilmesi gerekmez.
+	bir "static kod analizi aracları" konfigürasyonları gereği uyarı verebilir. Bunlar da dikkate alınmalıdır. Ancak hepsinin
+	düzeltilmesi gerekmez. Tipik olarak ürün elde edilmesi aşamasında derleyici anlamında hiç bir uyarı mesajının olmaması gerekir.
 
-	3. Ölümcül hatalar (fatal errors): Derleme işleminin bile tamamlanmasını engelleyen hatalardır. Bu durumda programcının
+	3. Ölümcül hatalar (Fatal errors): Derleme işleminin bile tamamlanmasını engelleyen hatalardır. Bu durumda programcının
 	yazdığı kod açısından yapacak birşeyi yoktur. Çünkü kod henüz derlenmemiş bile olabilir. Programcının ölümcül hataya 
-	yol açan durumu ortadan kaldırması gerekir. Örneğin diskte yer kalmaması, derlenecek dosyanın bulunanaması gibi durumlar
+	yol açan durumu ortadan kaldırması gerekir. Örneğin diskte yer kalmaması, derlenecek dosyanın bulunamaması gibi durumlar
 	ölümcül hatalara yol açar
 
 	Programın çalışma zamanı sırasında oluşan hatalı durumlara genel olarak "exception" denir. Exception işlemleri
@@ -332,6 +332,182 @@ packagecsd;class App{public static void main(String [] args){System.out.println(
 	"program sonlanır" olarak anlaşılacaktır. Exception terimi yerine "run time error" da kullanılmaktadır. "error" dendiğinde
 	"compile time error" anlaşılır
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Program içerisinde derleyicinin görmezden geleceği yazılara "yorum satırları (comment lines)" denir. Java'da iki
+	çeşit yorum satırı kullanılmaktadır. Aşağıda örnekleri gösterilmiştir. İç içe yorum satırlarının kullanımında
+	dikkatli olunmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+//App sınıfı
+class App {
+/*
+	Burası da 
+	derleyici tarafından dikkate alınmayacak
+*/
+	public static void main(String [] args) 
+	{
+		
+		System.out.println("Hello, World"); //Burası derleyici tarafından dikkate alınmayacak
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Programcı yorum satırlarını gereksiz yere ve karışık olarak yazmamalıdır. Gereksiz ve karışık olarak
+	yazılmış yorum satırlarının da okunabilirliği/algılanabilirliği olumsuz etkileyebileceği unutulmamalıdır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Java'da birden fazla ".java" dosyası ile çalışmanın bir takım ayrıntıları vardır. Bu sebeple 
+	paketler konusuna kadar yalnızca tek bir ".java" dosyası (App.java) ile çalışacağız
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Programlama dili gibi formal olarak tasarlanmış kavramlar açıklanırken genel biçimlere ilişkin bir 
+	takım yöntemler kullanılır. Özellikle bir takım standartlar BNF (Backus Neuer Form) notasyonu kullanırlar. 
+	"Java Language Specification (JLS)" içerisinde de büyük ölçüde BNF kullanılmıiştır. BNF görece karmaşık bir yapıya 
+	sahiptir. Özellikle başlangıç düzeyinde öğrenmek için kullanılması çok etkin bir yöntem değildir. Bu sebeple biz 
+	kursumuzda BNF notasyonu kullanmayacağız. Biz açısal parantez köşeli parantez tekniğini kullanacağız. Bir genel 
+	biçimde açısal parantez içerisine alınan bir bilgi zorunlu bir bilgi anlamına gelir, köşeli parantez içerisine 
+	alınan bilgi ise seçenekli bir bilgi yani orada olmaya dabilir anlamına gelir. Şüphesiz olması ile olmaması aynı 
+	anlamda olmak zorunda değildir. Açısal parantez veya köşeli parantez içerisine alınmamış her bilgi orda olması 
+	gereken şeklinde anlamına gelir. Örneğin:
+		package <paket ismi>;
+	anlatımında package sözcüğü olması ve onu takip eden bir paket ismi bulunmalı anlamındadır. Ayrıca kodlar
+	içerisinde //... biçimindeki gösterim de burada bir takım kodlar olabilir ancak şu durumda bizi ilgilendirmiyor
+	anlamındadır. Ayrıca son 15 yıldır kaynaklarda (buna JSL de dahil) bir takım konular anlatılırken herhangi bir 
+	senaryodan bağımsız olması anlamında isimlendirmede foo, bar, tar, car, zar gibi uydurma isimler kullanılmaktadır.
+	Biz de konularımızda bu isimleri kullanacağız.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bildirim (declaration): Bir ismin derleyiciye tanıtılmasıdır. Yani derleyici bir ismin bildirimini arar 
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir Java programı genel olarak paketlerden, paketler sınıflardan, sınıflar da metotlardan oluşur. Paket bildiriminin
+	genel biçimi şu şekildedir:
+		package <paket ismi>;
+	Paket ismi değişken isimlendirme kurallarına uygun herhangi bir isim olabilir. Örneğin:
+		package csd;
+	Paket bildirimi tüm diğer bildirimlerden önce yani tipik olarak kaynak kodun tepesinde bulunmalıdır. Bu sebeple bir 
+	.java dosyasında yalnızca bir tane paket bildirimi bulunabilir. Paketler konusu ayrıntılı bir konudur. İleride detaylı 
+	olarak ele alınacaktır. Sınıf bildiriminin genel biçimi şu şekildedir:
+		[erişim belirleyici] class <sınıf ismi> {
+			//...
+		}
+	Erişim belirleyici dışında başka sözcükler de olabilir. Erişim belirleyici ve diğerleri konular içerisinde ele
+	alınacaktır. Sınıf ismi değişken isimlendirme kurallarına uygun herhangi bir isim olabilir. Sınıflar konusu da
+	oldukça detaylı bir konudur. Neredeyse her konuda sınıflarla ilgili detaylar ele alınacaktır. Örneğin:
+		class Sample {
+			//...
+		}
+		
+		class Person {
+			//...
+		}
+		
+		class SerialPort {
+			//...
+		}
+	Java'da alt programlara metot (method) denir. Bir metodun ne iş yapacağının yani kodlarının yazılmasına 
+	metot bildirimi (method declaration), kodlarının çalıştırılmasına ise metot çağrısı (method call) denir. Java'da
+	bir metot bir sınıf içerisinde bildirilmek zorundadır. Metot bildiriminin genel biçimi şu şekildedir:
+	  [erişim belirleyici] [static] <geri dönüş değeri> <metot ismi>([parametre değişkenleri])
+	  {
+	  		//...
+	  }
+	Erişim belirleyi şunlardan biri olabilir: public, protected, no-modifier, private. Burada no-modifier hiç bir şey
+	yazmamak anlamındadır. Bu erişim belirleyicilerin hepsi farklı anlamdadır. İlgili konuya gelene kadar bir tüm
+	metotlardaki erişim belirleyicileri public yapacağız. Java'da bir metot static veya non-static olarak bildirilebilir.
+	Bir metodun bildiriminde static anahtar sözcüğü yazılırsa metot static olur. İlgili konuya gelene kadar tüm metotlarımızı
+	static olarak bildireceğiz. Metodun kodlarının yazıldığı bölüme metodun gövdesi (method body) denir. static bir metodu 
+	çağırmanın genel biçimi şu şekildedir:
+		[paket ismi].[sınıf ismi].<metot ismi>([argümanlar]);
+	Bir metot genel olarak başka bir metot içerisinde çağrılabilir. Akış java programına verilen sınıfın main metodundan
+	başlar. main metodu bittiğinde akış sonlanır. Bizim bu kursdaki programlarımızda bir tane akış olduğundan main metodu
+	bittiğinde program sonlanır. main metodu JVM tarafından akışı başlatmak üzere çağrılır. Bu anlamda akışı başlatmak
+	için çağrılan main metoduna "giriş noktası (entry point)" denir. Bir metot çağrıldığında akış metodun kodlarına 
+	dallanır ve metodun kodları çalıştırıldıktan sonra akış çağrılan noktaya geri döner. Metodun geri dönüş değeri
+	yoksa void anahtar sözcüğü yazılır. Metodun ismi değişken isimlendirme kurallarına uygun herhangi bir isim olabilir.
+	Metodun parametre değişkenleri olabilir. Metodun geri dönüş değeri ve parametre değişkenleri ileride ele
+	alınacaktır. Yani aslında bir program main metodun çağrılmasıyla başlar ve bi rçok metodun çağrılması ile devam eder.
+	print ve println'de birer metottur. Ancak bu metotlar static metot değildir. Bu sebeple System.out.print veya
+	System.out.println çağrıları yukarıdaki biçimden farklıdır. Burada System bir sınıf, out bir referans, print ve prinln de
+	birer metot ismidir. Detaylar şu an önemsizdir. Bu iki metot aldıkları yazıyı basarlar. println son yazdığı 
+	karakterden sonra bir sonra satıra geçme karakterini de basar
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.println("Hello World");
+		csd.Sample.foo();
+		csd.Sample.bar();
+		csd.Mample.tar();
+		System.out.println("Goodbye World");
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("foo");
+		csd.Mample.tar();
+	}
+	
+	public static void bar()
+	{
+		System.out.println("bar");
+	}
+}
+
+class Mample {
+	public static void tar()
+	{
+		System.out.println("tar");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Çağıran metodun (caller) ait olduğu sınıf ile çağrılan metodun (callee) ait olduğu sınıf aynı pakette ise çağrı
+	sırasında paket ismi yazılmayabilir. Çağıran metodun ait olduğu sınıf ile çağrılan metodun ait olduğu sınıf aynı ise
+	paket ismi yazılmazsa sınıf ismi de yazılmayabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.println("Hello World");
+		Sample.foo();
+		Sample.bar();
+		Mample.tar();
+		System.out.println("Goodbye World");
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("foo");
+		Mample.tar();		
+	}
+	
+	public static void bar()
+	{
+		System.out.println("bar");
+		foo();
+	}
+}
+
+class Mample {
+	public static void tar()
+	{
+		System.out.println("tar");
+	}
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
