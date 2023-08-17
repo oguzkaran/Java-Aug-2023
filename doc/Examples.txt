@@ -417,7 +417,7 @@ class App {
 	  {
 	  		//...
 	  }
-	Erişim belirleyi şunlardan biri olabilir: public, protected, no-modifier, private. Burada no-modifier hiç bir şey
+	Erişim belirleyici şunlardan biri olabilir: public, protected, no-modifier, private. Burada no-modifier hiç bir şey
 	yazmamak anlamındadır. Bu erişim belirleyicilerin hepsi farklı anlamdadır. İlgili konuya gelene kadar bir tüm
 	metotlardaki erişim belirleyicileri public yapacağız. Java'da bir metot static veya non-static olarak bildirilebilir.
 	Bir metodun bildiriminde static anahtar sözcüğü yazılırsa metot static olur. İlgili konuya gelene kadar tüm metotlarımızı
