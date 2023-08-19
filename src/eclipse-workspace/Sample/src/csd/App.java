@@ -1,38 +1,24 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Çağıran metodun (caller) ait olduğu sınıf ile çağrılan metodun (callee) ait olduğu sınıf aynı pakette ise çağrı
-	sırasında paket ismi yazılmayabilir. Çağıran metodun ait olduğu sınıf ile çağrılan metodun ait olduğu sınıf aynı ise
-	paket ismi yazılmazsa sınıf ismi de yazılmayabilir
+	Aşağıdaki örneği çalıştırıp yuvarlama hatasını gözlemleyiniz. Kodların detayları şu an önemsizdir. Yalnızca yuvarlama
+	hatasına odaklanınız	
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
 class App {
 	public static void main(String [] args)
 	{
-		System.out.println("Hello World");
-		Sample.foo();
-		Sample.bar();
-		Mample.tar();
-		System.out.println("Goodbye World");
-	}
-}
-
-class Sample {
-	public static void foo()
-	{
-		System.out.println("foo");
-		Mample.tar();		
-	}
-	
-	public static void bar()
-	{
-		System.out.println("bar");
-		foo();
-	}
-}
-
-class Mample {
-	public static void tar()
-	{
-		System.out.println("tar");
+		double a = 0.1, b = 0.2;
+		double c;
+		
+		c = a + b;
+		
+		System.out.printf("a = %.20f%n", a);
+		System.out.printf("b = %.20f%n", b);		
+		System.out.printf("c = %.20f%n", c);
+		
+		if (c == 0.3)
+			System.out.println("Eşit");
+		else
+			System.out.println("Eşit değil");
 	}
 }

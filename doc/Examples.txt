@@ -391,7 +391,7 @@ class App {
 	Paket ismi değişken isimlendirme kurallarına uygun herhangi bir isim olabilir. Örneğin:
 		package csd;
 	Paket bildirimi tüm diğer bildirimlerden önce yani tipik olarak kaynak kodun tepesinde bulunmalıdır. Bu sebeple bir 
-	.java dosyasında yalnızca bir tane paket bildirimi bulunabilir. Paketler konusu ayrıntılı bir konudur. İleride detaylı 
+	".java" dosyasında yalnızca bir tane paket bildirimi bulunabilir. Paketler konusu ayrıntılı bir konudur. İleride detaylı 
 	olarak ele alınacaktır. Sınıf bildiriminin genel biçimi şu şekildedir:
 		[erişim belirleyici] class <sınıf ismi> {
 			//...
@@ -508,6 +508,120 @@ class Mample {
 		System.out.println("tar");
 	}
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	19.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Tür (type): Bir değişkenin içerisindeki değerin hangi formatta tutulduğunu ve bellekte ne kadar uzunlukta (byte) yer
+	ayrılacağını belirtir. Java'da türler temel türler (primitive/built-in/predefined types) ve programcının tanımladığı
+	türler (user defined types) olmak üzere iki gruba ayrılabilir. Programcının tanımladığı türler ileride ele alınacaktır.
+	Temel türler birer anahtar sözcük olarak temsil edilmektedir. Java'nın tamel türleri şunlardır:
+	
+	Temel Tür				Uzunluğu (byte)
+	short						2
+	int							4
+	long						8
+	byte						1
+	
+	float						4
+	double						8
+	
+	char						2
+	boolean						-
+	
+	Temel türlere ilişkin özellikler:
+	- Temel türler genel olarak tamsayı türleri (integer/integral types), gerçek sayı türleri (real types) ve özel amaçlı
+	türler olarak ayrılabilir. 
+	
+	- Tamsayı türlerinde işaretli (signed) sistemde, 2'ye yöntemi kullanılır.
+	
+	- Gerçek sayı türleri IEEE 754 formatına göre çalışırlar. Bu formatta yuvarlama hataları (rounding error) oluşabilir. 
+	double türü "çift hassasiyetli (double precision)", float türü ise "tek hassasiyetli (single precision)" olarak çalışırlar.
+	Bu kavramlar IEEE 754 standardına ilişkindir. Burada bilinmesi gereken yuvarlama hatalarının oluşabileceği ve double
+	türünün, float türüne göre daha az yuvarlanacağıdır. Yani float türünün yuvarlamaya karşı direnci, double türüne göre daha
+	zayıftır. Yuvarlama hataları, bir işlemin sonucunda oluşabileceği gibi bir değer yerleştirilirken de olabilir.
+	
+	- Gerçek sayılardaki yuvarlama hatası, IEEE 754 standardının yöntemidir. Hatalı bir çalışma değildir. Programcı 
+	bu yuvarlama hatalarının problem oluşturabileceği (örneğin parasal ve finansal uygulamalar) uygulamalarda bu türleri
+	kullanmaz. Böyle bir durumda hangi türün kullanılacağı ileride ele alınacaktır. Böylesi bir durum dışında yani yuvarlama
+	hatalarının öneminin olmadığı uygulamalarda bu türler kullanılır. Çünkü, yuvarlama hatası yapılmamasını sağlayan
+	yöntemlerde yüzlerce makine komutunun kullanıldığı yerde, IEEE 754 ile bu tek bir makine komutuyla yapılabilir.
+	
+	- Yazılar içerisinde her bir karakter aslında bir sayı ile temsil edilir. Hangi karakterin hangi sayı ile ifade 
+	edildiğini belirten tablolara "karakter tabloları (character table)" denir. ASCII tabloso, 1 byte'lık yani 256 tane karakterden
+	oluşur. ASCII tablosunun ilk 128 karakteri standarttır. Karakterlerin konumları (sıra numaraları) ve kendileri değişmez.
+	UNICODE tablo, 2 byte'lık yani 65536 tane karakterden oluşur. Karakter tabloları bunlarla sınırlı değildir. Detaylar
+	ileride ele alınacaktır.
+	
+	- char türü Java'da UNICODE tablo dikkate alınarak belirlenmiştir. Bu nedenle char türü 2 byte'dır. char türden 
+	bir değişken içerisinde tutulan sayı UNICODE tabloda bir sıra numarası anlamına gelir. Dolayısıyla mantıksal olarak
+	char türü içerisinde bir karakter tutulmuş olur. Aslında, kullanılabilecek toplam karakterlerin sayısı 2 byte'ta
+	tutulabilecek sayıdan fazladır. Ancak çoğu zaman UNICODE tablo yeterli olmaktadır.
+	
+	- boolean türünün alabileceği 2 tane değer vardır: true, false. boolean türünün uzunluğu JLS'de belirtilmemiştir.
+	Sistemden sisteme değişebilir. Ancak bunu bir önemi yoktur.
+	
+	Anahtar Notlar: Java'da boolean türü dışında kalan temel türlerin uzunlukları her sistemde aynıdır.
+	
+	Anahtar Notlar: int türüne "integer" demek yanlış bir tanım kullanmak demektir. integer kavramı tam sayılara verilen
+	genel bir isimdir. int ise 4 byte'lık bir tamsayı türüdür. Ayrıca JavaSE'de Integer isimli önemli bir sınıf da 
+	bulunmaktadır
+	
+	Anahtar Notlar: Java'da en çok kullanılan tamsayı türü int'dir, en çok kullanılan gerçek sayı türü de double'dır. 
+	Programcı öncelikle bu türleri düşünmeli. Bu türler gereksinimi karşılamıyorsa (ki karşılamadığı da bir çok senaryo
+	mevcuttur) diğer türleri düşünmelidir. Bu anlamda int ve double türüne "default types" da denilmektedir	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği çalıştırıp yuvarlama hatasını gözlemleyiniz. Kodların detayları şu an önemsizdir. Yalnızca yuvarlama
+	hatasına odaklanınız	
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 0.1, b = 0.2;
+		double c;
+		
+		c = a + b;
+		
+		System.out.printf("a = %.20f%n", a);
+		System.out.printf("b = %.20f%n", b);		
+		System.out.printf("c = %.20f%n", c);
+		
+		if (c == 0.3)
+			System.out.println("Eşit");
+		else
+			System.out.println("Eşit değil");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği çalıştırıp yuvarlama hatalarını gözlemleyiniz. Kodların detayları şu an önemsizdir. Yalnızca yuvarlama
+	hatasına odaklanınız	
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a = 0.1F, b = 0.2F;
+		double c;
+		
+		c = a + b;
+		
+		System.out.printf("a = %.20f%n", a);
+		System.out.printf("b = %.20f%n", b);
+		System.out.printf("c = %.20f%n", c);
+		
+		if (c == 0.3)
+			System.out.println("Eşit");
+		else
+			System.out.println("Eşit değil");
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
