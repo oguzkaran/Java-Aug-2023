@@ -1178,6 +1178,26 @@ class Sample {
 	stdin de klavyeye yönlendirilmiştir. Biz kursumuzda ekran ve kalvye terimlerini kullanacağız
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	print ve println metotları bir değişkenin değerini ekrana yazabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10;
+		
+		System.out.println(a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Programlamda, çeşitli sebeplerden dolayı artık kullanılması önerilmeyen durumlarda "deprecated"
+	terimi kullanılır. Deprecated olmanın bir çok sebebi olabilir. Bu, neyin deprecated olduğu ile ilgilidir. Deprecated
+	olan durumlar gerelçeleri ve yerine kullanılacakları ile birlikte dokümante edilir. Deprecated durumlarda derleyici
+	uyarı mesajı verir
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 
