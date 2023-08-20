@@ -583,7 +583,7 @@ class Mample {
 
 	10101010
 
-	Negatif sayıları ifade edebilmek için kullanılan ikiye tümleme sisteminde en soldaki bir işaret bitidir. Bu bit 0 ise sayı pozitif, 1 ise negatiftir.
+	Negatif sayıları ifade edebilmek için kullanılan ikiye tümleme sisteminde en soldaki bit işaret bitidir. Bu bit 0 ise sayı pozitif, 1 ise negatiftir.
 	Negatif ve pozitif sayılar birbirlerinin ikiye tümleyenidir. Örneğin bu sistemde +10 yazmak isteyelim. Bunu işaret 0 yaparak yazabiliriz:
 
 	0 000 1010		---> +10
@@ -654,8 +654,8 @@ class Mample {
 	0111 1111   ---> +127
 	1000 0000   ---> -128
 
-	Demek ki bu sistemde bir sayıyı üst limitten taşırırsak yüksek bir negatif sayıyla karışılaırız. 
-
+	Demek ki bu sistemde bir sayıyı üst limitten taşırırsak yüksek bir negatif sayıyla karşılaırız. Benzer şekilde alt limitten taşırırsak yüksek bir 
+	pozitif sayı ile karşılaşırız	 
 ----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -663,9 +663,7 @@ class Mample {
 	olarak yorumlanmaz. Sayı herzaman sıfır ya da pozitiftir. İşaretli sistemde ise sayının en solundaki bit işaret bitidir. Sayı ikiye tümleyen aritmetiğine 
 	göre yorumlanır.
 	 
-	İşlemciler aslında genellikle işaretli ve işaretsiz ayırımını yapmazlar. Çünkü bu tür de aslında aynı biçimde işleme
-	sokulmaktadır. Sonucun yorumu değişmektedir. 
-
+	İşlemciler aslında genellikle işaretli ve işaretsiz ayırımını yapmazlar. Çünkü bu tür de aslında aynı biçimde işleme sokulmaktadır. Sonucun yorumu değişmektedir. 
 ----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -733,8 +731,8 @@ class Mample {
 	karakterleri ifade etmek için oluşturulmuştur. Bilgisayarlar yaygınlaşmaya başladığında farklı karakterlere sahip olan Türkiye gibi, Yunanistan gibi, Almanya gibi
 	ülkeler bu ASCII tablosunu 8 bite çıkartıp elde edilen 128'lik yeni alanı kendi karakterlerini ifade etmek için kullanmışlardır. ASCII tablosunun ilk yarısı 
 	(yani [0, 128] numaraları karakterleri) standarttır. Ancak ikinci yarısı "code page" adı altında farklı ülkeler tarafından farklı yerleşimler yapılarak kullanılmaktadır. 
-	DOS zamanlarında Türkçe karakterler için OEM 857 denilen code page kullanılıyordu.Daha sonra Microsoft Windows sistemlerinde Türkçe karakterler için 1254 code page'i
-	düzenledi. ISO bu code page'leri standart hale getirmiştir. Bugün Türkçe karakterler ISO tarafından ASCII 8859-9 Code page'i ile düzenlenmiştir.
+	DOS zamanlarında Türkçe karakterler için OEM 857 denilen code page kullanılıyordu. Daha sonra Microsoft Windows sistemlerinde Türkçe karakterler için 1254 code page'i
+	düzenledi. ISO, bu code page'leri standart hale getirmiştir. Bugün Türkçe karakterler ISO tarafından ASCII 8859-9 Code page'i ile düzenlenmiştir.
 
 	ASCII tablosu ve onların code page'leri uzun süre kullanılmış ve hala kullanılmakta olsa da maalesef karışıklıklara yol açmaktadır. İşte son 20 yıldır
 	artık karakterleri 2 byte içerisinde ifade ederek dünyanın bütün dillerinin ve ortak sembollerinin tek bir tabloya yerleştirilmesi ile ismine UNICODE 
@@ -819,7 +817,7 @@ class Mample {
 ----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------
-	Eskiden daha fazla kullanılıyor olsa da toplamda oldukça seyrek kullanılan dğer bir sayı sistemi de 8'lik sayı sistemidir. Bu sisteme İngilizce 
+	Eskiden daha fazla kullanılıyor olsa da toplamda oldukça seyrek kullanılan diğer bir sayı sistemi de 8'lik sayı sistemidir. Bu sisteme İngilizce 
 	"octal system" denilmektedir. 8'lik sayı sistemindeki her bir basamağa "octal digit" denir. Octal digit sembolleri olarak 10'luk sistemin ilk 8 sembolü 
 	kullanılmaktadır:
 
@@ -891,16 +889,9 @@ class Mample {
 	hatalarının öneminin olmadığı uygulamalarda bu türler kullanılır. Çünkü, yuvarlama hatası yapılmamasını sağlayan
 	yöntemlerde yüzlerce makine komutunun kullanıldığı yerde, IEEE 754 ile bu tek bir makine komutuyla yapılabilir.
 	
-	- Yazılar içerisinde her bir karakter aslında bir sayı ile temsil edilir. Hangi karakterin hangi sayı ile ifade 
-	edildiğini belirten tablolara "karakter tabloları (character table)" denir. ASCII tabloso, 1 byte'lık yani 256 tane karakterden
-	oluşur. ASCII tablosunun ilk 128 karakteri standarttır. Karakterlerin konumları (sıra numaraları) ve kendileri değişmez.
-	UNICODE tablo, 2 byte'lık yani 65536 tane karakterden oluşur. Karakter tabloları bunlarla sınırlı değildir. Detaylar
-	ileride ele alınacaktır.
-	
 	- char türü Java'da UNICODE tablo dikkate alınarak belirlenmiştir. Bu nedenle char türü 2 byte'dır. char türden 
 	bir değişken içerisinde tutulan sayı UNICODE tabloda bir sıra numarası anlamına gelir. Dolayısıyla mantıksal olarak
-	char türü içerisinde bir karakter tutulmuş olur. Aslında, kullanılabilecek toplam karakterlerin sayısı 2 byte'ta
-	tutulabilecek sayıdan fazladır. Ancak çoğu zaman UNICODE tablo yeterli olmaktadır.
+	char türü içerisinde bir karakter tutulmuş olur.
 	
 	- boolean türünün alabileceği 2 tane değer vardır: true, false. boolean türünün uzunluğu JLS'de belirtilmemiştir.
 	Sistemden sisteme değişebilir. Ancak bunu bir önemi yoktur.
@@ -950,7 +941,7 @@ class App {
 	public static void main(String [] args)
 	{
 		float a = 0.1F, b = 0.2F;
-		double c;
+		float c;
 		
 		c = a + b;
 		
@@ -965,6 +956,227 @@ class App {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	20.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da bir değişken kullanılmadan önce bildirilmelidir. Değişken bildiriminin genel biçimi şu şekildedir:
+		<tür> <ismi>;
+	Örnek:
+		int a;
+		double b;
+		
+	Java'da 3 çeşit değişken vardır:
+	1. Yerel değişken (local variable)
+	2. Parametre değişkeni (parameter variable)
+	3. Sınıf veri elemanı (class member variable)
+	
+	Değişkene ait için temel kavramlar:
+	Tür (type): Bellekte ne kadar ayrılacağını ve o alanda bilginin hangi formatta tutulacağını belirtir.
+	
+	İsim (name): Belirli kurallara göre yazılabilen karakter topluluğudur.
+	
+	Faaliyet Alanı (scope): Değişken isminin görülebildiği (bilindiği) kod aralığıdır. Derleme zamanına ilişkin
+	bir bilgidir.
+	
+	Ömür (storage duration): Bir değişkenin bellekte yaratılması ile yok edilmesi arasındaki süredir. Çalışma zamanına
+	ilişkin bir bilgidir. İleride ele alınacaktır
+	
+	Anahtar Notlar: Değişken (variable) terimi değişken atomlar için de kullanılmaktadır. Burada değişken bellekte
+	yer ayrılan ve içerisinde değer tutabilen atomlardır. Yani burada ele alından değişken de bir değişken atomdur. Ancak
+	her değişken atom burada ele alınan değişken değildir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun içerisinde { ile } arasında kalan bölgeye bu küme parantezleri ile birlikte blok (block) denir. Aslında 
+	metodun gövdesi de bir bloktur. Metot içerisinde istenildiği kadar içiçe veya ayrık bloklar olabilir. Bu anlamda örneğin
+	sınıf bildirimindeki {}'leri blok değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		{
+			//...
+			{
+				//...
+			}
+		}
+		
+		{
+			//...
+			{
+				//...
+				{
+					//...
+				}
+			}
+		}
+	}
+}
+
+class Sample {
+	public static void foo() 
+	{
+		{
+			//...			
+		}
+		
+		{
+			//...
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir blok içerisinde herhangi bir yerde bildirilen değişkenlere yerel değişkenler (local variables) denir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.println("Hello, World");
+		int a;
+		double b;
+		
+		{
+			boolean flag;
+			//...
+		}
+	}
+}
+
+class Sample {
+	public static void foo() 
+	{
+		int x;
+		double y;
+		
+		{
+			float z;
+			//...
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yerel bir değişkenin faaliyet alanı (scope), bildirildiği yerden bildirildiği bloğun sonuna kadardır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a;
+		
+		{
+			a = 10;
+			int x;
+			
+			x = 10;
+		}
+		
+		x = 20; //error
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aynı faaliyet alanı içerisinde aynı isimde yerel değişken bildirimi geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a;
+		boolean a; //error
+		
+		{			
+			float a; //error			
+			
+		}		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Farklı faaliyet alanlarında aynı isimde yerel değişken bildirimi yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		{
+			int a;
+			
+			a = 10;
+						
+		}	
+		
+		{
+			int a;
+			
+			a = 20;
+		}
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Farklı faaliyet alanlarında aynı isimde yerel değişken bildirimi yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		{
+			int a;
+			
+			a = 10;
+		}
+		
+		int a;
+		
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Farklı faaliyet alanlarında aynı isimde yerel değişken bildirimi yapılabilir. Aşağıdaki örnekte her iki metotta da
+	count isimde yerel değişken bildirimi olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static void foo()
+	{
+		int count;
+		
+		//...		
+	}
+	
+	
+	public static void bar()
+	{
+		int count;
+		
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Aslında ekrana basmak ve klavyeden okuma kavramları JLS'de doğrudan bu şekilde belirtilmemiştir.
+	print ve println metotları aslında "standard output (stdout)" denilen bir dosyaya yazma yaparlar. Bu anlamda klavyeden 
+	bilgi okuyan metotlar da "standard input (stdin)" denilen bir dosyadan okuma yaparlar. Ancak, bu dosyalar çeşitli
+	sistemlerde belli aygıtlara yönlendirilmiştir. Örneğin klasik masaüstü işletim sistemlerinde tipik olarak stdout ekrana,
+	stdin de klavyeye yönlendirilmiştir. Biz kursumuzda ekran ve kalvye terimlerini kullanacağız
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 /*----------------------------------------------------------------------------------------------------------------------
