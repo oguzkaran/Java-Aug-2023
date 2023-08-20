@@ -1186,9 +1186,30 @@ package csd;
 class App {
 	public static void main(String [] args)
 	{		
-		int a = 10;
+		int a;
+		
+		a = 10;
 		
 		System.out.println(a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir değişkene bildirim noktasında değer verilmesine "ilkdeğer verme (initialization)" denir. Bir değişkene bildirildikten
+	sonra yapılan atama işlemi teknik olarak "initialization" ile aynı anlamda değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{		
+		int a = 10; //initialization
+		int b;
+		
+		b = 20; //assignment
+		
+		System.out.println(a);
+		System.out.println(b);
 	}
 }
 
@@ -1198,6 +1219,353 @@ class App {
 	olan durumlar gerelçeleri ve yerine kullanılacakları ile birlikte dokümante edilir. Deprecated durumlarda derleyici
 	uyarı mesajı verir
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Değişken isimlendirme kuralları:
+	Bu kurallar Java'da tüm değişken atomlar için geçerlidir.
+	
+	- Değişken isimleri sayısal bir karakter ile başlatılamaz. Uygun bir karakter ile başlatılıp istenildiği kadar 
+	sayısal karakter kullanılabilir.
+	
+	- Değişken ismi alfabetik bir karakter ile başlatılabilir.
+	
+	- Değişken isminde _ karakteri kullanılabilir. Hatta değişken ismi _ karakteri ile başlatılabilir.
+	
+	- Java 8 ile birlikte _ karakterinin tek başına kullanılması deprecated olmuştur. Java 9 ile birlikte de artık 
+	geçersiz duruma gelmiştir.
+	
+	- Anahtar sözcükler tek başına değişken ismi olarak kullanılamaz. Java'ya daha sonra eklenen ancak kullanımına göre
+	anahtar sözcük gibi işlem gören bazı özel atomlar vardır. Bunlar doğrudan değişken ismi olarak kullanılabilirler. Bu
+	tarz atomlara programlamada "contextual keyword" de denilmektedir.
+	
+	- Değişken isimlerinde whitespace karakterler kullanılamaz.
+	
+	- Değişken isimlendirmede UNICODE karakterler kullanılabilir. Örneğin, Türkçe karakterler geçerlidir. Her ne kadar 
+	kullanılabiliyor olsa da, değişken isimlendirmede İngilizce alfabedeki karakter dışında karakter kullanmayacağız. Hatta
+	değişken isimlerinde geçen kelimeleri de İngilizce dışında kelimeler olarak kullanmayacağız.
+	
+	- Değişken isimlendirmede $ karakteri kullanılabilir. Dolar karakteri tek başına kullanılabilir, değişken ismi $
+	karakteri ile başlatılabilir. Ancak programcı hiç bir zaman değişken isimlendirmede $ karakterini kullanmamalıdır.
+	Derleyici bazı durumlarda bir takım isimler vermek zorunda kalabilir. İşte $ karakteri bu tip durumlarda isim çakışmasını
+	engellemek için düşünülmüştür. Programcı bu karakteri kullanmazsa, derleyici de ürettiği isimlerde bu karakteri için
+	herhangi bir isim çakışması oluşmaz.
+	
+	- Değişken isimleri büyük-küçük harf duyarlıdır (case sensitive). Aslında Java case sensitive bir dildir.
+	
+	- JLS'de değişken isimlerinin uzunluğu (karakter sayısı) konusunda bir üst sınır belirtilmemiştir. Ancak pratikte
+	kullanılan uzunluklar açısından bir problem yoktur. 
+	
+	- Değişken isimlerinde bazı teknikler kullanılabilir. Zaman içerisinde bu teknikler anlatılacak ve hangi durumlarda
+	hangisinin kullanıldığı anlaşılacaktır. Örneğin programcı Java'da sınıf isimlerini büyük harf ile başlatır, birden 
+	fazla kelimeden oluşuyorsa tüm kelimeler bitişik,  tüm kelimelerin baş harfleri büyük ve geri kalan karakterler
+	küçük olacak şekilde isimlendirme yapılır. Bu stile "upper camel case veya pascal case" denilmektedir.
+	
+	- Değişken isimleri kolay telaffuz edilebilir, yeterince uzunlukta ve anlamlı olmalıdır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da klavyeden (aslında stdin'den değil mi?) değer okumak için pek çok yöntem bulunmaktadır. Burada kullanacağımız
+	yöntemde bazı ayrıntılar ileride anlaşılacaktır. Bu sebeple şu an bazı detaylar göz ardı edilmelidir. Bir kalıp
+	biçiminde düşünülebilir. Ayrıca bu kalıpta bazı uyarı mesajları oluşabilir. Bunlar da şu aşamada önemsizdir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden int türden değerler okunması. Aşağıdaki kalıpta her bir değer girildiğinde ENTER karakterine basılmaldır.
+	Geçersiz bir giriş durumunda exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Birinci sayıyı giriniz:");
+		int a = Integer.parseInt(kb.nextLine());
+		
+		System.out.print("İkinci sayıyı giriniz:");
+		int b = Integer.parseInt(kb.nextLine());
+				
+		int total;
+		
+		total = a + b;
+		
+		
+		System.out.println(total);			
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden int türden değerler okunması. Aşağıdaki kalıpta sayılar aralarında herhangi bir whitespace karakter ile
+	girilebilir. Yine geçersiz değerler için exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int total;
+		
+		total = a + b;
+		
+		
+		System.out.println(total);			
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden double türden değerler okunması. Aşağıdaki kalıpta her bir değer girildiğinde ENTER karakterine basılmaldır.
+	Geçersiz bir giriş durumunda exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Birinci sayıyı giriniz:");
+		double a = Double.parseDouble(kb.nextLine());
+		
+		System.out.print("İkinci sayıyı giriniz:");
+		double b = Double.parseDouble(kb.nextLine());
+				
+		double total;
+		
+		total = a + b;
+		
+		System.out.println(total);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden double türden değerler okunması. Aşağıdaki kalıpta sayılar aralarında herhangi bir whitespace karakter ile
+	girilebilir. Yine geçersiz değerler için exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();		
+		double total;
+		
+		total = a + b;
+		
+		System.out.println(total);			
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: double ve float türleri için klavyeden girişleride nokta veya virgül kullanımı sistemden sisteme ve 
+	kullanılan kalıba göre değişiklik gösterebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden long türden değerler okunması. Aşağıdaki kalıpta her bir değer girildiğinde ENTER karakterine basılmaldır.
+	Geçersiz bir giriş durumunda exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Birinci sayıyı giriniz:");
+		long a = Long.parseLong(kb.nextLine());
+		
+		System.out.print("İkinci sayıyı giriniz:");
+		long b = Long.parseLong(kb.nextLine());
+				
+		long total;
+		
+		total = a + b;
+		
+		
+		System.out.println(total);			
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Klavyeden long türden değerler okunması. Aşağıdaki kalıpta sayılar aralarında herhangi bir whitespace karakter ile
+	girilebilir. Yine geçersiz değerler için exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		long a = kb.nextLong();
+		long b = kb.nextLong();		
+		long total;
+		
+		total = a + b;
+		
+		System.out.println(total);			
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İfade (expression): Sabitlerden, operatörlerden ve değişkenlerden oluşan herhangi bir geçerli dizilimdir. Değişkenler
+	ve sabitler tek başına ifade olabilirken, operatörler tek başına ifade olamazlar. Her ifadenin bir değeri vardır. İfade
+	hesaplandığında elde edilir. Bu durumun tek bir istisnası vardır. İleride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun geri dönüş değeri bilgisi yerine bir tür ismi yazıldığında o metot o türe geri dönmüş olur. Bir metodun 
+	geri dönüş değeri varsa çağrılan noktaya bir değer ile geri döner. Bu değer bir işleme sokulabilir. Bir metodun
+	geri dönüş değeri return deyimi ile oluşturulur. return deyiminin genel biçimi şu şekildedir:
+	
+		return [ifade];
+		
+	return deyimi nasıl kullanılırsa kullanılsın temel görevi metodu sonlandırmaktır. Yani akış return deyimine geldiğinde
+	metot sonlanır. Eğer return ifade ile kullanılırsa (ki geri dönüş değeri olan metotlarda bu zorunludur) ifadenin değerine
+	geri döner
+	
+	Anahtar Notlar: ** ile belirtilen kodda önce add metodu çağrılır. Bu durum operatör önceliği (operator precedence)
+	konusu ile ilgilidir. İleride detaylı olarak ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		int result;
+		
+		result = NumberUtil.add() * 2; //**
+		
+		System.out.println(result);
+	}
+}
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		int total = a + b;
+		
+		return total;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Akış return deyimine geldiğinde önce return deyimine ilişkin ifade hesaplanır, elde edilen değere geri dönülür
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		int result;
+		
+		result = NumberUtil.add() * 2;
+		
+		System.out.println(result);
+	}
+}
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş değeri olan metotlarda return tek başına kullanılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş değeri olan metotlarda akışın her noktasında geri dönülen bir değer söz konusu olmalıdır. Aksi durumda
+	error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class NumberUtil {
+	public static int add() //error
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş değeri olan metotlarda akışın her noktasında geri dönülen bir değer söz konusu olmalıdır. Aksi durumda
+	error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class NumberUtil {
+	public static int add() //error
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		if (a > b)
+			return a + b;		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Java derleyicisi akışın herhangi bir noktaya kesinlikle gelemeyeceğini anladığında genel olarak 
+	error oluşturur. Bu tip kod parçalarına "unreachable codes" da denilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class NumberUtil {
+	public static int add() //error
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return a + b;
+		System.out.println("Unreachable code"); //error
+	}
+}
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 
