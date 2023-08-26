@@ -1,29 +1,28 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Anahtar Notlar: Java derleyicisi akışın herhangi bir noktaya kesinlikle gelemeyeceğini anladığında genel olarak 
-	error oluşturur. Bu tip kod parçalarına "unreachable codes" da denilmektedir
+	Aşağıdaki örnekte ** ile belirtilen kod parçasında add metodu yeni a değeri için de çağrılmalıdır
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
-class App {	
+class App {
 	public static void main(String [] args) 
 	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
 		int result;
 		
-		result = NumberUtil.add() * 2; 
+		result = NumberUtil.add(a, b);
 		
+		//...
 		System.out.println(result);
 	}
 }
 
 class NumberUtil {
-	public static int add() //error
+	public static int add(int a, int b)
 	{
-		java.util.Scanner kb = new java.util.Scanner(System.in);
-		System.out.println("İki sayı giriniz:");
-		int a = kb.nextInt();
-		int b = kb.nextInt();		
-		
-		return a + b;
-		System.out.println("Unreachable code"); //error
+		return a ;
 	}
 }

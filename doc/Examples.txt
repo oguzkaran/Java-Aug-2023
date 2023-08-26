@@ -1565,7 +1565,528 @@ class NumberUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	26.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş değeri geçici değişken (temporary variable) yaratılarak iletilir. Geçici değişken, metodun geri dönüş 
+	değerinin türündendir. Aşağıdaki örnekte ** ile belirtilen kod parçasında add metodunun geri dönüş değerinin iletimi 
+	ve işleme sokuluşuna ilişkin yaklaşık kodlar şu şekildedir:
+		int temp = a + b;
+		
+		result = temp * 2;
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		int result;
+		
+		result = NumberUtil.add() * 2; //**
+		
+		System.out.println(result);
+	}
+}
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş değeri olan metotlar, geri dönüş değeri yokmuş gibi çağrılabilir. Yani geri dönüş değeri bir işleme sokulmayabilir.
+	Şüphesiz metodun da buna uygun olarak yazılmış olması gerekir. Aşağıdaki add metodu toplam değerini ekrana basmasaydı
+	örnekteki çağrının bir anlamı olur muydu?
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		NumberUtil.add();
+	}
+}
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result = a + b;
+		
+		System.out.println(result);
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun geri dönüş değeri, başka bir metodun geri dönüş olabilir. Bu durum aslında şu kuralın bir sonucudur:
+	akış return deyimine geldiğinde, return deyimine ilişkin ifade önce hesaplanır, elde edilen değere geri dönülür
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		int total = Sample.getTotal();
+		
+		System.out.println(total);
+	}
+}
+
+class Sample {
+	public static int getTotal()
+	{
+		System.out.println("getTotal");
+		
+		return NumberUtil.add();
+	}
+}
+
+class NumberUtil {
+	public static int add()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result = a + b;		
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Geri dönüş olmayan metotların, geri dönüş değeri bilgisi void anahtar ile yazılır. Geri dönüş değeri bilgisi yerine
+	hiç bir şey yazılmaması error oluşturur. Geri dönüş değeri olmayan metotlarda return deyimi zorunlu değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		NumberUtil.printAdd();
+	}
+}
+
+
+class NumberUtil {
+	public static void printAdd()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int result = a + b;
+		
+		System.out.println(result);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Geri dönüş değeri olmayan metotlara "void metot (void method)" da denilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	void metotlarda return deyimi istenirse metodu sonlandırmak için tek başına (yani ifade olmadan) kullanılabilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		NumberUtil.printAdd();
+	}
+}
+
+
+class NumberUtil {
+	public static void printAdd()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int result = a + b;
+		
+		if (result < 0) {
+			System.out.println("Sonuç negatif elde edildi");
+			return;
+		}
+		
+		//...
+		System.out.println(result);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	void metotlarda return deyiminin ifade ile kullanımı error oluşturur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class NumberUtil {
+	public static void printAdd()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int result = a + b;
+		
+		if (result < 0) {
+			System.out.println("Sonuç negatif elde edildi");
+			return a + b; //error
+		}
+		
+		//...
+		System.out.println(result);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	void metotlar geri dönüş değeri varmış gibi çağrılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		int result = NumberUtil.printAdd() * 2; //error
+		
+		//...
+	}
+}
+
+
+class NumberUtil {
+	public static void printAdd()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.println("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();		
+		int result = a + b;		
+		
+		//...
+		
+		System.out.println(result);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Anımsanacağı gibi her ifadenin bir türü vardır. Yani her ifade hesaplandıktan sonra bir değer
+	üretir. Ancak void bir ifadenin (void expression) değeri olmaz. void ifade, void metot çağrısına ilişkin ifadedir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Metoların parametre değişkenleri: Metot bildiriminde parantezler arasında bildirilen değişkenlere denir. Metot 
+	parametre değişkenlerinin faaliyet alanı (scope) metot boyuncadır. Bu anlamda faaliyet alanı bakımından metodun 
+	başında bildirilmiş yerel değişkenler gibidir. Metot çağrısında, metodun parametrelerine geçilen ifadelere 
+	argüman (argument) denir. Bir metodun kaç tane parametresi varsa o kadar sayıda argüman ile çağrılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		double b = kb.nextDouble();
+		
+		Sample.foo(a, b);
+	}
+}
+
+
+class Sample {	
+	public static void foo(int a, double b)
+	{		
+		System.out.println(a);
+		System.out.println(b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Parametre değişkenleri aynı türden bile olsa bildirimde tür yazılmalıdır. Aksi durumda error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {	
+	public static void foo(int a, b) //error
+	{		
+		System.out.println(a);
+		System.out.println(b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metoda geçilen argümanlara ilişkin ifadeler önce hesaplanır, elde edilen değerler ilgili parametre değişkenlerine
+	aktarılarak metot çağrılır. Yani aslında aşağıdaki örnekte foo metoduna argüman olarak geçilen değerler ilgili ifadelerin
+	değerleridir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		Sample.foo(a + 1, b * 3);		
+	}
+}
+
+
+class Sample {	
+	public static void foo(int a, int b)
+	{		
+		System.out.println(a);
+		System.out.println(b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte add metodunun geri dönüş değeri println metoduna argüman olarak geçilmiştir. Bu da aslında bir önceki
+	kuralın bir sonucudur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+	
+		System.out.println(NumberUtil.add(a, b));
+	}
+}
+
+class NumberUtil {
+	public static int add(int a, int b)
+	{
+		return a + b;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {	
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+	
+		System.out.println(NumberUtil.add(a + 2, b * 3));
+	}
+}
+
+class NumberUtil {
+	public static int add(int a, int b)
+	{
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Yukarıdaki gibi ifadelerin yazımında okunabilirlik/algılanabilirlik olumsuz yönde etkileniyorsa,
+	compact yazım tercih edilmemelidir. Ya da başka bir deyişle compact ifadeler okunabilir/algılanabilir olması 
+	durumunda yazılmalıdır. 	
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ** ile *** arasındaki kodlarda a ve b değişkenlerinin değerleri değişmediğinden add metodu iki
+	defa gereksiz yere çağrılmıştır. Çünkü her iki durumda da aynı sonuç elde edilecektir. Bu durumda metodun gereksiz
+	yere çağrılması maliyeti dışında, kodun okunabilirliği açısından da olumsuz bir durum söz konusudur. Çünkü bu kodu 
+	okuyan kişi, add çağrısını iki kere gördüğünde ** ve *** arasındaki kodlarda a ve/veya b değişkenlerinin değerlerinin
+	değiştiğini algılar.  
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+	
+		System.out.println(NumberUtil.add(a, b)); //**
+		
+		//... (a ve b değişkenlerinin değerleri burada değiştirilmiyor)
+		
+		System.out.println(NumberUtil.add(a, b)); //***
+	}
+}
+
+class NumberUtil {
+	public static int add(int a, int b)
+	{
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki demo aşağıdaki gibi daha okunabilir/algılanabilir ve görece daha az maliyetli olarak yazılabilir  
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+	
+		int result = NumberUtil.add(a, b);
+		
+		System.out.println(result); //**
+		
+		//... (a ve b değişkenlerinin değerleri burada değiştirilmiyor)
+		
+		System.out.println(result); //***
+	}
+}
+
+class NumberUtil {
+	public static int add(int a, int b)
+	{
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ** ile belirtilen kod parçasında add metodu yeni a değeri için de çağrılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();	
+		
+		System.out.println(NumberUtil.add(a, b)); //**
+		
+		//... 
+		
+		a = a * 2;
+		
+		System.out.println(NumberUtil.add(a, b)); //***
+	}
+}
+
+class NumberUtil {
+	public static int add(int a, int b)
+	{
+		return a + b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bir metodun parametre değişkenleri aslında o metodun girdileridi (input). Bu anlamda metot parametre
+	değişkenleri ile aldığı girdilerin nasıl elde edildiğinden bağımsız çalışır. Örneğin,
+	
+		public static int add(int a, int b)
+		{
+			return a + b;
+		} 
+		
+	ve
+		public static int add()
+		{
+			java.util.Scanner kb = new java.util.Scanner(System.in);
+			System.out.println("İki sayı giriniz:");
+			int a = kb.nextInt();
+			int b = kb.nextInt();
+			int result = a + b;		
+			
+			return result;
+		}
+	metotları için parametreli add metodu toplayacağı değerlerin nereden geldiğini ve nasıl elde edildiğini bilmez.
+	parametresiz add metodu ise değerleri klavyeden elde eder. Bu anlamda parametreli add metodu daha genel yazılmıştır. 
+	Bir metodun geri dönüş değeri de o metodun çıktısıdır (output). Örneğin,
+	
+		public static int add(int a, int b)
+		{
+			return a + b;
+		} 
+	ve
+		public static void printTotal(int a, int b)
+		{
+			System.out.println(a + b);
+		} 
+		
+	metotları için add metodu elde edilen değeri çıktı olarak verdiğinden toplam değerinin kullanılması anlamında genel
+	yazılmıştır. Buradaki örnekler karşılaştırma amaçlı yazılmıştır. Bir metot diğerinden daha iyidir anlamı çıkartılmamalıdır.
+	Hangisinin gerekeceği yazılan uygulamaya göre şüphesiz değişebilir.
+	
+	Anahtar Notlar: Bir metodun geri dönüş değeri olması ya da olmaması ve parametre değişkeni olması ya da olmaması
+	birbiriyle doğrundan doğrudan ilişkili değildir. Şüphesiz dolaylı bir ilişki vardır. Bu anlamda geri dönüş değeri ve 
+	parametre değişkenleri anlamında bir metot aşağıdakilerden biri biçiminde olabilir:
+		1. Geri dönüş değeri var, parametre veya parametreleri var
+		2. Geri dönüş değeri var, parametresi yok
+		3. Geri dönüş değeri yok, parametre veya parametreleri var
+		4. Geri dönüş değeri yok, parametresi yok	
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Java'da atama işlemi 3 yerde yapılır:
+	- Atama operatörü (işlemli atama operatörleri dahil) ile. Initialization işlemi de bu gruba sokulabilir.
+	- Bir metodun geri dönüş değerinin geçici değişkene aktarılması
+	- Metot çağrısında, argümanların parametre değişkenlerine aktarılması
+	
+	İstisna bazı durumlar dışında atama operatörü ile ilgili kuralların hepsi, diğer iki atama için de geçerlidir. İstisna
+	durumlar konular içerisinde ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Neden metot yazalım? Yani, programcının uygulamayı geliştirirken çeşitli metotları yazması ne gibi bir avatajlar 
+	sağlar? Aslında bu sorulara tek bir cümle ile cevap verilemez. Bu avantajlar genel olarak şu şekilde belirtilebilir: 
+	- Bir metodun yaptığı işin detayları yani kabaca nasıl yaptığı, çağıran tarafından bilinmek zorunda değildir. Bu anlamda
+	metot aslında, metodu çağrıdan programcıdan detayları gizlemiş olur.
+	
+	- Bir metodun yaptığı iş başka konuları da bilmeyi gerektirebilir. Ancak kullanan açısından bu durum önemsiz olabilir. Örneğin
+	bir sayının asal olup olmadığının anlaşılması konusu, asal sayı üretirken kullanılır ancak birbirlerinde algoritmik olarak 
+	bağımsızdır. Bu durumda asal sayı üreten bir programcı, elinde sayının asal olup olmadığını test etmek için kullanılan bir metodu
+	çağırarak, sayının asal olup olmadığının nasıl anlaşılacağından bağımsız kod yazabilir
+	
+	- Metot çağrılması okunabilirliği/algılanabilirliği artırır
+	
+	Anahtar Notlar: Buradaki maddelerinin hiç birisi birbirinden daha az önemli değildir
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 
