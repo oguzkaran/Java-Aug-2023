@@ -2073,19 +2073,254 @@ class NumberUtil {
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
+	27.08.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
 	Neden metot yazalım? Yani, programcının uygulamayı geliştirirken çeşitli metotları yazması ne gibi bir avatajlar 
 	sağlar? Aslında bu sorulara tek bir cümle ile cevap verilemez. Bu avantajlar genel olarak şu şekilde belirtilebilir: 
 	- Bir metodun yaptığı işin detayları yani kabaca nasıl yaptığı, çağıran tarafından bilinmek zorunda değildir. Bu anlamda
 	metot aslında, metodu çağrıdan programcıdan detayları gizlemiş olur.
 	
-	- Bir metodun yaptığı iş başka konuları da bilmeyi gerektirebilir. Ancak kullanan açısından bu durum önemsiz olabilir. Örneğin
-	bir sayının asal olup olmadığının anlaşılması konusu, asal sayı üretirken kullanılır ancak birbirlerinde algoritmik olarak 
-	bağımsızdır. Bu durumda asal sayı üreten bir programcı, elinde sayının asal olup olmadığını test etmek için kullanılan bir metodu
-	çağırarak, sayının asal olup olmadığının nasıl anlaşılacağından bağımsız kod yazabilir
+	- Bir metodun yaptığı iş başka konuları da bilmeyi gerektirebilir. Ancak kullanan açısından bu durum önemsiz olabilir. 
+	Örneğin bir sayının asal olup olmadığının anlaşılması konusu, asal sayı üretirken kullanılır ancak birbirlerinden 
+	algoritmik olarak bağımsızdır. Bu durumda asal sayı üreten bir programcı, elinde sayının asal olup olmadığını test 
+	etmek için kullanılan bir metodu çağırarak, sayının asal olup olmadığının nasıl anlaşılacağından bağımsız kod yazabilir.
 	
 	- Metot çağrılması okunabilirliği/algılanabilirliği artırır
 	
-	Anahtar Notlar: Buradaki maddelerinin hiç birisi birbirinden daha az önemli değildir
+	- Bir algoritma akış içerisinde bir çok yerde yazılmak isteneblir. Örneğin, bir sayının faktoriyel değerini bulan
+	bir kod akış içerisinde bir çok yerde gerekebilir. Programcı bu kodu gereken her yerde yazarsa bu durumda hata yapma
+	olasılığı artar. Aynı zamanda kodunda bir hata yaptığını farkederse veya kodda değişiklik yapmak isterse bunu yazdığı
+	her yerde yapmak zorunda kalır. Bu da görece karmaşık bir hale getirebilir. İşte bu durumda programcı bir metot yazar
+	ve gereken her yerde o metodu çağırırsa hata yapma olasılığı azalır, hata yaptığını anladığında veya bir değişiklik 
+	gerektiğinde sadece metotta bu değişiklik yapılır. Bu da daha kolay ve çabuk bir biçimde yapılmasını sağlar. 
+	
+	- Uzun bir kodu bir çok yerde yazmak byte code'u büyütebilir. Ancak metot yazılıp çağrıldığında bu durum oluşmaz
+	
+	- Bir kodu metot olarak yazmak, o koda ilişkin test işlemlerini yaparak olası programlama hatalarının daha kolay
+	belirlenebilmesini ve dolayısıyla daha kolay düzeltilmesini sağlar
+	
+	Anahtar Notlar: Buradaki maddelerinin hiç birisi birbirinden daha az önemli değildir.
+	
+	Anahtar Notlar: Programlamada en temel prensip kod tekrarından mümkün olduğunca kaçınmaktır. Yani, aynı işi yapan bir 
+	kodu tekrar yazmak ZORUNLU OLMADIKÇA iyi bir teknik değildir. Bu kavrama programlamada "DO NOT REPEAT YOURSELF (DRY)" de 
+	denilmektedir. İşte bu tekrarlamanın en yalın yöntemi metot yazmaktır ve çağırmaktır. Ayrıca ileride Nesne Yönelimli
+	Programlama tekniğine ilişkin kavramlarla birlikte DRY çok daha etkin bir biçimde yapılabilmektedir.	
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	System.out.printf metodu formatlı yazdırmak için kullanılan çok temel bir metottur. Bu metodun birinci parametresine
+	argüman olarak bir yazı (bir String literal olabilir) geçilmelidir. Bu metot değişken sayıda argüman ile (vararg) 
+	çağrılabilen bir metottur. Bu metodun diğer parametrelerinde herhangi bir türden argüman geçilebilir. Birinci parametre
+	geçilen argümana ilişkin yazıda % karakteri ile birlikte özel bazı karakterler (format characters/specifiers) 
+	yer tutucu (placeholder) olarak kullanılır. Örneğin n format karakteri imleci bir sonraki satırın başına geçirir. Bu 
+	metot ileride göreceğimiz bazı metotlarla da aynı sistematik ile çalışır. printf metodunda format karakterlerin yer 
+	tutucu dışında anlamı vardır. Bu anlamda bu metodu tanımak programcı açısından önemlidir. Örnek bir kullanım aşağıda 
+	verilmiştir. Detaylar şu an önemsizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bugün ve yarınki tahmini hava sıcaklığını giriniz:");
+		int today = kb.nextInt();
+		int tomorrow = kb.nextInt();
+		
+		System.out.printf("Bugün hava %d derece. Yarın %d derece olacak%n", today, tomorrow);				
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Tamsayı türden bir değeri decimal olarak formatlamak için d format karakteri kullanılır, hexadecimal olarak formatlamak
+	için x (küçük veya büyük) format karakteri kullanılır, octal formatlamak için o format karakteri kullanılır. 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int a = kb.nextInt();
+		
+		System.out.printf("a = %d%na = %x%na = %X%na = %o%n", a, a, a, a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Tamsayı türlerinin formatlanmasında % ile format karakteri arasına sıfır dışında pozitif bir sayı hizalama (alignment)
+	anlamına gelir. Eğer sayının başına sıfır da yazılırsa basılacak karakterler hizalanacak sayıdan küçükse başına sıfır
+	eklenir. Eğer sıfır yazılmazsa space karakteri eklenir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int a = kb.nextInt();
+		
+		System.out.printf("a = %02d%na = %08X%n", a, a);
+		System.out.printf("a = %2d%na = %8X%n", a, a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Gün, Ay ve Yıl bilgilerini giriniz:");
+		int day = kb.nextInt();
+		int month = kb.nextInt();
+		int year = kb.nextInt();
+		
+		System.out.printf("%02d/%02d/%04d%n", day, month, year);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Gerçek sayıların formatlanmasında f format karakteri kullanılır. f format karakteri noktadan sonraki basamak sayısını
+	default olarak belirli bir sayıda basamak kadar alır. Bu sayı doğrudan belirtilmemiş olsa da pek çok sistemde 6 dır.
+	Geri kalan basamaklar bilimsel yuvarlama yöntemiyle yuvarlanır 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		float b = kb.nextFloat();
+		
+		System.out.printf("a = %f, b = %f%n", a, b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Gerçek sayılarda noktadan sonra istenilen sayıda basamağın formatlanması için % ile f karakteri arasında . (nokta)
+	ve negatif olmayan bir sayı yazılır. Bu durumda sayı o kadar sayıda basamak olarak formatlanmış olur. Geri kalan
+	basamaklar yine yuvarlanarak atılır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		float b = kb.nextFloat();
+		
+		System.out.printf("a = %.2f, b = %.2f%n", a, b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	char türünün için c format karakteri kullanılır. Bu durumda char türü içerisinde tutulan sayıya karşılık gelen
+	karakter formatlanmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c = 68;
+		
+		System.out.printf("c = %c%n", c);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	boolean türünün için b format karakteri kullanılır. Bu durumda boolean türüne ilişkin değerin (true veya false) yazısal
+	karşılığı ile formatlama yapılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		boolean flag1 = true;
+		boolean flag2 = false;
+		
+		System.out.printf("flag1 = %b, flag2 = %b%n", flag1, flag2);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	printf metodunda kullanılan format karakteri geçilen argümanın türünden farklı ise bu durumda genel olarak exception 
+	oluşur 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("a = %f, b = %f%n", a, b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	printf metodunda s format karakteri ile her tür formatlanabilir. Tabii bu durumda türe özgü bazı formatlama biçimleri
+	kullanılamaz. s format karakteri ile bu işlemin nasıl yapıldığı ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		double b = kb.nextDouble();
+		
+		System.out.printf("a = %s, b = %s%n", a, b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	System.out.printf metodu ile tamamen aynı işi yapan System.out.format isimli bir metot da vardır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		double b = kb.nextDouble();
+		
+		System.out.format("a = %d, b = %.20f%n", a, b);
+	}
+}
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: printf (ve format) metodu için başka format karakterleri ve format karakterlerine özgü başka 
+	detaylar da vardır. Bunlar zaman içerisinde ele alınacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------

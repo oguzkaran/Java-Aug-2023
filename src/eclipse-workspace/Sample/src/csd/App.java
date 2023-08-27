@@ -1,5 +1,12 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örnekte ** ile belirtilen kod parçasında add metodu yeni a değeri için de çağrılmalıdır
+	Sınıf Çalışması: Klavyeden girilen iki tam sayının toplamını, çarpımını ve farkını açıklamalara göre ekrana bastıran
+	programı yazınız: 
+	Açıklamalar:
+		- Girilen sayılar 10 ve 20 olsun. Ekran çıktısı şu şekilde olacaktır:
+		  	10 + 20 = 30
+		  	10 * 20 = 200
+		  	10 - 20 = -10
+		- Ekrana formatlı yazdırmak için printf metodunu kullanınız 
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -8,21 +15,10 @@ class App {
 	{
 		java.util.Scanner kb = new java.util.Scanner(System.in);
 		
-		System.out.print("İki tane sayı giriniz:");
+		System.out.print("İki sayı giriniz:");
 		int a = kb.nextInt();
-		int b = kb.nextInt();		
-		int result;
+		double b = kb.nextDouble();
 		
-		result = NumberUtil.add(a, b);
-		
-		//...
-		System.out.println(result);
-	}
-}
-
-class NumberUtil {
-	public static int add(int a, int b)
-	{
-		return a ;
+		System.out.format("a = %d, b = %.20f%n", a, b);
 	}
 }
