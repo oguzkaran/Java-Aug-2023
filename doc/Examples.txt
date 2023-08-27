@@ -2378,6 +2378,45 @@ class NumberUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	JavaSE'de de bir çok sınıf ve bir çok metot vardır. Ayrıca programcı geliştirme sırasında kullandığı kütüphane ve 
+	ortamlarda da (framework) pek çok sınıf ve metot bulunur. Peki programcı bir konuya ilişkin metodu ne zaman 
+	yazmaya karar vermelidir? Yani başka bir deyişle JavaSE ya da diğer kullanılan ortam ve kütüphanelerde ilgili
+	işlemi yapan sınıflar ya da metotlar programcı kendisi yazmalı mıdır? Programcı önce JavaSE'de ilgili işlemi yapan
+	sınıfları ve metotları tercih etmelidir. Eğer işlemi yapan sınıf veya metot JavaSE'de yoksa, kullandığı kütüphane veya
+	ortamda varsa onu tercih etmelidir. Eğer burada da yoksa kendisi yazmalı veya bu konuda yine iyi yazılmış olan bir 
+	kütüphaneninkini varsa kullanmalıdır. Programcı kendi yazacağı metodu mutlaka test eder ve ona göre kodunu iyileştirir.
+	Bununla birlikte Java programcısı zaman içerisinde (bu hemen olmayabilir) hepsini olmasa da kullandığı sınıfları ve
+	metotları yazabilmeyi öğrenmelidir. Ancak, bir uygulama geliştirirken var olanları kullanmalıdır. Bu anlamda her şey
+	de hazır değildir. Programcı da pek çok sınıf ve metot yazar.
+	
+	Peki, JavaSE'de ya da kullanılan ortamlar ve kütüphanelerdeki metotları kullanmanın avantajları nelerdir?
+	- Okunabilirlik/algılanabilirlik
+	
+	- Kodun taşınabilirliğini sağlar. Özellikle JavaSE'deki bir metodun kod içerisinde çağrılması durumunda, o kod her ortama
+	taşınabilir ve kodu derlenmesi için ektra bir işlem yapmaya gerek kalmaz
+	
+	- Bu metotlar zaman içerisinde test edildiği ve iyileştirildiği için metotlar uygun çalışması anlamında güvenilirdir
+	 
+	- JavaSE'den kullanılan bir metot veya sınıf için derleyici daha etkin kodlar üretebilir.
+	
+	- Programcının yalnızca kendi konusuna odaklanmasını sağlar
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınıfının PI ve E veri elemanları
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println(Math.PI);
+		System.out.println(Math.E);
+	}
+}
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
