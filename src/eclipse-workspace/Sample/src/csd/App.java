@@ -1,13 +1,14 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Math sınıfının PI ve E veri elemanları
+	Bir karakterin sıra numası ters bölü ve u ile birlikte hexadecimal olarak da verilebilmektedir. Bu durumda ilgili
+	karakterin sıra numarası alınmış olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
 class App {
 	public static void main(String [] args) 
-	{
-		System.out.println(Math.PI);
-		System.out.println(Math.E);
+	{		
+		char c = '\u04f4';
+		
+		System.out.println(c);
 	}
 }
-

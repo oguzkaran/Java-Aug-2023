@@ -2396,7 +2396,7 @@ class NumberUtil {
 	- Kodun taşınabilirliğini sağlar. Özellikle JavaSE'deki bir metodun kod içerisinde çağrılması durumunda, o kod her ortama
 	taşınabilir ve kodu derlenmesi için ektra bir işlem yapmaya gerek kalmaz
 	
-	- Bu metotlar zaman içerisinde test edildiği ve iyileştirildiği için metotlar uygun çalışması anlamında güvenilirdir
+	- Bu metotlar zaman içerisinde test edildiği ve iyileştirildiği için uygun çalışması anlamında güvenilirdir
 	 
 	- JavaSE'den kullanılan bir metot veya sınıf için derleyici daha etkin kodlar üretebilir.
 	
@@ -2416,7 +2416,555 @@ class App {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	02.09.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	İki tam sayı bölme işlemine sokulduğunda bölümün noktadan sonraki kısmı atılır. Ayrıca iki tamsayı bölme işlemine
+	sokulduğunda bölen yani payda sıfır ise exception oluşur. Yani tamsayılar ile bölme işlemi paydanın sıfır olması
+	durumunda yapılamaz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
 
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		double c;
+		
+		c = a / b;
+		
+		System.out.printf("c = %f%n", c);				
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki gerçek sayı bölme işlemine sokulduğunda bölünenin (payın) sıfır dışı bir değer, bölenin (paydanın) sıfır olması
+	durumunda +-Infinity, payın da sıfır olması durumunda NaN (Not a number) değeri elde edilir. IEEE 754 standardına göre 
+	gerçek sayılar kümesinde gerçek sayılar dışında özel bazı değerler vardır. İşte Infinity ve NaN değerleri de bunlardan
+	ikisidir. Aşağıdaki örneği çeşitli değerler içinm çalıştırıp sonuc-çları gözlemleyiniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c;
+		
+		c = a / b;
+		
+		System.out.printf("c = %f%n", c);				
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Math sınıfının metotları matematiksel olarak geçersiz olan argümanlar için genel olarak exception
+	oluşturmazlar. Duruma göre NaN, Infinity gibi özel değerlere geri dönerler 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınfının karakök alan sqrt metodu. Metot argümanın negatif olması durumunda NaN değerine geri döner 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("sqrt(%f) = %f%n", a, Math.sqrt(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınfının karakök alan sqrt metodu. Metot argümanın negatif olması durumunda NaN değerine geri döner 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("|%f| = %f%n", a, Math.abs(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınfının abs metotları 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("|%f| = %f%n", a, Math.abs(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bir sınıf içerisinde aynı isimde birden fazla metot bildirilmesi durumunda "method overloading"
+	denir. Method overloading konusu ileride detaylı olarak ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınfının pow metodu 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		
+		System.out.printf("pow(%f, %f) = %f%n", a, b, Math.pow(a, b));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı 2 noktanın koordinat bilgilerine göre aralarındaki uzaklığa geri dönen
+	distance isimli metodu yazınız ve aşağıdaki kod ile test ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		PointUtilDistanceTest.run();
+	}
+}
+
+class PointUtilDistanceTest {
+	public static void printDistance(double x1, double y1, double x2, double y2)
+	{
+		System.out.printf("Distance:%f%n", PointUtil.distance(x1, y1, x2, y2));
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("İki noktanın koordinatlarını giriniz");
+		double x1 = kb.nextDouble();
+		double y1 = kb.nextDouble();
+		double x2 = kb.nextDouble();
+		double y2 = kb.nextDouble();
+
+		printDistance(x1, y1, x2, y2);
+	}
+}
+
+class PointUtil {
+	public static double distance(double x1, double y1, double x2, double y2)
+	{
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı 2 noktanın koordinat bilgilerine göre aralarındaki uzaklığa geri dönen
+	distance isimli metodu yazınız ve aşağıdaki kod ile test ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		PointUtilDistanceTest.run();
+	}
+}
+
+class PointUtilDistanceTest {
+	public static void printDistance(double x1, double y1, double x2, double y2)
+	{
+		System.out.printf("Distance:%f%n", PointUtil.distance(x1, y1, x2, y2));
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("İki noktanın koordinatlarını giriniz");
+		double x1 = kb.nextDouble();
+		double y1 = kb.nextDouble();
+		double x2 = kb.nextDouble();
+		double y2 = kb.nextDouble();
+
+		printDistance(x1, y1, x2, y2);
+	}
+}
+
+class PointUtil {
+	public static double distance(double x1, double y1, double x2, double y2)
+	{
+		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınıfının min ve max metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		
+		System.out.printf("min(%f, %f) = %f%n", a, b, Math.min(a, b));
+		System.out.printf("max(%f, %f) = %f%n", a, b, Math.max(a, b));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte 3 tane sayının en büyüğü ve en küçüğü bulunmaktadır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("Üç sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c = kb.nextDouble();
+		
+		System.out.printf("min(%f, %f, %f) = %f%n", a, b, c, Math.min(Math.min(a, b), c));
+		System.out.printf("max(%f, %f, %f) = %f%n", a, b, c, Math.max(Math.max(a, b), c));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınıfının logaritma işlemi yapan metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();	
+		
+		System.out.printf("log10(%f) = %f%n", a, Math.log10(a));
+		System.out.printf("log(%f) = %f%n", a, Math.log(a));
+		System.out.printf("log1p(%f) = %f%n", a, Math.log1p(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Math sınıfının yuvarlama işlemi yapan önemli metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();	
+		
+		System.out.printf("round(%f) = %d%n", a, Math.round(a));		
+		System.out.printf("rint(%f) = %f%n", a, Math.rint(a));
+		System.out.printf("ceil(%f) = %f%n", a, Math.ceil(a));
+		System.out.printf("floor(%f) = %f%n", a, Math.floor(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Math sınıfında yukarıdaki metotlar dışında da pek çok metot bulunmaktadır. Bunlar genel olarak
+	spesifik durumlarda ihtiyaç olan metotlardır. Gerektiğinde dokümantasyondan öğrenilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sabit İfadesi (constant expression): Yalnızca sabitlerden ve operatörlerden oluşan ifadelere denir. Sabitler de 
+	tek başına bir sabit ifadesidir. 
+	
+	Anahtar Notlar: İleride aslında bir sabit olarak ele alınan değişken bildirimleri de yapılabileceğini göreceğiz
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Sabitler (Literals/Constants): Program içerisinde doğrudan yazılan sayılara denir.  Sabitlerin de türleri vardır. 
+	Yani derleyici yazılan sabitin türüne göre işlem yapar. Sabitlerin türlerine ilişkin detaylar şu şekildedir:
+	- Sayı nokta içermiyorsa VE sonuna herhangi bir ek almamışsa VE int türü sınırları içerisindeyse int türdendir. int
+	türü sınırları dışında ise error oluşur. Örneğin: 10, 20, 45
+	
+	- Sayı nokta içermiyorsa ve sonuna L (küçük veya büyük) ekini almışsa (bu ek sayıya bitişik olarak yazılmalıdır)
+	long türdendir. Sayı long türü sınırları dışında ise error oluşur.. Örneğin: 10L, 20000L 
+	Anahtar Notlar: Küçük harf L karakteri sayının sonuna getirildiğinde bazı yazı tiplerinde 1 (bir) rakamı ile 
+	karıştırılabileceğinden okunabilirlik açısından küçük harf L son ekinin kullanımı tavsiye edilmez
+	
+	- Java'da byte ve short türden sabitler yoktur
+	
+	- Sayı nokta içeriyorsa ve herhangi bir sonek almamışsa ve sınırlar içerisindeyse double türdendir. Örneğin: 3.4, 9.28759
+	
+	- Sayı nokta içersinde ya da içermesin sonuna D (küçük veya büyük) ekini almışsa double türdendir. Örneğin: 10D, 3.45d
+	
+	- Sayı nokta içersin ya da içermesin sonuna F (küçük veya büyük) ekini almışsa float türden. Sayının ondalık kısmı
+	varsa F eki ile yuvarlama hataları oluşabilir. Örneğin: 3.4F, 8f
+	
+	- boolean türden iki tane sabit vardır: true, false
+	
+	- Tek tırnak içerisinde yazılan bir karakter, o karakterin karakter tablosundaki sıra numarasına karşılık gelir.
+	Örneğin, 'Ş', 'D' gibi. Tek tırnak içerisinde özel bazı durumlar dışında yalnızca bir tane karakter yazılabilir. Bazı
+	karakterlerin doğrudan sembol karşılığı yoktur. Bu karakterlere "escape sequence" karakterler denir. Bu karakterler
+	için karakter sabitleri ters bölü ile birlikte özel bir karakter kullanılarak yazılır. Java'da desteklenen escape
+	sequence karakterler şunlardır:
+	
+	'\n' -> Line Feed (LF)
+	'\r' -> Carriage Return (CR)
+	'\t' -> Horizontal Tab
+	'\'' -> Single quote	
+	'\"' -> Double quote (optional)
+	'\0' -> null character
+	'\\' -> back slash
+	'\f' -> form feed
+	'\b' -> backspace
+	
+	Peki, klavyemizin desteklemediği bir karakteri karakter sabiti olarak yazmanın yolu var mıdır? Sıra numarası doğrudan
+	yazılabilir ya da çok kullanılan bir teknik olarak ters bölü ve u ile birlikte yazılabilir. Örneğin: '\u00C6'. Burada
+	hexadecimal değer kesinlikle iki byte olarak yazılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	LF karakter sabiti
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c;
+		
+		c = '\n';
+		
+		System.out.print("Merhaba");
+		System.out.print(c);
+		System.out.print("Nasılsın");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Eclipse ve IntelliJ gibi bazı IDE'ler işletim sisteminin console'unu doğrudan kullanmazlar. Kendi 
+	console'ları da vardır. Bazı durumlarda bu console programın çalıştırıldığı sistemin console'undan farklı davranabilirler
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	CR karakter sabiti. Aşağıdaki örneği işletim sisteminizin console'unda çalıştırıp sonucu gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c;
+		
+		c = '\r';
+		
+		System.out.print("Merhaba");
+		System.out.print(c);
+		System.out.print("Ali");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Escape sequence karakterler string literal içerisinde kendi anlamlarında kullanılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("Merhaba\rAli");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Tek tırnak karakterinin karakter sabiti ters bölü ile yazılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c = '\'';
+		
+		System.out.println(c);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Tek tırnak karakteri string literal içerisinde iki şekilde kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("'Ankara'");
+		System.out.println("\'Ankara\'");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki tırnak karakterinin sabiti iki şekilde yazılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c1 = '\"';
+		char c2 = '"';
+		
+		System.out.println(c1);
+		System.out.println(c2);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki tırnak karakteri string literal içerisinde ters bölü ile kullanılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("\"Ankara\"");;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Ters bölü karakter sabiti de ters bölü ile kullanılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		char c = '\\';
+		
+		System.out.println(c);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte escape sequence karakterler kullanıldığından çıktı C:\test\names.txt biçiminde olmaz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("C:\test\names.txt");;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnekte ters bölü karakterinin çıkartılması için ili tane ters bölü kullanılmalıdır 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("C:\\test\\names.txt");;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ters bölü karakterinden sonra uygun bir karakter gelmediğinden error oluşur 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("C:\deneme\names.txt");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnek aşağıdaki gibi yazılabilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		System.out.println("C:\\deneme\\names.txt");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Backspace karakter sabiti
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		System.out.println("Merhaba\bAli");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Backtick karakter sabiti. Bu karakterin çok özel bir anlamı yoktur. Tek tırnak karakterine benzerliği dolayısıyla
+	burada örnek olarak gösterilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		char c = '`';
+		
+		System.out.println(c);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir karakterin sıra numası ters bölü ve u ile birlikte hexadecimal olarak da verilebilmektedir. Bu durumda ilgili
+	karakterin sıra numarası alınmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		char c = '\u00C6';
+		
+		System.out.println(c);
+	}
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
