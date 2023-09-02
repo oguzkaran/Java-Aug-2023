@@ -859,17 +859,17 @@ class Mample {
 	türler (user defined types) olmak üzere iki gruba ayrılabilir. Programcının tanımladığı türler ileride ele alınacaktır.
 	Temel türler birer anahtar sözcük olarak temsil edilmektedir. Java'nın tamel türleri şunlardır:
 	
-	Temel Tür				Uzunluğu (byte)
-	short						2
-	int							4
-	long						8
-	byte						1
+	   Tür ismi            Uzunluk (byte)            Sınır Değerler
+	   short                 2                    	[-32768, +32767]
+	   int                   4                    	[-2147483648, +2147483647]  
+	   long                  8                    	[-9223372036854775808, +9223372036854775807]
+	   byte                  1                    	[-128, +127]
 	
-	float						4
-	double						8
+	   float                 4                    	[±3.6 * 10-38, ±3.6 * 10+38]
+	   double                8                    	[±1.6 * 10-308, ±1.6 * 10+308]
 	
-	char						2
-	boolean						-
+	   char                  2                    	[0, 65535]
+	   boolean               -                    	true, false
 	
 	Temel türlere ilişkin özellikler:
 	- Temel türler genel olarak tamsayı türleri (integer/integral types), gerçek sayı türleri (real types) ve özel amaçlı
