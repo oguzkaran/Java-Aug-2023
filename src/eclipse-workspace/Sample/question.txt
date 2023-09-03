@@ -1,0 +1,21 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da negatif bir sabit doğrudan yoktur. Pozitif bir sabite işaret eksi operatörü uygulandığında negatif olur. Örneğin
+	-2 yazıldığında 2 sabitine işaret - operatörü uygulandığında elde edilen değer üretilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a;
+		
+		a = - - - - - - - - - - - - - - - - - - - - -2;
+		
+		System.out.printf("a = %d%n", a);		
+	}
+}
+
+Yukarıdaki kod için aşağıdakilerden hangisi doğrudur.
+1. Sentaks hatası vardır. Yeri ...
+2. Program derlenir. çalıştırıldığında ... değeri elde edilir
+3. Hiç biri
