@@ -3638,7 +3638,7 @@ class App {
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Anahtar Notlar: İki operandlı operatörler için bazı özel operatörler dışında operanlar arasında bir ve yalnız bir tane
-	space karakteri koyacağız. Tek operandlı operatörler için de genel olarak operandına bitişik olarak yazacağız 
+	space karakteri koyacağız. Tek operandlı operatörleri genel olarak operandına bitişik olarak yazacağız 
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
 	Aşağıdaki örneği inceleyiniz
@@ -3685,6 +3685,684 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------
 	09.09.2023	
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyici soldan sağa ve yukarıdan aşağıya doğru anlamlı en uzun ifadeyi ele alacak şekilde parsing işlemini yapar.
+	Bu kurala "maximal munch" da denilmektedir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		int b = 5;
+		int c;
+		
+		c = a+++b; //a++ + b		
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c); //a = 3, b = 5, c = 7
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		int b = 5;
+		int c;
+		
+		c = a++b; //error
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		int b = 5;
+		int c;
+		
+		c = a++++b; //error		
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		int b = 5;
+		int c;
+		
+		c = a+++-b;		
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c); //a = 3, b = 5, c = -3
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;	
+		
+		a = a++;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;	
+		
+		a = ++a;
+		
+		System.out.printf("a = %d%n", a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2;
+		int b;
+		
+		b = a++ + a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b); //a = 3, b = 5
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2, b = 3;
+		int c;
+		
+		c = ++a + ++b * a--;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c); //a = 2 , b = 4, c = 15 
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2, b = 3;
+		int c;
+		
+		c = ++b * a-- + ++a;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c); //a = 2 , b = 4, c = 10
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 2, b = 3;
+		int c;
+		
+		c = ++b * a-- + ++a;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c); //a = 2 , b = 4, c = 10 
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Temel karşılaştırma operatörleri 6 tanedir: <, >, <=, >=, ==, !=. Bu operatörler iki operandlı ve araek durumundadır.
+	Bu operatörlerin yan etkisi yoktur. Bu operatörlerin temel türler açısından operandının boolean türünden olmaması 
+	gerektiği dışında bir kısıtı yoktur. Bu operatörlerin ürettiği değer karşılaştırmanın sonucuna göre boolean türdendir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		
+		System.out.printf("%d < %d = %b%n", a, b, a < b);
+		System.out.printf("%d > %d = %b%n", a, b, a > b);
+		System.out.printf("%d <= %d = %b%n", a, b, a <= b);
+		System.out.printf("%d >= %d = %b%n", a, b, a >= b);
+		System.out.printf("%d == %d = %b%n", a, b, a == b);
+		System.out.printf("%d != %d = %b%n", a, b, a != b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte boolean ile int türü karşılaştırması geçersiz olacağından error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10, b = 20, c = 30;
+
+		
+		System.out.println(a < b < c);	//error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Mantıksal operatörler (logical operators) 3 tanedir: Logical AND (&&), logical OR (||), logical NOT (!).
+	&& ve || operatörleri iki operandlı araek durumundadır, ! operatörü tek operandlı ve önek durumundadır. Mantıksal
+	operatörlerin operandları boolean türden olmak zorundadır. Bu operatörlerin ürettiği değer işlemin sonucuna göre
+	boolean türdendir. Bu operatörlerin yan etkisi yoktur.
+	
+	Mantıksal operatörlerin doğruluk tabloları (truth table):
+	
+	a 		b		a && b		a || b
+	T		T		  T			  T
+	T		F		  F			  T
+	F		T		  F			  T
+	F		F		  F			  F
+	
+	a		!a
+	T		F
+	F		T
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	&& operatörü. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.foo() && Sample.bar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	|| operatörü. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.bar() || Sample.foo();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	&& operatörünün kısa devre davranışı (short circuit behavior) . Aşağıdaki örnekte foo metodunun çağrılması sonucu
+	etkilemediğinden çağrılmaz. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.bar() && Sample.foo();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	|| operatörünün kısa devre davranışı (short circuit behavior) . Aşağıdaki örnekte foo metodunun çağrılması sonucu
+	etkilemediğinden çağrılmaz. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.foo() || Sample.bar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	&& ve || operatörleri doğru sonuca en kısa yoldan hesaplamak isterler. Bunu da kısa devre davranışı ile yaparlar. 
+	Derleyici bu operatörlerin kullanıldığı ifadelerde buna yönelik kod üretir.
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	&& ve || operatörlerine ilişkin ifadelerde işlem önceliği düşünülmeksizin hep soldan başlanarak işlem yapılır. Yani
+	bu operatörlerle işlem yapılırken operatör önceliğine uyulmaz. Ancak elde edilen sonuç operatör önceliğine uyulsa
+	(yani Matematiksel olarak işlem yapılsa) elde edilecek sonucun aynısı olur. Aşağıdaki örneği inceleyiniz. Metotlar 
+	durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.foo() || Sample.bar() && Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte operatör önceliği, işlem yapılış önceliği aynıdır. Bu durumda ona yönelik kod üretilir. Örnekte 
+	tar çağrılmadan sonuç elde edilemez. Ancak foo'nunn çağrılmasına gerek yoktur. Metotlar  durumu göstermek aşağıdaki 
+	gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.bar() && Sample.foo() || Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return true;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	! operatörü operandına ilişkin ifadenin mantıksal tersini üretir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean flag = false; //Buradaki değerin ne olduğu ve nereden elde edildiğini düşünmeyiniz
+		
+		flag = !flag;
+		
+		System.out.printf("flag = %b%n", flag);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bitwise AND (&) ve bitwise OR (|) operatörleri boolean türü ile kullanıldığında yani operandları boolean türden 
+	olduğunda kısa devre davranışı dışında && ve || operatörleri ile aynı biçimde çalışırlar. Yani bu operatörler boolean
+	türü ile kullanıldıklarında ne olursa olsun kısa devre olmaz. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		boolean result = Sample.foo() | Sample.bar() & Sample.tar();
+		
+		System.out.printf("result = %b%n", result);
+	}
+}
+
+class Sample {
+	public static boolean foo()
+	{
+		System.out.println("foo");
+		
+		return true;
+	}
+	
+	public static boolean bar()
+	{
+		System.out.println("bar");
+		
+		return false;
+	}
+	
+	public static boolean tar()
+	{
+		System.out.println("tar");
+		
+		return false;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	& ve | operatörleri iki tamsayının karşılıklı bitlerini işleme sokarlar ve elde edilen sayıyı üretirler. Örnek durumu
+	göstermek için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 10; //00000000000000000000000000001010 -> 0000000A
+		int b = 11; //00000000000000000000000000001011 -> 0000000B
+		int c;
+		
+		c = a & b; //00000000000000000000000000001010 -> 0000000A
+		
+		System.out.printf("c = %d%n", c);
+		
+		c = a | b; //00000000000000000000000000001011 -> 0000000B
+		
+		System.out.printf("c = %d%n", c);
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bitsel operatörlerin detayları burada ele alınmayacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Atama operatörü (assignment operator) (=) iki operandlı araek durumundadır. Operatörün birinci operandı değişken
+	olmalıdır. Operatörün yan etkisi vardır. Atama operatörü atanmış olan değeri üretir. Atama operatörü sağdan sola
+	önceliklidir. Bu sebeple aşağıdaki işlem geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a, b, c;
+		
+		a = b = c = 2;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Atama operatörü (assignment operator) (=) iki operandlı araek durumundadır. Operatörün birinci operandı değişken
+	olmalıdır. Operatörün yan etkisi vardır. Atama operatörü atanmış olan değeri üretir. Atama operatörü sağdan sola
+	önceliklidir. Bu sebeple aşağıdaki işlem geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a, b, c;
+		
+		a = b = c = 2;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte, atama operatörünün birinci operandının değişken olması gerektiğinden error oluşur 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20, b = 10, c = 10;
+		
+		(a = b) = c = 2;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte, atama operatörünün birinci operandının değişken olması gerektiğinden error oluşur 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20, b = 34, c = 3;
+		
+		a = (b = c) = 3;
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnek geçerlidir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20, b = 34, c = 3;
+		
+		a = b = (c = 2);
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da bir grup işlemli atama (compound/augmented assignment) operatörü vardır. Bu operatörlerin genel biçimi şu 
+	şekildedir:
+	<değişken> <op>= <ifade>
+	Örneğin 
+	a += b;
+	
+	Bu operatöler iki operandlı ve araek durumundadır. Bu operatörlerin birinci operandları değişken olmalıdır. Bu 
+	opetörlerin çalışme biçimi şu şekildedir:
+	
+	<değişken> <op>= <ifade> => <değişken> = <değişken> <op> <ifade>
+	Örneğin: 
+	a += b => a = a + b
+	
+	İşlemli atama operatörleri de atanmış değeri üretirler
+	
+	Anahtar Notlar: İşlemli atama operatörleri aslında <değişken> = <değişken> <op> <ifade> işlemini bu şekilde 
+	yapmazlar. İleride asıl işlemi ele alacağız
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İşlemli atama operatörleri
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20;
+		
+		a += 10; //a = a + 10;
+		
+		System.out.printf("a = %d%n", a);		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İşlemli atama operatörleri ifadelerin daha basit yazılması için tercih edilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20, b = 10, c = 20;
+		
+		a *= b + c; //a = a * (b + c); 
+		
+		System.out.printf("a = %d%n", a);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		int a = 20, b = 10, c = 20;
+		
+		a += b += c;  
+		
+		System.out.printf("a = %d, b = %d, c = %d%n", a, b, c);		
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
