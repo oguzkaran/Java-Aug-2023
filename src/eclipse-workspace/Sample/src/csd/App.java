@@ -1,42 +1,63 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının asal olup olmadığını test eden isPrime isimli
-	metodu yazınız
-	Asal Sayı: Yalnızca 1'e ve kendisine bölünebilen pozitif sayılara asal sayı denir
-	
-	Kural: Bir sayı karekökünden küçük olan asal sayıların hiç birisine bölünmüyorsa asaldır
+	Sınıf Çalışması: Parametresi ile aldığı bir sayıdan küçük en büyük asal sayıya geri dönen previousClosestPrime isimli metodu 
+	yazınız ve aşağıdaki kod ile test ediniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
 class App {
 	public static void main(String [] args) 
 	{
-		NumberUtilIsPrimeTest.run();
+		NumberUtilPreviousClosestPrimeTest.run();
 	}
 }
 
-class NumberUtilIsPrimeTest {
+class NumberUtilPreviousClosestPrimeTest {
 	public static void run()
-	{			
-		for (long i = -10; i <= 100; ++i)
-			if (NumberUtil.isPrime(i))
-				System.out.printf("%d ", i);
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
 		
-		System.out.println();
-		
-		System.out.println(NumberUtil.isPrime(1_000_003));
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			long n = Long.parseLong(kb.nextLine());		
+			
+			
+			System.out.printf("%d. sayısından küçük en büyük asal sayı:%d%n", n, NumberUtil.previousClosestPrime(n));
+			
+			if (n == 0)
+				return;
+		}
 	}
 }
 
 class NumberUtil {
+	public static long previousClosestPrime(long val)
+	{
+		//TODO:				
+	}
+	
 	public static boolean isPrime(long val)
 	{
-		if (val < 1)
+		if (val <= 1)
 			return false;
 		
-		for (long i = 2; i <= val / 2; ++i)
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
 			if (val % i == 0)
 				return false;
 		
-		return true;
+		return true;		
 	}
 }
+
+

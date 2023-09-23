@@ -6336,7 +6336,8 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının asal olup olmadığını test eden isPrime isimli
 	metodu yazınız
-	Asal Sayı: Yalnızca 1'e ve kendisine bölünebilen pozitif sayılara asal sayı denir 
+	Asal Sayı: Yalnızca 1'e ve kendisine bölünebilen pozitif sayılara asal sayı denir
+	(Yavaş versiyon) 
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -6363,7 +6364,7 @@ class NumberUtilIsPrimeTest {
 class NumberUtil {
 	public static boolean isPrime(long val)
 	{
-		if (val < 1)
+		if (val <= 1)
 			return false;
 		
 		for (long i = 2; i <= val / 2; ++i)
@@ -6371,6 +6372,425 @@ class NumberUtil {
 				return false;
 		
 		return true;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının asal olup olmadığını test eden isPrime isimli
+	metodu yazınız
+	Asal Sayı: Yalnızca 1'e ve kendisine bölünebilen pozitif sayılara asal sayı denir
+	
+	Kural: Bir sayı kare kökünden küçük olan asal sayıların hiç birisine bölünmüyorsa asaldır
+	(Daha hızlı versiyon)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{			
+		for (long i = -10; i <= 100; ++i)
+			if (NumberUtil.isPrime(i))
+				System.out.printf("%d ", i);
+		
+		System.out.println();
+		
+		System.out.println(NumberUtil.isPrime(1_000_003));
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte isPrime metotlarının demo bir counter testi yapılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{		
+		System.out.println(NumberUtil.isPrime(1_000_003));
+		System.out.println(NumberUtil.isPrimeSlow(1_000_003));
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		int count = 0;
+		
+		for (long i = 11; i * i <= val; i += 2) {
+			++count;
+			if (val % i == 0)
+				return false;
+		}
+		
+		System.out.printf("isPrime:count:%d%n", count);
+		
+		return true;		
+	}
+	
+	public static boolean isPrimeSlow(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		int count = 0;
+		for (long i = 2; i <= val / 2; ++i) {
+			++count;
+			if (val % i == 0)
+				return false;
+		}
+		
+		System.out.printf("isPrimeSlow:count:%d%n", count);
+		return true;
+	}
+}
+
+
+/*---------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki algoritmanın Matematiksel olarak daha hızlısı vardır. Ancak burada ele alınmayacaktır. Çoğu zaman
+	bu algoritma yeterli olacaktır. Eğer çok büyük sayılarla çalışılmıyorsa sayının yarısına kadar dolaşan algoritma da
+	yeterli olabilir. Yukarıdaki iki algoritmayı aşağıdaki asal sayılar ile çalıştırıp sonuçları gözlemleyebilirsiniz:
+	
+	6750161072220585911
+	1603318868174368979
+	6584583408148485263
+	6245098347044246839
+	6285871677077738093
+	5697859706174583067
+	710584055392819667
+	4935060337471977161
+	3728803592870153407
+	4331452335614730577
+	1386437196678024971
+	1677990107453991593
+	4765603950744460867
+	4498306523077899307
+	4434895834573449257	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı pozitif bir n değeri için n-inci asal sayıya geri dönen nthPrime isimli
+	metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar:
+		- n değerinin pozitif olup olmadığı kontrol edilmeyecektir		
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilNthPrimeTest.run();
+	}
+}
+
+class NumberUtilNthPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n <= 0)
+				return;
+			
+			System.out.printf("%d. asal sayı:%d%n", n, NumberUtil.nthPrime(n));
+		}
+	}
+}
+
+class NumberUtil {
+	public static long nthPrime(int n)
+	{
+		long val = 2;
+		int count = 0;
+		
+		for (long i = 2; count < n; ++i)
+			if (isPrime(i)) {
+				++count;
+				val = i;
+			}
+		
+		return val;
+	}
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı pozitif bir n değeri için n-inci asal sayıya geri dönen nthPrime isimli
+	metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar:
+		- n değerinin pozitif olup olmadığı kontrol edilmeyecektir		
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilNthPrimeTest.run();
+	}
+}
+
+class NumberUtilNthPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n <= 0)
+				return;
+			
+			System.out.printf("%d. asal sayı:%d%n", n, NumberUtil.nthPrime(n));
+		}
+	}
+}
+
+class NumberUtil {
+	public static long nthPrime(int n)
+	{
+		long val = 2;
+		int count = 0;
+		
+		while (true) {
+			if (isPrime(val))
+				++count;
+			
+			if (count == n)
+				return val;
+			
+			++val;
+		}
+	}
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir sayıdan büyük ilk asal sayıya geri dönen nextClosestPrime isimli metodu 
+	yazınız ve aşağıdaki kod ile test ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilNextClosestPrimeTest.run();
+	}
+}
+
+class NumberUtilNextClosestPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			long n = Long.parseLong(kb.nextLine());		
+			
+			
+			System.out.printf("%d. sayısından büyük ilk asal sayı:%d%n", n, NumberUtil.nextClosestPrime(n));
+			
+			if (n == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static long nextClosestPrime(long val)
+	{
+		//TODO:				
+	}
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir sayıdan küçük en büyük asal sayıya geri dönen previousClosestPrime isimli metodu 
+	yazınız ve aşağıdaki kod ile test ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilPreviousClosestPrimeTest.run();
+	}
+}
+
+class NumberUtilPreviousClosestPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			long n = Long.parseLong(kb.nextLine());		
+			
+			
+			System.out.printf("%d. sayısından küçük en büyük asal sayı:%d%n", n, NumberUtil.previousClosestPrime(n));
+			
+			if (n == 0)
+				return;
+		}
+	}
+}
+
+class NumberUtil {
+	public static long previousClosestPrime(long val)
+	{
+		//TODO:				
+	}
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
 	}
 }
 
