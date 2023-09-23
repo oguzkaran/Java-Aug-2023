@@ -6196,6 +6196,184 @@ class NumberUtil {
 /*---------------------------------------------------------------------------------------------------------------------
 	23.09.2023
 ----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	for döngüsünde 1.kısım boş bırakıldığında akış for döngüsüne geldiğinde yalnızca koşul kontrolü yapılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		int i = 0;
+		
+		for (; i < n; ++i) 
+			System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for döngüsünde 3.kısım boş bırakıldığında her adım sonunda koşul kontrol edilmeden herhangi bir işlem yapılmamış
+	olur. Şüphesiz programcı bu duruma göre kodunu düzenlemelidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < n;) { 
+			System.out.printf("%d ", i);
+			++i;			
+		}
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for döngüsünde 1. ve 3. kısımlar boş bırakıldığında while döngü deyimi gibidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		int i = 0;
+		
+		for (; i < n;) { //while (i < n) {  
+			System.out.printf("%d ", i);
+			++i;			
+		}
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for döngüsünde ikinci kısmın boş bırakılması durumu true yazılmasıyla aynı anlamdadır. Yani sonsuz döngüdür
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+
+		for (int i = 0; ; ++i)  
+			System.out.printf("%d%n", i);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for döngüsünde sonsuz döngü oluşturmak için programcılar okunabilirlik açısından 3 kısmı da boş bırakırlar
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);	
+	
+		for (;;) {
+			//...
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sonsuz döngü sanılan ancak olmayan bir döngü örneği
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		int i;
+		for (i = 0; i < 10; --i)
+			;//System.out.println(i);
+			
+			
+		System.out.printf("i = %d%n", i);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		int i;
+		for (i = 20; i >= 0; ++i)
+			;//System.out.println(i);
+			
+		System.out.printf("i = %d%n", i);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının asal olup olmadığını test eden isPrime isimli
+	metodu yazınız
+	Asal Sayı: Yalnızca 1'e ve kendisine bölünebilen pozitif sayılara asal sayı denir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilIsPrimeTest.run();
+	}
+}
+
+class NumberUtilIsPrimeTest {
+	public static void run()
+	{
+		for (long i = -10; i <= 100; ++i)
+			if (NumberUtil.isPrime(i))
+				System.out.printf("%d ", i);
+		
+		System.out.println();
+		
+		System.out.println(NumberUtil.isPrime(1_000_003));			 
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long val)
+	{
+		if (val < 1)
+			return false;
+		
+		for (long i = 2; i <= val / 2; ++i)
+			if (val % i == 0)
+				return false;
+		
+		return true;
+	}
+}
+
 
 
 /*---------------------------------------------------------------------------------------------------------------------
