@@ -6668,10 +6668,15 @@ class NumberUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	24.09.2023
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Parametresi ile aldığı bir sayıdan büyük ilk asal sayıya geri dönen nextClosestPrime isimli metodu 
 	yazınız ve aşağıdaki kod ile test ediniz
+	
+	Not: Aşağıdaki örnekte sayının üstten taşması (over flow) durumu kontrol edilmemiştir
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -6702,8 +6707,11 @@ class NumberUtilNextClosestPrimeTest {
 
 class NumberUtil {
 	public static long nextClosestPrime(long val)
-	{
-		//TODO:				
+	{		
+		while (!isPrime(++val))
+			;
+		
+		return val;		
 	}
 	
 	public static boolean isPrime(long val)
@@ -6731,10 +6739,11 @@ class NumberUtil {
 	}
 }
 
-
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Parametresi ile aldığı bir sayıdan küçük en büyük asal sayıya geri dönen previousClosestPrime isimli metodu 
 	yazınız ve aşağıdaki kod ile test ediniz
+	
+	Not: Aşağıdaki örnekte sayının alttan taşması (under flow) durumu kontrol edilmemiştir
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -6765,8 +6774,11 @@ class NumberUtilPreviousClosestPrimeTest {
 
 class NumberUtil {
 	public static long previousClosestPrime(long val)
-	{
-		//TODO:				
+	{		
+		while (!isPrime(--val))
+			;
+		
+		return val;
 	}
 	
 	public static boolean isPrime(long val)
@@ -6793,6 +6805,270 @@ class NumberUtil {
 		return true;		
 	}
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İçiçe döngülerde dıştaki döngünün bir adımı için içteki döngü tamamlanır. Bu durumda örneğin içiçe iki döngünün 
+	toplam dönme sayısı "dıştaki döngünün adım sayısı * içteki döngünün adım sayısı" kadardır. Örnek durumu göstermek
+	için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < m; ++i)
+			for (int k = n - 1; k >= 0; --k)
+				System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazen programcı tek bir döngü yazsa bile, döngü içerisinde çağırmış olduğu bir metot da döngüye girdiğinde dolaylı
+	olarak içiçe döngü kullanmış olur. Örnek durumu göstermek için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+		
+		for (int i = 0; i < m; ++i)
+			Sample.doWork(i, n);
+	}
+}
+
+class Sample {
+	public static void doWork(int i, int n)
+	{
+		for (int k = n - 1; k >= 0; --k)
+			System.out.printf("(%d, %d)%n", i, k);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Prtaikte içiçe döngüler için, 2 veya 3 döngü karşımıza çok fazla çıkabilir. Programcı özellikle 
+	3'den fazla içiçe döngü ile bir algoritmayı gerçekleştirmişse, algoritmasını tekrar gözden geçirmesi tavsiye edilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte içiçe döngü kullanılarak 3 basamaklı Armstrong sayıları bulunmuştur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		for (int a = 1; a <= 9; ++a)
+			for (int b = 0; b <= 9; ++b)
+				for (int c = 0; c <= 9; ++c)
+					if (100 * a + 10 * b + c == a * a * a + b * b * b + c * c * c)
+						System.out.printf("%d%d%d ", a, b, c);
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	break deyimi: break deyimi döngüyü sonlandırmak için kullanılır. break deyiminin genel biçimi şu şekildedir:
+	
+		break [etiket ismi];
+		
+	break deyiminin tek başına kullanımına etiketsiz break ya da sadece break, etiket ile kullanımına ise etiketli break
+	deyimi denilmektedir. break tek başına kullanıldığında, akış break deyimine geldiğinde ilgili döngü sonlanır ve akış
+	döngü deyiminden sonraki deyimle devam eder. break deyimi ya bir döngü deyimi içerisinde ya da  ileride göreceğimiz 
+	switch deyimi içerisinde kullanılabilir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.println("Sayıları girmeye başlayınız:");
+		int total = 0;				
+		
+		while (true) {
+			int val = kb.nextInt();
+			
+			if (val == 0)
+				break;
+			
+			total += val;
+		}
+		
+		System.out.printf("Toplam:%d%n", total);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı pozitif bir n değeri için n-inci asal sayıya geri dönen nthPrime isimli
+	metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar:
+		- n değerinin pozitif olup olmadığı kontrol edilmeyecektir		
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		NumberUtilNthPrimeTest.run();
+	}
+}
+
+class NumberUtilNthPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n <= 0)
+				break;
+			
+			System.out.printf("%d. asal sayı:%d%n", n, NumberUtil.nthPrime(n));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static long nthPrime(int n)
+	{
+		long val = 2;
+		int count = 0;
+		
+		while (true) {
+			if (isPrime(val))
+				++count;
+			
+			if (count == n)
+				return val;
+			
+			++val;
+		}
+	}
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte içteki döngüde bir koşul gerçekleştiğinde dıştaki döngünün sonlanrılması için flag değişken 
+	kullanılmıştır. Örnek durumu göstermek için yazılmıştır		
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{
+		boolean exitFlag = false;
+		
+		for (int i = 2; i <= 20; ++i) { 
+			for (int k = 30; k >= 3; --k) {
+				System.out.printf("(%d, %d)%n", i, k);
+				
+				if ((i + k) % 6 == 0) {
+					exitFlag = true;
+					break;
+				}
+			}
+			if (exitFlag)
+				break;
+		}
+				
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Etiketli break deyimi, etiketin bildirildiği kontrol deyiminin (tipik olarak döngü deyimi) sonlanmasını sağlar. Etiket
+	ismi değişken isimlendirme kurallarına uygun herhangi bir isim olabilir. Ancak bir convention etiket isimlerinin
+	tamamı büyük harf ile, birden fazla kelimeden oluşuyorsa kelimeler arasına alttire karakteri kullanılarak bildirim
+	yapılır. Etiket bildirimi etiket isminden sonra : ile birlikte ilgili kontrol deyiminden önce yapılır. Etiket ismi
+	bildirildiği döngü boyunca görülebilirdir. Yukarıdaki etiketli break kullanılarak aşağıdaki gibi yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		EXIT_LOOP:
+		for (int i = 2; i <= 20; ++i) 
+			for (int k = 30; k >= 3; --k) {
+				System.out.printf("(%d, %d)%n", i, k);
+				
+				if ((i + k) % 6 == 0)
+					break EXIT_LOOP;
+			}	
+				
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyimiz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		EXIT_LOOP:
+		for (int i = 2; i <= 20; ++i) 
+			EXIT_INNER_LOOP:
+			for (int j = 3; j <= 40; ++j) 
+				for (int k = 30; k >= 3; --k) {
+					System.out.printf("(%d, %d, %d)%n", i, j, k);
+					
+					if ((i +  j + k) % 11 == 0)
+						break EXIT_LOOP;
+					
+					if ((i +  j + k) % 7 == 0)
+						break EXIT_INNER_LOOP;
+				}	
+					
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
 
 
 
