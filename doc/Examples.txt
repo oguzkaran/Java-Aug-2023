@@ -5128,7 +5128,7 @@ class QuadraticEquation {
 	yani koşul ifadesi true olduğu sürece yinelenir. Akış while döngüsüne geldiğinde de koşul kontrol edilir, duruma
 	göre döngüye hiç girmeyebilir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5152,7 +5152,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	while döngü deyiminde yanlışlıkla noktalı virgül kullanılması durumu
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5176,7 +5176,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	while döngü deyiminde n-kez dönen döngü kalıbı
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5200,7 +5200,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	while döngü deyiminde n-kez dönen döngü kalıbı
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5224,7 +5224,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	while döngü deyiminde n-kez dönen döngü kalıbı
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5256,7 +5256,7 @@ class App {
 	Yineleme sayısı		: 1 -> 2 -> 3 -> 4
 	Döngü sonrası n		: -1
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5279,7 +5279,7 @@ class App {
 	ifadeler kullanılabilir. Bu durumda atama işleminin öncelikli olarak yapılması için atama işlemi parantez içerisinde
 	yazılmalıdır. Aşağıdaki örnekte klavyeden sıfır girilene kadar alınan sayıların toplamı bulunmaktadır
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5306,7 +5306,7 @@ class App {
 		- Program hiç pozitif ve/veya negatif sayı girilmezse de uygun mesajı (örneğin: Hiç pozitif sayı girilmedi!...)
 		 verecektir 
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5368,7 +5368,7 @@ class FindPosNegCountAndTotalApp {
 		- Program hiç pozitif ve/veya negatif sayı girilmezse de uygun mesajı (örneğin: Hiç pozitif sayı girilmedi!...)
 		 verecektir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5443,7 +5443,7 @@ class FindPosNegCountAndTotalApp {
 	Sınıf Çalışması: Parametresi ile aldığı int türden bir sayının basamak sayısına geri dönen digitsCount isimli metodu
 	NumberUtil isimli sınıf içerisinde yazınız ve aşağıdaki kod ile test ediniz  
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5491,7 +5491,7 @@ class NumberUtil {
 	metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz 
 	Açıklama: Sayı negatif ise basamaklar toplamı yine pozitif olacaktır 
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5539,7 +5539,7 @@ class NumberUtil {
 		123 -> 3 * 10 + 2 = 32 -> 32 * 10 + 1 = 321
 		-123 -> -3 * 10 - 2 = -32 -> -32 * 10 - 1 = -321
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5561,7 +5561,7 @@ class NumberUtilReversedTest {
 			
 			if (val == 0)
 				return;
-		}
+		}		
 	}
 }
 
@@ -5591,7 +5591,7 @@ class NumberUtil {
 	edilebilir. Bununla birlikte gereksiz yer kullanımı okunabilirliği azaltabilir. Kodu okuyan kişi do-while döngüsü
 	gördüğünde kişinin azdığı algoritmada o döngünün ilk adımının kesin yapıldığı algısını oluşuturur
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5617,7 +5617,7 @@ class App {
 	Sınıf Çalışması: Parametresi ile aldığı int türden bir sayının basamak sayısına geri dönen digitsCount isimli metodu
 	NumberUtil isimli sınıf içerisinde yazınız ve aşağıdaki kod ile test ediniz  
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5662,7 +5662,7 @@ class NumberUtil {
 	Aşağıdaki örnekte val değişkeni yerel değişken olduğundan faaliyet alanı kuralları gereği while parantezi içerisinde
 	kullanılamaz.
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5681,7 +5681,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	Yukarıdaki örnek aşağıdaki gibi yapılabilir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5723,7 +5723,7 @@ class App {
 	Anahtar Notlar: for döngü deyiminin bölümleri içerisinde kullanılan değişkenlere genel olarak döngü değişkeni 
 	denir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5747,7 +5747,7 @@ class App {
 	alanında aynı isimde başka bir yerel değişken olamaz. Aşağıdaki örnekte döngü değişkeni 1.kısımda bildirilmiş ve 
 	ilkdeğerlenmiştir (initialization)
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5769,7 +5769,7 @@ class App {
 	for döngüsünde 1.kısımda bildirilen değişken yalnızca döngü deyiminde kullanılabilir. Döngü deyiminden sonra 
 	artık faaliyet alanı bitmiş olur
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5790,7 +5790,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	Aşağıdaki örnekte bildirilen döngü değişkenleri geçerlidir. Çünkü faaliyet alanları (scope) çakışmaz
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5819,7 +5819,7 @@ class App {
 	değişkenin döngüden önce bildirilmesi durumunda kodu okuyan programcı döngü değişkenin döngüden sonra son değerinin
 	kullanıldığını anlar
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5841,7 +5841,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	for döngü deyiminde yanlışıkla noktalı virgül kullanılması durumu. Aşağıdaki örnekte bir error durumu oluşmaz
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5863,7 +5863,7 @@ class App {
 	Aşağıdaki örnekte döngü değişkeni döngü içerisinde bildirilşdiği için error oluşur. Bu durumda programcı yanlışlıkla
 	noktalı virgül koymasından dolayı böcekli (bug) bir kod yazmamış olur 
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5884,7 +5884,7 @@ class App {
 	for döngü deyiminde birinci ve üçüncü kısımda virgül bir ayraç olarak ifadeleri ayırmak için kullanılabilir. Virgül 
 	Java'da bir operatör değildir. Aşağıdaki örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5908,7 +5908,7 @@ class App {
 	for döngüsünde birinci kısımda birden fazla değişken bildirimi yapılabilir. Bu durumda değişkenler aynı türden
 	olmalıdır
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5924,7 +5924,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	for döngüsünde birinci kısımda bir bildirim yapıldığında artık başka bir ifade yazılamaz
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5940,7 +5940,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------	 
 	Aşağıdaki örnek geçerlidir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5961,7 +5961,7 @@ class App {
 	Şüphesiz bu kod okunabilir değildir ancak Java programcısı for döngü deyiminin çalışma sistemini bilmeli ve böyle bir
 	kodu yazabilmelidir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -5994,7 +5994,7 @@ class App {
 		
 		- Negatif sayılar için faktoriyel değeri 1 olarak döndürülecektir
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -6030,7 +6030,7 @@ class NumberUtil {
 		- Metot üssün negatif olması durumunda 1 değerine geri dönecektir
 		- Metot içerisinde Math sınıfının pow metodu kullanılmayacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -6079,7 +6079,7 @@ class NumberUtil {
 		- Metot üssün negatif olması durumunda 1 değerine geri dönecektir
 		- Metot içerisinde Math sınıfının pow metodu kullanılmayacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -6133,7 +6133,7 @@ class NumberUtil {
 		
 	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
-package org.csystem.app;
+package csd;
 
 class App {
 	public static void main(String [] args)
@@ -7439,7 +7439,7 @@ class NumberUtil {
 	30.09.2023
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
-	switch deyimi: 	switch belirli koşullar altında sabit olan değerleri eşitlik karşılaştırmasına sokmak ve duruma göre
+	switch deyimi: 	switch belirli koşullar altında, sabit olan değerleri eşitlik karşılaştırmasına sokmak ve duruma göre
 	işlem yapmak için kullanılan bir kontrol deyimidir. Yani if deyimine alternatif olmasa da belirli koşullar altında
 	if deyimi yerine kullanılabilen bir deyimdir. switch deyimi okunabilirliği artırmak için if deyimi yerine tercih
 	edilebilir. switch deyiminin geneş biçimi şu şekildedir:
@@ -7455,7 +7455,684 @@ class NumberUtil {
 				<deyim>
 			]
 		}
+		
+	switch deyiminin parantezi içerisindeki ifadenin temel türlerden tamsayı türlerinden biri veya char türünden olması
+	gerekir. Gerçek sayı türlerinden biri ve boolean türünden olamaz. switch deyiminin parantezi içerisindeki ifadenin
+	değeri yukarıdan aşağıya doğru case bölümlerine ilişkin sabit ifadesi ile eşitlik karşılaştırmasına sokulur ve ilk
+	doğru olan (yani eşitliğin sağlandığı) case bölümünden itibaren akış switch deyiminden çıkılana kadar devam eder. 
+	Eğer hiç bir case bölümü doğru olmazsa (yani eşitlik sağlanmazsa) varsa default case bölümü çalıştırılır. Default 
+	case yoksa akış switch deyiminden sonrasından devam eder  
+	
+	Anahtar Notlar: switch deyimi temel türler dışında String sınıfı ve enum sınıflar ile de kullanılmaktadır. Bunlar
+	ileride ele alınacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki switch deyiminin if deyimi karşılığı şu şekildedir:
+	
+	if (plate == 34)
+		System.out.println("İstanbul");
+	else if (plate == 67)
+		System.out.println("Zonguldak");
+	else if (plate == 6)
+		System.out.println("Ankara");
+	else if (plate == 35)
+		System.out.println("İzmir");
+	else
+		System.out.println("Geçersiz şehir girdiniz!...");
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plakayı giriniz:");
+		int plate = kb.nextInt();
+		
+		switch (plate) {
+		case 34:
+			System.out.println("İstanbul");
+			break;
+		case 67:
+			System.out.println("Zonguldak");
+			break;
+		case 6:
+			System.out.println("Ankara");
+			break;
+		case 35:
+			System.out.println("İzmir");
+			break;
+		default:
+			System.out.println("Geçersiz şehir girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde gerçek sayı türleri kullanılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plakayı giriniz:");
+		double plate = kb.nextDouble();
+		
+		switch (plate) { //error
+		//...
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde boolean türü kullanılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{	
+		
+		boolean flag = true;
+		
+		switch (flag) { //error
+		//...
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde default bölüm olmayabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plakayı giriniz:");
+		int plate = kb.nextInt();
+		
+		switch (plate) {
+		case 34:
+			System.out.println("İstanbul");
+			break;
+		case 67:
+			System.out.println("Zonguldak");
+			break;
+		case 6:
+			System.out.println("Ankara");
+			break;
+		case 35:
+			System.out.println("İzmir");
+			break;		
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde aşağı düşme (fall through) özelliği vardır. Akış bir bölümü çalıştırdıktan sonra bir sonraki
+	bölüme geçmeyi engelleyen bir deyime kadar veya switch sonuna kadar tüm deyimleri çalıştırır. break deyimi switch
+	deyimini de sonlandırır. Aşağıdaki örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plakayı giriniz:");
+		int plate = kb.nextInt();
+		
+		switch (plate) {
+		case 34:
+			System.out.println("İstanbul");
+		case 67:
+			System.out.println("Zonguldak");			
+		case 6:
+			System.out.println("Ankara");
+			break;
+		case 35:
+			System.out.println("İzmir");			
+		default:
+			System.out.println("Geçersiz şehir girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde default bölüm sonda olmak zorunda değildir. Sonda olmasa bile default bölümün anlamı değişmez. Sonda
+	olmaması durumunda default bölüm çalıştırıldıktan sonra yine aşağıda düşme olur bu sebeple engellenmesi gerekir. 
+	Şüphesiz default bölümün sonda yazılması okunabilirlik açısından daha normal bir durumdur. Aşağıdaki örneği
+	çeşitli değerler için çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Plakayı giriniz:");
+		int plate = kb.nextInt();
+		
+		switch (plate) {
+		case 34:
+			System.out.println("İstanbul");
+		case 67:
+			System.out.println("Zonguldak");			
+		case 6:
+			System.out.println("Ankara");
+			break;
+		default:
+			System.out.println("Geçersiz şehir girdiniz!...");
+		case 35:
+			System.out.println("İzmir");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte fall through özelliği kullanılarak kod tekrarı engellenmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Telefon kodunu giriniz:");
+		int code = kb.nextInt();
+		
+		switch (code) {
+		case 212:
+			System.out.print("Avrupa ");			
+		case 216:
+			System.out.println("İstanbul");
+			break;
+		case 372:
+			System.out.println("Zonguldak");
+			break;
+		case 312:
+			System.out.println("Ankara");
+			break;
+		case 232:
+			System.out.println("İzmir");
+			break;			
+		default:
+			System.out.println("Geçersiz telefon kodu girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Telefon kodunu giriniz:");
+		int code = kb.nextInt();
+		
+		switch (code) {
+		case 212:						
+		case 216:
+			System.out.println("İstanbul");
+			break;
+		case 372:
+			System.out.println("Zonguldak");
+			break;
+		case 312:
+			System.out.println("Ankara");
+			break;
+		case 232:
+			System.out.println("İzmir");
+			break;			
+		default:
+			System.out.println("Geçersiz telefon kodu girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 12 ile birlikte preview olarak, java 14 ile birlikte normal olacak şekilde case ifadesinde birden fazla sabit
+	için aynı işlem yapılacaksa sabitler tek bir case içerisinde vigül ile listelebilir. Java programcısı bu sentaks 
+	ticari olarak Java 17 ile birlikte kullanılabilir olarak düşünmelidir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Telefon kodunu giriniz:");
+		int code = kb.nextInt();
+		
+		switch (code) {
+		case 212, 216:
+			System.out.println("İstanbul");
+			break;
+		case 372:
+			System.out.println("Zonguldak");
+			break;
+		case 312:
+			System.out.println("Ankara");
+			break;
+		case 232:
+			System.out.println("İzmir");
+			break;			
+		default:
+			System.out.println("Geçersiz telefon kodu girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*---------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: switch deyiminde case bölümlerinin özellikle çok uzun tutulmamasına dikkat edilmelidir. Yani switch
+	deyimi tüm bölümleriyle okunabilir olmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Derleyicinin yazılan kodun algoritmasını değiştirmeden daha hızlı veya daha az yer kaplayacak 
+	şekilde bir kod üretmesine derleyicinin kod optimizasyonu (code optimization) denir. Bu anlamda derleyicilerin 
+	optimizasyonu ikiye ayrılır: speed, size. Burada baskın olan genelde hızdır. Derleyicilerin çok fazla optimizasyonu
+	vardır. Zaman içerisinde ele alınacaktır 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Derleyici sabit ifadelerinin değerlerini hesaplayıp arakoda yazar, yani akış o noktaya geldiğinde sabit ifadeleri
+	hesaplanmaz. Buna "constant folding optimization" denir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		long divider = 1000L * 60 * 60 * 24 * 365;
+		
+		System.out.println(divider);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde aynı değere sahip birden fazla case bölümü geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Telefon kodunu giriniz:");
+		int code = kb.nextInt();
+		
+		switch (code) {
+		case 212: //error						
+		case 216 - 4: //error
+			System.out.println("İstanbul");
+			break;
+		case 212 - 2 + 2: //error
+			System.out.println("Zonguldak");
+			break;
+		case 312:
+			System.out.println("Ankara");
+			break;
+		case 232:
+			System.out.println("İzmir");
+			break;			
+		default:
+			System.out.println("Geçersiz telefon kodu girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	switch deyiminde case bölüme ilişkin ifadenin sabit ifadesi olması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Telefon kodunu giriniz:");
+		int code = kb.nextInt();
+		
+		int c = 372;
+		
+		switch (code) {
+		case 212: 						
+		case 216:
+			System.out.println("İstanbul");
+			break;
+		case c: //error
+			System.out.println("Zonguldak");
+			break;
+		case 312:
+			System.out.println("Ankara");
+			break;
+		case 232:
+			System.out.println("İzmir");
+			break;			
+		default:
+			System.out.println("Geçersiz telefon kodu girdiniz!...");
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo menü uygulamasını inceleyiniz
+	
+	Not: İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		DemoMenuApp.run();
+	}
+}
+
+class DemoMenuApp {
+	public static void printMenu()
+	{		
+		System.out.println("1.Ekle");
+		System.out.println("2.Güncelle");
+		System.out.println("3.Ara");
+		System.out.println("4.Sil");
+		System.out.println("5.Çıkış");
+		System.out.print("Seçenek:");
+	}
+	
+	public static void doInsert()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Ekle seçildi");
+		System.out.println("-------------------------------------");
+	}
+	
+	public static void doUpdate()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Güncelle seçildi");
+		System.out.println("-------------------------------------");
+	}
+	
+	public static void doSearch()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Ara seçildi");
+		System.out.println("-------------------------------------");
+	}
+	
+	public static void doDelete()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Sil seçildi");
+		System.out.println("-------------------------------------");
+	}
+	
+	public static void doExit()
+	{
+		System.out.println("C ve Sistem Programcıları Derneği");
+		System.out.println("Teşekkür ederiz");
+		System.exit(0);
+	}
+	
+	public static void doInvalidOption()
+	{
+		System.out.println("-------------------------------------");
+		System.out.println("Geçersiz seçenek!...");
+		System.out.println("-------------------------------------");
+	}
+	
+	public static void doOption(int option)
+	{
+		switch (option) {
+		case 1:
+			doInsert();
+			break;
+		case 2:
+			doUpdate();
+			break;
+		case 3:
+			doSearch();
+			break;
+		case 4:
+			doDelete();
+			break;
+		case 5:
+			doExit();
+			break;
+		default:
+			doInvalidOption();		
+		}				
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			printMenu();
+			doOption(Integer.parseInt(kb.nextLine()));		
+		}		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı yıl bilgisinin artık yıl olup olmadığını test eden isLeapYear isimli 
+	metodu yazınız ve aşağıdaki kod ile test ediniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		DateUtilIsLeapYearTest.run();
+	}
+}
+
+class DateUtilIsLeapYearTest {
+	public static void run()
+	{
+		for (int year = 1999; year <= 2104; ++year)
+			if (DateUtil.isLeapYear(year))
+				System.out.println(year);
+	}
+}
+
+class DateUtil {
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin geçerli bir tarih olup olmadığını
+	test eden isValidDate isimli metodu DateUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar: 
+	 - Yıl 1900'den küçük olmamalıdır
+	 
+	Not: İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		DateUtilIsValidDateTest.run();
+	}
+}
+
+class DateUtilIsValidDateTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.println("Gün ay ve yıl bilgilerini giriniz:");
+			int day = kb.nextInt();
+			int month = kb.nextInt();
+			int year = kb.nextInt();
+			
+			if (DateUtil.isValidDate(day, month, year))
+				System.out.printf("%02d/%02d/%04d geçerli bir tarihtir%n", day, month, year);
+			else
+				System.out.println("Geçersiz tarih!...");
+			
+			if (day == 0 && month == 0 && year == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class DateUtil {
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && 1900 <= year && day <= getDays(month, year);
+	}
+	
+	public static int getDays(int month, int year)
+	{
+		int days = 31;
+		
+		switch (month) {
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			days = 30;
+			break;
+		case 2:
+			days = 28;
+			if (isLeapYear(year))
+				++days;
+		}
+		
+		return days;
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı gün, ay ve yıl bilgilerine ilişkin tarihin geçerli bir tarih olup olmadığını
+	test eden isValidDate isimli metodu DateUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar: 
+	 - Yıl 1900'den küçük olmamalıdır
+	 
+	Not: İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		DateUtilIsValidDateTest.run();
+	}
+}
+
+class DateUtilIsValidDateTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.println("Gün ay ve yıl bilgilerini giriniz:");
+			int day = kb.nextInt();
+			int month = kb.nextInt();
+			int year = kb.nextInt();
+			
+			if (DateUtil.isValidDate(day, month, year))
+				System.out.printf("%02d/%02d/%04d geçerli bir tarihtir%n", day, month, year);
+			else
+				System.out.println("Geçersiz tarih!...");
+			
+			if (day == 0 && month == 0 && year == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class DateUtil {
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && 1900 <= year && day <= getDays(month, year);
+	}
+	
+	public static int getDays(int month, int year)
+	{
+		int days = 31;
+		
+		switch (month) {
+		case 4, 6, 9, 11:		
+			days = 30;
+			break;
+		case 2:
+			days = 28;
+			if (isLeapYear(year))
+				++days;
+		}
+		
+		return days;
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+
+
 
 
 /*---------------------------------------------------------------------------------------------------------------------
