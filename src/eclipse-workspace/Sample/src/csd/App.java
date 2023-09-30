@@ -9,9 +9,18 @@
 		 bulunabilir: 01.01.1900 ile ilgili tarih arasındaki gün sayısı hesaplanır ve 7 değerine modu alınır. Bu durumda
 		 sıfır Pazar, 1 pazartesi, ..., 6 cumartesi'ye karşılık gelir
 		 
-		 - getDayOfWeek metodu parametresi ile değerlere ilişkin tarihin
+		 - getDayOfWeek metodu parametresi ile değerlere ilişkin tarihi geçerli bir tarihse şu şekilde yazdıracakdır:
+		 		 
+		 	01/03/2023 Çarşamba yılın 60. günüdür 
+		 			 	
+		 tarih geçersizse şu şekilde yazdıracaktır:
 		 
-		 - Metotlar şu ana kada görülen bilgiler ile yapılacaktır
+		  	Geçersiz tarih!...
+		 	
+		 - Varolan metotların yapısını (isim, parametreler ve geri dönüş değeri gibi) değiştirmeden istediğiniz 
+		 metodu ekleyebilirsiniz		 
+		  
+		 - Metotlar şu ana kadar görülen bilgiler ile yapılacaktır
 		
 	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
