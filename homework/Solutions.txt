@@ -1,0 +1,225 @@
+﻿/*----------------------------------------------------------------------------------------------------------------------
+										Java ile Nesne Yönelimli Programlama
+
+											   Eğitmen: Oğuz KARAN
+
+										C ve Sistem Programcıları Derneği
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-001-1.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		PrintRelationsApp.run();
+	}
+}
+
+class PrintRelationsApp {	
+	public static void printRelations(int max, int mid, int min)
+	{
+		if (min < mid)
+			System.out.printf("%d < %d ", min, mid);
+		else
+			System.out.printf("%d = %d ", min, mid);
+		
+		if (mid < max)
+			System.out.printf("< %d", max);
+		else
+			System.out.printf("= %d", max);
+		
+		System.out.println();
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		System.out.print("Üç tane sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int c = kb.nextInt();
+		
+		int max = Math.max(Math.max(a, b), c);
+		int min = Math.min(Math.min(a, b), c);
+		int mid = a + b + c - max - min;
+		
+		printRelations(max, mid, min);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-001-2.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		NumberUtilMidTest.run();
+	}
+}
+
+class NumberUtilMidTest {	
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Üç tane sayı giriniz:");
+			int a = kb.nextInt();
+			int b = kb.nextInt();
+			int c = kb.nextInt();
+			
+			System.out.printf("mid(%d, %d, %d) = %d%n", a, b, c, NumberUtil.mid(a, b, c));
+			
+			if (a == 0 && b == 0 && c == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");				
+	}
+}
+
+
+class NumberUtil {
+	public static int mid(int a, int b, int c)
+	{
+		if (a <= b && b <= c || c <= b && b <= a)
+			return b;
+		
+		if (b <= a && a <= c || c <= a && a <= b)
+			return a;
+		
+		return c;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-001-3.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		NumberUtilMidTest.run();
+	}
+}
+
+class NumberUtilMidTest {	
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			int result = Util.signum(a);
+			
+			if (result == 1)
+				System.out.println("Pozitif");
+			else if (result == 0)
+				System.out.println("Sıfır");
+			else
+				System.out.println("Negatif");
+			
+			if (a == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");				
+	}
+}
+
+
+class Util {
+	public static int signum(int a)
+	{
+		if (a > 0)
+			return 1;
+		
+		if (a == 0)
+			return 0;
+		
+		return -1;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-001-3.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args) 
+	{		
+		NumberUtilMidTest.run();
+	}
+}
+
+class NumberUtilMidTest {	
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			int result = Util.signum(a);
+			
+			if (result == 1)
+				System.out.println("Pozitif");
+			else if (result == 0)
+				System.out.println("Sıfır");
+			else
+				System.out.println("Negatif");
+			
+			if (a == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");				
+	}
+}
+
+
+class Util {
+	public static int signum(int a)
+	{
+		int result = -1;
+		
+		if (a > 0)
+			result = 1;
+		else if (a == 0)
+			result = 0;
+		
+		return result;
+	}
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	
+----------------------------------------------------------------------------------------------------------------------*/
+
