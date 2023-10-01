@@ -20,7 +20,7 @@
 		 - Varolan metotların yapısını (isim, parametreler ve geri dönüş değeri gibi) değiştirmeden istediğiniz 
 		 metodu ekleyebilirsiniz		 
 		  
-		 - Metotlar şu ana kadar görülen bilgiler ile yapılacaktır
+		 - Metotlar şu ana kadar görülen bilgiler ile yazılacaktır
 		
 	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
