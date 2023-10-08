@@ -9087,6 +9087,357 @@ class App {
 }
 
 
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Küçük tamsayı türünden büyük tamsayı türüne doğrudan atama geçerlidir. Bu durumda sayının yüksek anlamlı bit
+	değerleri sayı pozitifse sıfır ile, negatif ise 1 ile beslenir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		short a = kb.nextShort();
+		int b;
+		
+		b = a;
+		
+		System.out.printf("a = %d, a = %04Xh%n", a, a);
+		System.out.printf("b = %d, b = %08Xh%n", b, b);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	char türünden kendisinden size olarak büyük herhangi bir türe doğrudan dönüşüm geçelidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c = 'D';
+		int a;
+		double b;
+		
+		a = c;
+		b = c;
+		
+		System.out.printf("a = %d, b = %f%n", a, b);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	char türünden short türüne doğrudan dönüşüm geçersizdir. Çünkü char türü içerisinde short türü sınırlarından büyük
+	değerler de tutulabilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c = 40000;
+		short a;
+		
+		a = c; //error
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Tüm tamsayı türlerinden gerçek sayı türlerine doğrudan dönüşüm geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		long a = 10;
+		float b;
+		
+		b = a; 
+		
+		System.out.printf("b = %f%n", b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Gerçek sayı türlerinden tamsayı türlerine doğrudan dönüşüm geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a = 10;
+		long b;
+		
+		b = a; //error
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	float türünden double türüne doğrudan dönüşüm geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			float a = Float.parseFloat(kb.nextLine());
+			
+			if (Math.abs(a) < 0.00001)
+				break;
+			
+			double b;
+			
+			b = a;
+			
+			System.out.printf("a = %.20f, b = %.20f%n", a, b);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	double türünden float türüne doğrudan dönüşüm geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 123;
+		float b;
+		
+		b = a; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte, double türünden float türüne doğrudan atama geçersiz olduğundan error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a;
+		
+		a = 0.3; //error
+	}
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte 0.3 sabit float olarak alınmıştır. Yuvarlama hatasına dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a;
+		
+		a = 0.3F;
+		
+		System.out.printf("a = %.20f%n", a);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnek int türünden float türüne doğrudan atama yapılabileceği için geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a;
+		
+		a = 10;
+		
+		System.out.printf("a = %.20f%n", a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	bool türünden hiç bir türe, herhangi bir türden bool türüne doğrudan dönüşüm yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 1;
+		boolean b;
+		
+		b = a; //error
+		
+		b = true;
+		
+		a = b; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Doğrudan dönüşüme ilişkin özet şu şekilde yazılabilir: 
+	byte		-> short, int, long, float, double
+	short		-> int, long, float, double
+	int			-> long, float, double
+	long		-> float, double
+	float		-> double
+	char		-> int, long, float, double
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------	 
+	İşlem Öncesi Otomatik Tür Dönüşümleri: İki operandlı operatörlere ilişkin işlemler aşağı seviye farklı türlerle 
+	yapılamaz. Örneğin farklı türden iki ifade doğrudan toplanamaz. Bu işlemler aynı türler ile yapılabilir. Bu durumda
+	farklı türden işlemler için derleyici bir operandı ya da operandları farklı bir türden ele alacak kodu üretir ve işlem
+	ortak tür ile yapılır. Buna işlem öncesi otomatik tür dönüşümü denir. Bu dönüşümler yukarıda anlatılan "implicit conversion"
+	kurallarına uygun olarak yapılır. Otomatik tür dönüşümü bir ifadenin (örneğin bir değişkenin) türünün değişmesi
+	demek değildir. O ifadenin değerinin dönüştürülmüş olan tür ile temsil edilmesidir. Bu işlemin aşağı seviyede nasıl
+	yapıldığı ileride ele alınacaktır  
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------	 
+	İşlem öncesi otomatik tür dönüşümüne ilişkin ayrıntılar şunlardır  
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Bölme işleminde operandlar tam sayı türündense sonuç tamsayı türünden çıkar. Bölme işleminden  elde edilen değerin 
+	noktadan sonraki kısmı atılır. Tam kısmı alınır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Birinci sayıyı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			if (a == 0)
+				break;
+			
+			System.out.print("İkinci sayıyı giriniz:");
+			int b = Integer.parseInt(kb.nextLine());
+			int c;
+			
+			c = a / b;
+			
+			System.out.printf("%d / %d = %d%n", a, b, c);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Birinci sayıyı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			if (a == 0)
+				break;
+			
+			System.out.print("İkinci sayıyı giriniz:");
+			int b = Integer.parseInt(kb.nextLine());
+			double c;
+			
+			c = a / b;
+			
+			System.out.printf("%d / %d = %f%n", a, b, c);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	int türünden size olarak küçük tamsayı türleri (short, byte) ve char türü kendi aralarında işleme sokulduğunda her 
+	iki ifadeye ilişkin değer de int türüne dönüştürülür ve sonuç int türünden çıkar. Buna integral/integer promotion 
+	denir. Yani iki operandlı bir operatör için en az int türünde işlem yapılar. Aşağıdaki error'u inceleyiniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a, b;
+		short c;
+		
+		a = 10;
+		b = 20;
+		
+		c = a + b; //error
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	int türünden size olarak küçük tamsayı türleri (short, byte) ve char türü kendi aralarında işleme sokulduğunda her 
+	iki ifadeye ilişkin değer de int türüne dönüştürülür ve sonuç int türünden çıkar. Buna integral/integer promotion 
+	denir. Yani iki operandlı bir operatör için en az int türünde işlem yapılar. Aşağıdaki error'u inceleyiniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a;
+		byte b;
+		short c;
+		
+		a = 10;
+		b = 20;
+		
+		c = a + b; //error
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	int türünden size olarak küçük tamsayı türleri (short, byte) ve char türü kendi aralarında işleme sokulduğunda her 
+	iki ifadeye ilişkin değer de int türüne dönüştürülür ve sonuç int türünden çıkar. Buna integral/integer promotion 
+	denir. Yani iki operandlı bir operatör için en az int türünde işlem yapılar. Aşağıdaki error'u inceleyiniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a;
+		char b;
+		char c;
+		
+		a = 10;
+		b = 20;
+		
+		c = a + b; //error
+		
+	}
+}
 
 
 
