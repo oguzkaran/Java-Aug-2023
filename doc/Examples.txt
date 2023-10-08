@@ -8849,6 +8849,245 @@ class DateUtil {
 	bazılar preview biçimindedir. Bu özellikler başka konuları da gerektirdiğinden ileride ele alınacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------------------------------------------------
+	08.10.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Farklı Türlerin Birbirine Atanması (Type Conversions)
+	Java'da farklı türlerin birbirine atanabilmesine (dönüşebilmesine) yönelik kurallar belirlenmiştir. T1 ve T2 birer
+	tür ismi olmak üzere
+		T1 t1;
+		T2 t2;
+		
+		...
+		
+		t1 = t2; //**
+	kodları için ** ile belirtilen ifadede T2 türünden T1 türüne doğrudan dönşüm/atama (implicit conversion) denir.
+	Bu ifadede T2 türüne kaynak tür (source type), T1 türüne ise hedef tür (destination/target type) denir. Java'da 
+	derleyici açısından hangi türün hangi türe doğrudan atanabileceği belirlidir. Bu anlamda atanamayan türler de 
+	genel olarak ileride göreceğimiz tür dönüştürme operatörü (type cast operator) ile dönüştürülebilmektedir. Tür
+	dönüştürme operatörü ile yapılan dönüşüme ise explicit conversion denir. Burada temel türler arasındaki tür 
+	dönüştürme kuralları ele alınacaktır. Diğer türler arasındaki dönüşümler ileride konular içerisinde ele alınacaktır.
+	
+	Temel türler arasındaki doğrudan dönüşümlerde genel kural şu şekildedir: Genel olarak bilgi/veri kaybına yol açmayacak 
+	dönüşümler doğrudan yapılabilir
+	
+	Derleyici kaynak türe ile ilişkin değerin hedef tür sınırları içerisinde olup olmadığına bakmaz ki çoğu zamanda bakamaz.
+	Örneğin değer klavyeden okunsa zaten derleme zamanında hiç bir şekilde bilinemez. Bu durumda derleyici kaynak türden hedef
+	türe doğrudan atamanın geçerli olup olmadığına göre kodu derler. Doğrudan dönüşüme ilişkin ayrıntılar ayrıca ele alınacaktır.
+	
+	Anahtar Notlar: Size olarak küçük türden size olarak büyük türe yapılan atamalara Java Language Specification'da (JLS)
+	widening conversion, size olarak büyük türden size olarak küçük türe yapılan atamalar ise narrowing conversion 
+	her ikisinin birden olduğu dönüşümlere ise widening and narrowing conversion denilmektedir. Buradaki terimler,
+	dönüşümün geçerli ya da geçersiz olmasından bağımsızdır. Anlatım bu şekilde kullanılmıştır. Biz burada bu terimleri
+	her zaman kullanmayarak konuyu daha anlaşılır hale getirmeye çalışacağız.
+	
+	Anahtar Notlar: Anımsanacağı gibi Java'da 3 yerde atama işlemi yapılmaktadır:
+	1. Yalın atama işlemi
+	2. Metot çağrısında argümanlardan parametrelere aktarım
+	3. Metodun geri dönüş değerinin geçici değişkene atanması
+	Tür dönüştürme kuralları istisna bir kaç kural dışında tüm atama durumlarında geçerlidir. İstisna kurallar ayrıca
+	ele alınacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte long türünden int türüne yapılan dönüşüm geçersiz olduğundan error oluşur. Derleyici a değişkeni
+	içerisindeki değer bilmesine rağmen atama durumunda bunu dikkate almaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		long a = 10;
+		int b;
+		
+		b = a;//error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte a değişkeninin değeri derleme zamanında kesinlikle bilinemez
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		long a = kb.nextLong();
+		int b;
+		
+		b = a; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Temel türler arasındaki implicit conversion detayları şunlardır
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Büyük tamsayı türünden küçük tamsayı türüne doğrudan dönüşüm geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		short b;
+		
+		b = a; //error
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Hiç bir türden char türüne doğrudan dönüşüm yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		byte a = 10;
+		char b;
+		
+		b = a; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Anımsanacağı gibi byte ve short türden sabit yoktur. Java'da int türden bir sabit sınırlar içerisinde kalması
+	koşuluyla byte veya short türüne doğrudan atanabilir. Aksi durumda error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a;
+		byte b;
+		int c = 10;
+		
+		a = 10;
+		b = 20;
+		
+		b = c; //error
+		b = 10L; //error
+		a = 70000; //error
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Yukarıdaki istisna kural char türü için de geçerlidir. Yani sınırlar içerisinde kalması koşuluyla int türden 
+	bir sabit char türüne doğrudan atanabilir. Ancak bu kural shot ve byte türleri kadar pratikte kullanılmaz. Çünkü
+	char türden sabitler vardır ve bunlar kullanılmalıdır 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c;
+		int a = 67;
+		
+		c = 67;
+		c = a; //error
+		c = 67L; //error
+		c = -23; //error
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	short, byte ve char türüne ilişkin yukarıdaki istisna kurallar, metodun geri dönüş değeri varsa return deyimine 
+	ilişkin ifadeler için de geçerlidir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static short foo()
+	{
+		//...
+	
+		return 10;
+	}
+	
+	public static byte bar()
+	{
+		//...
+	
+		return 127;
+	}
+	
+	public static char tar()
+	{
+		//...
+	
+		return 67;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	short, byte ve char türüne ilişkin yukarıdaki istisna kurallar, argümalardan parametrelere aktarıma ilişkin atamada
+	geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.foo(10); //error
+		Sample.bar(127); //error
+		Sample.tar(67); //error
+	}
+}
+
+class Sample {
+	public static void foo(short a)
+	{
+		//...
+	}
+	
+	public static void bar(byte b)
+	{
+		//...
+	}
+	
+	public static void tar(char c)
+	{
+		//...
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Küçük tamsayı türünden büyük tamsayı türüne doğrudan atama geçerlidir. Bu durumda sayının yüksek anlamlı bit
+	değerleri sayı pozitifse sıfır ile, negatif ise 1 ile beslenir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int a = kb.nextInt();
+		long b;
+		
+		b = a;
+		
+		System.out.printf("a = %d, a = %08Xh%n", a, a);
+		System.out.printf("b = %d, b = %016Xh%n", b, b);
+	}
+}
+
+
+
 
 
 /*---------------------------------------------------------------------------------------------------------------------
