@@ -9621,6 +9621,290 @@ class App {
 	üretmeyebileceğine, hatta bazılarında o kadar sayıda geçici değişken yaratmayabileceğine dikkat ediniz
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Tür Dönüştürme (type cast) Operatörü: Tür dönüştürme operatörü özel amaçlı, tek operandlı ve önek durumunda bir 
+	operatördür. Operatörün genel biçimi şu şekildedir:
+	
+		(<hedef tür>)<ifade>
+		
+	Operatör operandı olarak aldığı ifadenin değerini hedef türe dönüştürür ve o değeri üretir. Operatörün yan etkisi 
+	yoktur. Tür dönüştürme operatörü ile yapılan dönüştürme işlemine "explicit conversion", "type casting" ya da kısaca
+	"casting" denilmektedir. Tür dönüştürme operatörü operatör öncelik tablosunun ikinci seviyesinde ve sağdan sola
+	önceliklidir. Implicit olarak yapılamayan dönüşümler genel olarak explicit olarak yani tür dönüştürme operatörü
+	ile yapılabilir. implicit dönüşümlerde de tür dönüştürme operatörü kullanılabilir 
+	
+	Anahtar Notlar: Tür dönüştürme operatörünün sentaks olarak zorunlu olması durumu yani bu operatör kullanılmamasının
+	error olması durumu şu şekilde özetlenebilir: Ortada bir problem olabilir. Derleyici programcının bunu doğrudan
+	yapmasına izin vermiyor çünkü yanlışlıkla yapılabilir. Bu durumda programcı da bunu explicit olarak yaparak
+	derleyiciye ben durumun farkındayım demiş olur. Bazı dönüşümler explicit olarak bile yapılamaz. Bunlar Java açısından
+	anlamsız durumlardır ve derleyici buna hiç vermez.
+	
+	Anahtar Notlar: Bir dönüşüm implicit olarak yapılamıyor ise explicit olarak yapılıyor olabilir. Ancak explicit olarak
+	yapılamıyorsa implicit olarak zaten yapılamaz
+	
+	Tür dönüştürme operatörü ile yapılan işlem de geçici değişkenyaratılarak yapılır. Yani tür dönüştürme operatörünün
+	operandına ilişkin ifadenin türü değişmez. Aşağıdaki örnekte değişken a'nın türü değildir. Çünkü bir değişkenin 
+	faaliyet alanı boyunca aynıdır. ** ile belirtilen basit deyime ilişkin ifade için derleyicinin ürettiği yaklaşık
+	kod şu şekildedir:
+	
+		double temp1 = a;
+		double temp2 = b;
+		
+		c = temp1 / temp2;	 	
+	
+	Örnekte bölme operatörünün birinci operandı double olarak işleme sokulduğundan ikinci operandına ilişkin
+	değer de double türüne dönüştürülür, işlem double olarak yapılır ve sonuç da double olarak elde edilir. 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		double c;
+		
+		c = (double)a / b; //**
+		
+		System.out.printf("c = %f%n", c);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Tür dönüştürme operatörüne yönelik detaylar şunlardır: 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Büyük tamsayı türünden küçük tamsayı türüne veya char türüne yapılan explicit dönüşümde değerin yüksek anlamlı
+	byte değerleri atılır, elde edilen sonuç hedef türe atanır. Bu durumda değer hedef türün sınırları içerisindeyse
+	bilgi kaybı oluşmaz, sınırları dışında ise bilgi kaybı oluşur. Aşağıdaki örneği çeşitli değerler ile çalıştırıp
+	sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			short b;
+			
+			b = (short)a;
+			
+			System.out.printf("a = %d, a = %08X%n", a, a);
+			System.out.printf("b = %d, b = %04X%n", b, b);
+			
+			if (b == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			byte b;
+			
+			b = (byte)a;
+			
+			System.out.printf("a = %d, a = %08X%n", a, a);
+			System.out.printf("b = %d, b = %02X%n", b, b);
+			
+			if (b == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			char b;
+			
+			b = (char)a;
+			
+			System.out.printf("a = %d, a = %08X%n", a, a);
+			System.out.printf("b = %d, b = %02X%n", (int)b, (int)b);
+			
+			if (b == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	short türünden char türüne yapılan explicit dönüşümde sayının bit kalıbı değişmez. Sayının yorumlanışı değişir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10, b = -10;
+		char c1, c2;
+		
+		c1 = (char)a;
+		c2 = (char)b;
+		
+		System.out.printf("a = %d, a = %04X%n", a, a);
+		System.out.printf("c1 = %d, c1 = %04X%n", (int)c1, (int)c1);
+		System.out.printf("b = %d, b = %04X%n", b, b);
+		System.out.printf("c2 = %d, c2 = %04X%n", (int)c2, (int)c2);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	char türünden short türüne yapılan explicit dönüşümde sayının bit kalıbı değişmez. Sayının yorumlanışı değişir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c1 = 'D', c2 = '\uFFF6';
+		short a, b;
+		
+		a = (short)c1;
+		b = (short)c2;
+		
+		
+		System.out.printf("c1 = %d, c1 = %04X%n", (int)c1, (int)c1);
+		System.out.printf("a = %d, a = %04X%n", a, a);
+		System.out.printf("c2 = %d, c2 = %04X%n", (int)c2, (int)c2);
+		System.out.printf("b = %d, b = %04X%n", b, b);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	char türünden byte türüne dönüşümde sayının yük anlamlı byte'ı atılır ve elde edilen değer byte türüne atanır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c = '\uFFF6';
+		byte b;		
+		
+		b = (byte)c;
+		
+		
+		System.out.printf("c = %d, c = %04X%n", (int)c, (int)c);		
+		System.out.printf("b = %d, b = %02X%n", b, b);		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	byte türünden char türüne explicit dönüşüm iki aşamada yapılır. Önce byte türüne ilişkin değer int türüne 
+	dönüştürülür sonra elde edilen değerin yüksek anlamlı iki byte'ı atılır ve char türüne atılır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			byte a = Byte.parseByte(kb.nextLine());			
+			char c;
+			
+			c = (char)a;
+			
+			System.out.printf("a = %d, a = %02X%n", a, a);
+			System.out.printf("a = %d, a = %08X%n", (int)a, (int)a);
+			System.out.printf("c = %d, c = %04X%n", (int)c, (int)c);
+			
+			if (a == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	double türünden float türüne yapılan explicit dönüşümde double türüne ilişkin değerin IEEE 754 formatına göre 
+	float türüne en yakın değeri elde edilir. Bu durumda yuvarlama hataları oluşabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			double a = Double.parseDouble(kb.nextLine());			
+			float b;
+			
+			b = (float)a;
+			
+			System.out.printf("a = %.20f%n", a);
+			System.out.printf("b = %.20f%n", b);
+			
+			if (a == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	boolean türünden hiç bir türe ve hiç bir türden boolean türüne explicit dönüşüm yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		boolean a = true;
+		int b = 1;
+		int c;
+		boolean d;
+		
+		c = (int)a; //error	
+		d = (boolean)b; //error
+	}
+}
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
