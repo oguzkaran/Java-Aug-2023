@@ -9311,7 +9311,7 @@ class App {
 	yapıldığı ileride ele alınacaktır  
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------	 
-	İşlem öncesi otomatik tür dönüşümüne ilişkin ayrıntılar şunlardır  
+	İşlem öncesi otomatik tür dönüşümüne ilişkin ayrıntılar şunlardır (else if biçiminde değerlendiriniz):
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------	 
 	Bölme işleminde operandlar tam sayı türündense sonuç tamsayı türünden çıkar. Bölme işleminden  elde edilen değerin 
@@ -9443,17 +9443,198 @@ class App {
 	14.10.2023
 ----------------------------------------------------------------------------------------------------------------------*/
 
-
 /*---------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki maddeye göre tamsayı türleri ile işlemler aşağı seviyde size olarak en az int türü yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Büyük tamsayı türü ile küçük tamsayı türü işleme sokulduğunda küçük tamsayı türüne ilişkin değer büyük tamsayı türüne
+	dönüştürülür, işlem büyük tamsayı türünden yapılır ve sonuç büyük tamsayı türünden çıkar 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		long b = 30;		
+		int c;
+		
+		c = a + b; //error		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	char türü kendisinden size olarak olarak büyük bir tür ile işleme sokulduğunda char türüne ilişkin değer ilgili türe
+	dönüştürülür ve sonuç o türden çıkar 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		char c = 'A';
+		double b = 4.5;
+		double result;
+		
+		result = c + b;
+		
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	 Bir tamsayı türü ile gerçek sayı türü işleme sokulduğunda tamsayı türüne ilişkin değer gerçek sayı türüne 
+	 dönüştürülür ve işlem o gerçek sayı türünden çıkar
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a = 3.4F;
+		long b = 345;
+		float c;
+		
+		c = a + b;
+		
+		//...				
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	 float türü ile double türü işleme sokulduğunda float türüne ilişkin değer double türüne dönüştürülür ve sonuç
+	 double türünden elde edilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		float a = 3.4F;
+		double b = 345.89;
+		float c;
+		
+		c = a + b; //error
+
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	 boolean türü hiç bir tür ile işleme sokulamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		boolean a = true;
+		int b = 1;	
+		
+		System.out.println(a == b); //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	İşlem öncesi otomatik tür dönüşümü geçici değişken yaratılarak yapılır. Yani derleyici geçici değişken yaratılan 
+	kodu üretir. Aşağıdaki örnekte c = a + b ifadesi için derleyici tarafından üretilen kod yaklaşık olarak şu 
+	şekildedir:
+		long temp;
+		
+		temp = a;
+		
+		c = temp + b;	
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		long b = 345;		
+		long c;
+		
+		c = a + b;
+		
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte c = a + b ifadesi için derleyici tarafından üretilen kod yaklaşık olarak şu şekildedir:
+		int temp1, temp2;
+		
+		temp1 = a;
+		temp2 = b;
+		
+		c = temp1 + temp2;	
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10;
+		short b = 345;		
+		int c;
+		
+		c = a + b;
+		
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Aşağıdaki örnekte c = a + b ifadesi için derleyici tarafından üretilen kod yaklaşık olarak şu şekildedir:
+		double temp1;
+		double temp2;		
+		long temp3;
+		
+		temp1 = Math.sqrt(a);
+		temp3 = Math.round(b);
+		temp2 = temp3;
+		
+		c = temp1 + temp2;
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		double a = kb.nextDouble();
+		double b = kb.nextDouble();
+		double c;
+		
+		c = Math.sqrt(a) + Math.round(b);
+	
+		System.out.printf("c = %f%n", c);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Anahtar Notlar: Yukarıdaki üç örnek için yazılan kodların yaklaşık olduğuna yani derleyicinin birebir aynı kodlar
+	üretmeyebileceğine, hatta bazılarında o kadar sayıda geçici değişken yaratmayabileceğine dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
 	
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
+
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
+
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
