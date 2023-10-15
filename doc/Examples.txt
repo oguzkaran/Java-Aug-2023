@@ -9952,6 +9952,8 @@ class App {
 			
 			- Elde edilen değer long türü sınırları içerisinde değilse sayının pozitif ya da negatif olması durumuna
 			göre long türünün en büyük ve en küçük değeri alınır atanır
+			
+	Aşağıdaki örnekleri inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -10053,6 +10055,316 @@ class App {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazen tür dönüştürme operatörü kullanılmazsa bilgi kaybı oluşabilir. Aşağıdaki örneği tür dönüştürme operatörünü de
+	kaldırarak çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Birinci sayıyı giriniz:");
+			int a = Integer.parseInt(kb.nextLine());
+			
+			System.out.print("İkinci sayıyı giriniz:");
+			int b = Integer.parseInt(kb.nextLine());
+			long c;
+			
+			c = (long)a + b;
+			System.out.printf("%d + %d = %d%n", a, b, c);
+			
+			if (a == 0 && b == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazen tür dönüştürme operatörü kullanılmazsa bilgi kaybı oluşabilir. Aşağıdaki örneği tür dönüştürme operatörünü de
+	kaldırarak çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.println("Sayıları girmeye başlayınız:");
+		int count = 0;
+		int total = 0;
+		int val;
+		
+		while ((val = Integer.parseInt(kb.nextLine())) != 0) {
+			total += val;
+			++count;			
+		}
+		
+		double average = (double)total / count;
+		
+		System.out.printf("Average:%f%n", average);
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int total = 0;
+		
+		for (int i = 0; i < 5; ++i) {
+			System.out.print("Bir sayı giriniz:");
+			total += Integer.parseInt(kb.nextLine());
+		}
+		
+		double average = total / 5.;
+		
+		System.out.printf("Average:%f%n", average);
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int total = 0;
+		
+		for (int i = 0; i < 5; ++i) {
+			System.out.print("Bir sayı giriniz:");
+			total += Integer.parseInt(kb.nextLine());
+		}
+		
+		double average = total / 5D;
+		
+		System.out.printf("Average:%f%n", average);
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İşlemli atama operatörlerinin genel biçimi aslında şu şekildedir:
+		T1 ve T2 tür isimleri olmak üzere
+		T1 a;
+		T2 b;
+		
+	için
+		a <op>= b;
+	işlemi
+		a = (T1)(a <op> b)
+	Örneğin:
+		int a;
+		double b;
+		
+		//...
+		
+		a += b; 
+	ifadesinin karşılığı
+		a = (int)(a + b)	
+		
+	Aşağıdaki örneği inceleyiniz	
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		NumberUtilIsArmstrongTest.run();
+	}
+}
+
+class NumberUtilIsArmstrongTest {
+	public static void run() 
+	{
+		for (int n = -1; n <= 999_999; ++n)
+			if (NumberUtil.isArmstrong(n))
+				System.out.println(n);
+	}
+}
+
+class NumberUtil {	
+	public static boolean isArmstrong(int val)
+	{
+		return val >= 0 && getDigitsPowSum(val) == val;
+	}
+	
+	public static int getDigitsPowSum(int val)
+	{
+		int n = digitsCount(val);
+		int result = 0;
+		
+		while (val != 0) {
+			result += Math.pow(val % 10, n);
+			val /= 10;
+		}
+		
+		return result;
+	}
+	
+	public static int digitsCount(int val)
+	{
+		int count = 0;
+		
+		do {
+			++count;
+			val /= 10;
+		} while (val != 0);
+		
+		return count;
+	}
+	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir sayının basamak sayısını bulan metot aşağıdaki gibi döngü kullanmadan yazılabilir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		NumberUtilIsArmstrongTest.run();
+	}
+}
+
+class NumberUtilIsArmstrongTest {
+	public static void run() 
+	{
+		for (int n = -1; n <= 999_999; ++n)
+			if (NumberUtil.isArmstrong(n))
+				System.out.println(n);
+	}
+}
+
+class NumberUtil {	
+	public static boolean isArmstrong(int val)
+	{
+		return val >= 0 && getDigitsPowSum(val) == val;
+	}
+	
+	public static int getDigitsPowSum(int val)
+	{
+		int n = digitsCount(val);
+		int result = 0;
+		
+		while (val != 0) {
+			result += Math.pow(val % 10, n);
+			val /= 10;
+		}
+		
+		return result;
+	}
+	
+	public static int digitsCount(int val)
+	{
+		if (val == 0)
+			return 1;
+		
+		return (int)Math.log10(Math.abs(val)) + 1;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Koşul Operatörü (Conditional/Ternary Operator): Bu operatör özel amaçlı, üç operandlı (ternary) ve araek durumundadır.
+	Operatörün genel biçimi şu şekildedir:
+		<ifade1> ? <ifade2> : <ifade3>
+	Burada ifade1'in yani birinci operandın boolean türden olması zorunludur.  Bu operatör birinci operandının değeri
+	true ise ikinci operandının değerini, false ise üçüncü operandının değerini üretir. Bu operatörün yan etkisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ** ile belirtilen deyimin if deyimi ile yapılışı şu şekildedir:
+		if (a > b)
+			max = a;
+		else 
+			max = b;
+	Şüphesiz şu şekilde de yapılabilir:
+		max = a;
+		if (a < b)
+			max = b;
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int max;
+		
+		max = a > b ? a : b; //**
+		
+		System.out.printf("max(%d, %d) = %d%n", a, b, max);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte koşul operatörünün üçüncü operandı b - 200 ifadesidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = a > b ? a + 100 : b - 200; //**
+		
+		System.out.printf("result = %d%n", result);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte koşul operatörünün üçüncü operandı b ifadesidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("İki sayı giriniz:");
+		int a = kb.nextInt();
+		int b = kb.nextInt();
+		int result;
+		
+		result = (a > b ? a + 100 : b) - 200; //**
+		
+		System.out.printf("result = %d%n", result);
+	}
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
