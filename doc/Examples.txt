@@ -9904,6 +9904,154 @@ class App {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	15.10.2023	
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	int, short, long ve byte türlerine ilişkin en küçük ve en büyük değerler ilgili sınıfların MIN_VALUE ve MAX_VALUE
+	elemanları ile elde edilebilir:
+	
+	Tür				En küçük Değer					En büyük değer
+	int				Integer.MIN_VALUE				Integer.MAX_VALUE
+	short			Short.MIN_VALUE					Short.MAX_VALUE
+	long			Long.MIN_VALUE					Long.MAX_VALUE
+	byte			Byte.MIN_VALUE					Byte.MAX_VALUE
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("byte:[%d, %d]%n", Byte.MIN_VALUE, Byte.MAX_VALUE);		
+		System.out.printf("short:[%d, %d]%n", Short.MIN_VALUE, Short.MAX_VALUE);
+		System.out.printf("int:[%d, %d]%n", Integer.MIN_VALUE, Integer.MAX_VALUE);
+		System.out.printf("long:[%d, %d]%n", Long.MIN_VALUE, Long.MAX_VALUE);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------	 
+	Bir gerçek sayı türünden bir tamsayı türüne veya char türüne yapılan explicit dönüşüm şu şekilde gerçekleşir:
+	- Sayının noktadan sonraki kısmı atılır
+	
+	- Elde edilen sayı hedef türün sınırları içerisindeyse hedef türe atanır
+	
+	- Elde edilen sayı hedef türün sınırları içerisinde değilse	
+		- Hedef tür int, short, byte ve char türlerinden biriyse
+			- Elde edilmiş olan değer int türü sınırları içerisindeyse tam sayılar arasındaki tür dönüşümü kuralları
+			uygulanır. Yani int'den küçük türler için yüksek anlamlı byte değerleri atılır ve elde edilen değer hedef türe 
+			atanır. Hedef tür int ise değer doğrudan atanır
+			
+			- Elde edilmiş olan değer int türü sınırları içerisinde değilse sayının pozitif ya da negatif olması 
+			durumuna göre int türünün en büyük ve en küçük değeri alınır ve hedef türe dönüştürülür. Hedef tür int 
+			ise int'in en büyük veya en küçük değeri atanır
+			
+		- Hedef tür long ise
+			- Elde edilen değer long türü sınırları içerisindeyse doğrudan atanır
+			
+			- Elde edilen değer long türü sınırları içerisinde değilse sayının pozitif ya da negatif olması durumuna
+			göre long türünün en büyük ve en küçük değeri alınır atanır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 123.45;
+		byte b;
+		
+		b = (byte)a;
+		
+		System.out.printf("b = %d%n", b);
+	}
+}
+
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 1236.45;
+		byte b;
+		
+		b = (byte)a;
+		
+		System.out.printf("1236 = %08X%n", 1236);
+		System.out.printf("b = %d%n", b);
+		System.out.printf("b = %02X%n", b);		
+	}
+}
+
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 40000.45;
+		short b;
+		
+		b = (short)a;
+		
+		System.out.printf("40000 = %08X%n", 40000);
+		System.out.printf("b = %d%n", b);
+		System.out.printf("b = %04X%n", b);		
+	}
+}
+
+
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 5_000_000_000.45;
+		int b;
+		
+		b = (int)a;
+		
+		System.out.printf("5_000_000_000 = %08X%n", (int)5_000_000_000L);
+		System.out.printf("2147483647 = %08X%n", Integer.MAX_VALUE);
+		System.out.printf("b = %d%n", b);
+		System.out.printf("b = %08X%n", b);		
+	}
+}
+
+
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = -5_000_000_000.45;
+		int b;
+		
+		b = (int)a;
+		
+		System.out.printf("-5_000_000_000 = %08X%n", (int)-5_000_000_000L);
+		System.out.printf("-2147483648 = %08X%n", Integer.MIN_VALUE);
+		System.out.printf("b = %d%n", b);
+		System.out.printf("b = %08X%n", b);
+	}
+}
+
+
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		double a = 5_000_000_000.45;
+		byte b;
+		
+		b = (byte)a;
+		
+		System.out.printf("5_000_000_000 = %02X%n", (byte)5_000_000_000L);
+		System.out.printf("(byte)2147483647 = %08X%n", (byte)Integer.MAX_VALUE);
+		System.out.printf("b = %d%n", b);
+		System.out.printf("b = %02X%n", b);
+	}
+}
 
 
 
