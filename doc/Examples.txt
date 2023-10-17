@@ -4012,7 +4012,7 @@ class Sample {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	|| operatörünün kısa devre davranışı (short circuit behavior) . Aşağıdaki örnekte foo metodunun çağrılması sonucu
+	|| operatörünün kısa devre davranışı (short circuit behavior) . Aşağıdaki örnekte bar metodunun çağrılması sonucu
 	etkilemediğinden çağrılmaz. Metotlar durumu göstermek aşağıdaki gibi yazılmıştır
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
