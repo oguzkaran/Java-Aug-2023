@@ -8194,8 +8194,13 @@ class DemoDateApp {
 class DateUtil {	
 	public static void printDateTR(int day, int month, int year)
 	{
-		int dayOfYear = getDayOfYear(day, month, year);	
-	
+		int dayOfYear = getDayOfYear(day, month, year);
+		
+		if (dayOfYear == -1) {
+			System.out.println("Geçersiz tarih!...");
+			return;
+		}
+		
 		switch (getDayOfWeek(day, month, year)) {
 		case 0:
 			System.out.printf("%02d/%02d/%04d Pazar yılın %d. günüdür%n", day, month, year, dayOfYear);
@@ -8218,8 +8223,6 @@ class DateUtil {
 		case 6:
 			System.out.printf("%02d/%02d/%04d Cumartesi yılın %d. günüdür%n", day, month, year, dayOfYear);
 			break;
-		default:
-			System.out.println("Geçersiz tarih!...");
 		}
 	}
 
@@ -8737,7 +8740,11 @@ class DemoDateApp {
 class DateUtil {	
 	public static void printDateTR(int day, int month, int year)
 	{
-		int dayOfYear = getDayOfYear(day, month, year);	
+		int dayOfYear = getDayOfYear(day, month, year);
+		if (dayOfYear == -1) {
+			System.out.println("Geçersiz tarih!...");
+			return;
+		}	
 	
 		switch (getDayOfWeek(day, month, year)) {
 		case 0 -> System.out.printf("%02d/%02d/%04d Pazar yılın %d. günüdür%n", day, month, year, dayOfYear);						
@@ -8747,7 +8754,6 @@ class DateUtil {
 		case 4 -> System.out.printf("%02d/%02d/%04d Perşembe yılın %d. günüdür%n", day, month, year, dayOfYear);			
 		case 5 -> System.out.printf("%02d/%02d/%04d Cuma yılın %d. günüdür%n", day, month, year, dayOfYear);
 		case 6 -> System.out.printf("%02d/%02d/%04d Cumartesi yılın %d. günüdür%n", day, month, year, dayOfYear);			
-		default -> System.out.println("Geçersiz tarih!...");
 		}
 	}
 
