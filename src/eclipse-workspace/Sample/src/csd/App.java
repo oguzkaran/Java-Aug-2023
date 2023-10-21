@@ -1,5 +1,6 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örnekte koşul operatörünün üçüncü operandı b ifadesidir
+	Koşul operatörğ doğrudan if deyimine deyimine alternatif olmasa da bazı durumlarda okunabilirliği artırmak için
+	kullanılır. 
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -13,9 +14,8 @@ class App {
 		int b = kb.nextInt();
 		int result;
 		
-		result = (a > b ? a + 100 : b) - 200; //**
+		result = a + (a > b ? a : b);
 		
 		System.out.printf("result = %d%n", result);
 	}
 }
-
