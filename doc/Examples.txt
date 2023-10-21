@@ -10877,6 +10877,400 @@ class NumberUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir sınıf içerisinde aynı isimde birden fazla metot bildirilmesi durumu (method overloading): Bir sınıf içerisinde
+	aynı isimde birden fazla metot bildirilebilir. Buna method overloading denir. Farklı sınıflarda aynı isimde metotların
+	olması method overloading değildir. Method overloading için şu iki sorunun cevaplarını ele alacağız:
+		- Method overloading kuralları nelerdir?
+		- Derleyici bir metot çağrıldığında hangi metodun çağrılacağına nasıl karar verecektir? (method overload resolution)
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte method overloading yapılmamıştır. Çünkü foo metotları ayrı sınıflardadır 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.foo();
+		Mample.foo();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("Sample.foo");
+	}
+}
+
+class Mample {
+	public static void foo()
+	{
+		System.out.println("Mample.foo");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir sınıf içerisinde birden fazla AYNI metottan bildirilemez. Yani bir sınıf içerisinde metotların FARKLI olması
+	gerekir. Bu durumda iki metodun AYNI ya da FARKLI olması durumlarının incelenmesi gerekir. İşte burada iki metodun
+	AYNI ya da FARKLı olması durumlarına yönelik detaylar ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki metodun erişim belirleyicilerinin farklı olması o iki metodu farklı yapmaz. Yani overload işlemine etkisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	private static void foo() //error
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki metodun static veya non-static olması durumu metotları farklı yapmaz. Bu durumda overload'a etkisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	public void foo() //error
+	{
+		//...
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki metodun geri dönüş değerlerinin farklı olması da metotları farklı yapmaz. Yani overload'a etkisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+
+class Sample {
+	public static void foo() //error
+	{
+		//...
+	}
+	
+	public static int foo() //error
+	{
+		//...
+		
+		return 0;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki metodun parametre değişkenlerinin isimlerinin farklı olması da metotları farklı yapmaz. Yani parametre değişken
+	isimlerinin overload işlemine etkisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static void foo(int a) //error
+	{
+		//...
+	}
+	
+	public static void foo(int b) //error
+	{
+		//...
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun overload edilebilmesi için parametrelerin türlerinin ve dizilimlerinin farklı olması gerekir. Bu anlamda
+	bir metodun parametrelerinin türlerine ve dizilimlerine parametrik yapısı diyebiliriz. Yani bu durumda bir metodun
+	overload edilebilmesi için parametrik yapısının diğer aynı isimde olan metotlardan farklı olması gerekir. Aşağıdaki
+	metotları inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+
+class Sample {
+	public static void foo()
+	{
+		//...
+	}
+	
+	public static void foo(int a)
+	{
+		//...
+	}
+	
+	public static void foo(double a)
+	{
+		//...
+	}
+	
+	public static void foo(double a, int b)
+	{
+		//...
+	}
+	
+	public static void foo(int a, double b)
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun imzası (signature) o metodun ismi ve parametrik yapı kombinasyonudur. Bir sınıf içerisinde aynı imzaya
+	sahip birden fazla metot bildirimi geçersizdir. Aslında method overloading bu kavramın özel bir durumudur. İki
+	metodun ismi aynı olacağına göre, imzaların farklı olması için parametrik yapısının farklı olması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public static void foo() //imza: foo
+	{
+		//...
+	}
+	
+	public static void foo(int a) //imza: foo, int
+	{
+		//...
+	}
+	
+	public static void foo(double a) //imza: foo, double
+	{
+		//...
+	}
+	
+	public static void foo(double a, int b) //imza: foo, double, int
+	{
+		//...
+	}
+	
+	public static void foo(int b, double a) //imza: foo, int, double
+	{
+		//...
+	}
+	
+	public static void bar(int b, double a) //imza:bar, int, double
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyici bir metot çağrısı gördüğünde hangi metodu çağrılacağına nasıl karar verecektir? Bu durumun ayrıntıları 
+	vardır ve bu bölümde ele alınacaktır. Bu kavrama "method overload resolution" ya da kısaca "overload resolution"
+	denir.  
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Overload resolution işleminde derleyici ismini en uygun metot (the most applicable) denilen metodu bulmaya çalışır. 
+	Bunun için derleyici birazdan ele alacağımız sırayla metotları seçer. Ancak bu seçimin özel bir durumu olarak 
+	çağrılan metoda geçilen argümanlar ile karşılık gelen parametrelerinin tür bakımından birebir uyumlu olduğu bir
+	metot varsa o çağrılır. Bu kavrama "tam uyum (best match)" denir. 
+	
+	Derleyici overload resolution işlemini şu adımlardan geçerek yapar:
+	1. Aday metotlar (candidate methods) belirlenir: Çağrılan metot ile aynı isimde olan tüm metotlardır. 
+	
+	2. Uygun metotlar (applicable methods) belirlenir: Çağrı sırasında geçilen argüman sayı ile parametre sayısı olan
+	VE argümanların türünden karşılık geldikleri parametrenin türüne otomatik (implicit) tür dönüşümünün geçerli olduğu
+	metotlardır. 
+	
+	3. En uygun metot (the most applicable method) belirlenir: En uygun metot öyle bir metottur ki, uygun metotlar
+	arasında argümanlar ile parametreler kalite yarışına sokulduğunda toplamda daha iyi olan veya daha kötü olmayan
+	metottur. Dönüşümün kalitesi şu şekilde belirlenir:
+	T1 argümanın, T2 ve T3'de yarışa sokulan parametrelerin türleri ise:
+	1. T1 -> T2 ve T1 -> T3 çağrıları yarışa sokulduğunda T2 veya T3'den birisi T1 ile aynı ise daha kalitelidir.
+	Örneğin:
+	int -> double
+	int -> int *
+	
+	2. T1 -> T2 ve T1 -> T3 çağrıları yarışa sokulduğunda T2'den T3' otomatik dönüşüm var, T3'den T2'ye yoksa
+	T2 daha kalitelidir. 
+	Örneğin:
+ 	int -> long *
+ 	int -> float
+	
+	Bu adımlardan herhangi birisinde bir metot bulunamazsa error oluşur. Yani aday metot bulunamazsa VEYA aday
+	metotlar var fakat uygun metot bulunamazsa VEYA uygun metotlar var en uygun metot bulunamazsa error oluşur. 
+	  
+	Anahtar Notlar: Aslında best match de yukarıda anlatılan biçimde yapılır. Ancak kolay anlaşılır olması açısından
+	bu şekilde anlatılmıştır.
+	
+	Anahtar Notlar: Şüphesiz tam uyumlu çağrılar en idealidir. Ancak her zaman bu şekilde olmayabilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki çağrıda tam uyum vardır. Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5, 6
+	2. Uygun metotlar: 5, 6
+	3. En uygun metot: 5
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		double b = 4;
+		
+		Sample.foo(a, b);
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+	
+	public static void foo(double a, int b) //4
+	{
+		System.out.println("foo, double, int");
+	}
+	
+	public static void foo(int b, double a) //5
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a,  double b) //6
+	{
+		System.out.println("foo, long, double");
+	}
+	
+	public static void bar(int b, double a) //7
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	1. Aday metotlar: 1, 2, 3, 4, 5
+	2. Uygun metotlar: 4, 5
+	3. En uygun metot: 4
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10;
+		int b = 4;
+		
+		Sample.foo(a, b);
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a,  double b) //5
+	{
+		System.out.println("foo, long, double");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5
+	2. Uygun metotlar: 4, 5
+	3. En uygun metot: Yok
+	
+	Örnekte en uygun metot olmadığından yani "uygun metotlar arasında toplamda daha iyi ya da ya da daha kötü olmayan
+	dönüşümü sunan" bir tane metot bulunmadığından error oluşur 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10;
+		int b = 4;
+		
+		Sample.foo(a, b); //error: ambiguity
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a,  float b) //5
+	{
+		System.out.println("foo, long, float");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
