@@ -209,6 +209,144 @@ class Util {
 }
 
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-1.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		PrintDiamondApp.run();
+	}
+}
+
+class PrintDiamondApp {
+	public static void printAbove(int n)
+	{
+		for (int i = 0; i < n; ++i) {
+			for (int k = 0; k < n - i; ++k)
+				System.out.print(' ');
+			
+			for (int k = 0; k < 2 * i - 1; ++k)
+				System.out.print('*');
+			
+			System.out.println();
+		}
+	}
+	
+	
+	public static void printBelow(int n)
+	{
+		for (int i = 0; i < n; ++i) {
+			for (int k = 0; k < i; ++k)
+				System.out.print(' ');
+			
+			for (int k = 0; k < 2 * (n - i) - 1; ++k)
+				System.out.print('*');
+			
+			System.out.println();
+		}
+	}
+	
+	
+	public static void printDiamond(int n)
+	{
+		printAbove(n);
+		printBelow(n);
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int n = kb.nextInt();
+			
+			if (n <= 0)
+				break;
+			
+			printDiamond(n);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-2.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		PrintDurationTest.run();
+	}
+}
+
+class PrintDurationTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Toplam saniyeyi giriniz:");
+			long totalSeconds = kb.nextLong();			
+			
+			TimeUtil.printDuration(totalSeconds);
+			
+			if (totalSeconds <= 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+class TimeUtil {
+	public static void printDuration(long totalSeconds)
+	{
+		long hours = totalSeconds / 60 / 60;
+		long minutes = totalSeconds / 60 % 60;
+		long seconds = totalSeconds % 60;
+		
+		if (hours != 0)			
+			System.out.printf("%d saat ", hours);
+		
+		if (minutes != 0)			
+			System.out.printf("%d dakika ", minutes);
+		
+		if (seconds != 0)			
+			System.out.printf("%d saniye", seconds);
+		
+		System.out.println();
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,21 +1,44 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Koşul operatörğ doğrudan if deyimine deyimine alternatif olmasa da bazı durumlarda okunabilirliği artırmak için
-	kullanılır. 
+	Homework-002-2.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
 class App {
 	public static void main(String [] args)
 	{
+		PrintPrimeFactorsApp.run();
+	}
+}
+
+class PrintPrimeFactorsApp {
+	public static void run()
+	{
 		java.util.Scanner kb = new java.util.Scanner(System.in);
 		
-		System.out.print("İki sayı giriniz:");
-		int a = kb.nextInt();
-		int b = kb.nextInt();
-		int result;
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int val = kb.nextInt();		
+			
+			NumberUtil.printPrimeFactors(val);
+			
+			if (val == 0)
+				break;
+		}
 		
-		result = a + (a > b ? a : b);
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+class NumberUtil {
+	public static void printPrimeFactors(int val)
+	{
+		if (val == 0)
+			return;
 		
-		System.out.printf("result = %d%n", result);
+		val = Math.abs(val);
+		
+		
 	}
 }
