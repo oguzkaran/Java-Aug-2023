@@ -330,12 +330,219 @@ class TimeUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-3.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		PrintPrimeFactorsApp.run();
+	}
+}
+
+class PrintPrimeFactorsApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int val = kb.nextInt();		
+			
+			NumberUtil.printPrimeFactors(val);
+			
+			if (val == 0)
+				break;
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+class NumberUtil {
+	public static void printPrimeFactors(int val)
+	{
+		if (val == 0)
+			return;
+		
+		val = Math.abs(val);
+		
+		int a = 2;
+		
+		while (val != 1) {
+			if (val % a == 0) {
+				System.out.printf("%d ", a);
+				val /= a;
+			}
+			else 
+				++a;
+		}
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-4.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		BallFallGameApp.run();
+	}
+}
+
+class BallFallGameApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Genişlik ve yüksekliği giriniz:");
+			int width = kb.nextInt();
+			int height = kb.nextInt();
+			
+			if (width <= 0 || height <= 0)
+				break;
+			
+			BallFall.play(width, height);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+class BallFall {
+	public static void writeSpace(int begin, int end)
+	{
+		for (int i = begin; i < end; ++i)
+			System.out.print(' ');
+	}
+	
+	public static void writeBall(int ballIndex, int end)
+	{
+		writeSpace(0, ballIndex);
+		System.out.print('*');
+		writeSpace(ballIndex + 1, end);
+	}
+	
+	public static boolean updateRightFlagIfNecessary(boolean right, int ballIndex, int width)
+	{
+		if (ballIndex == 0)
+			right = true;
+		else if (ballIndex == width - 1)
+			right = false;
+		
+		return right;
+	}
+	
+	public static int updateBallIndex(int ballIndex, boolean right)
+	{
+		if (right)
+			return ballIndex + 1;
+		
+		return ballIndex - 1;
+	}
+	
+	public static void play(int width, int height)
+	{
+		boolean right = false;
+		int ballIndex = 0;
+		
+		for (int i = 1; i <= height; ++i) {
+			System.out.print('|');
+			writeBall(ballIndex, width);
+			if (width != 1) {
+				right = updateRightFlagIfNecessary(right, ballIndex, width);
+				ballIndex = updateBallIndex(ballIndex, right);
+			}
+			System.out.println('|');			
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-5.sorunun bir çözümü
+	(Not:Çözüm çalışma sorusunun verildiği tarihte işlenmiş konulara göre yazılmıştır)
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		PrintGoldbachApp.run();
+	}
+}
+
+class PrintGoldbachApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Çift bir sayı giriniz:");
+			int val = kb.nextInt();
+			
+			if (val % 2 != 0) {
+				System.out.println("Çift sayı girmelisiniz!...");
+				continue;
+			}
+			
+			if (val <= 2)
+				break;
+			
+			NumberUtil.printGoldbach(val);			
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
 
 
 
+class NumberUtil {
+	public static void printGoldbach(int val)
+	{
+		for (int a = val - 1; a >= 2; --a) {
+			int b = val - a;
+			
+			if (isPrime(a) && isPrime(b) && a >= b)
+				System.out.printf("%d + %d = %d == %d%n", a, b, a + b, val);
+		}
+	}
 
-
-
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+}
 
 
 
