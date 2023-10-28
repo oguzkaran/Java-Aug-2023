@@ -11155,7 +11155,7 @@ class Sample {
 		System.out.println("foo, int, double");
 	}
 	
-	public static void foo(long a,  double b) //6
+	public static void foo(long a, double b) //6
 	{
 		System.out.println("foo, long, double");
 	}
@@ -11205,7 +11205,7 @@ class Sample {
 		System.out.println("foo, int, double");
 	}
 	
-	public static void foo(long a,  double b) //5
+	public static void foo(long a, double b) //5
 	{
 		System.out.println("foo, long, double");
 	}
@@ -11224,7 +11224,7 @@ class Sample {
 	3. En uygun metot: Yok
 	
 	Örnekte en uygun metot olmadığından yani "uygun metotlar arasında toplamda daha iyi ya da ya da daha kötü olmayan
-	dönüşümü sunan" bir tane metot bulunmadığından error oluşur 
+	dönüşümü sunan" bir tane metot bulunmadığından error oluşur. Bu duruma iki anlamlılık (ambiguity) denir
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -11259,6 +11259,215 @@ class Sample {
 		System.out.println("foo, int, double");
 	}
 	
+	public static void foo(long a, float b) //5
+	{
+		System.out.println("foo, long, float");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	28.10.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5
+	2. Uygun metotlar: Yok
+	
+	Örnekte uygun metot bulunamadığından error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		boolean a = true;
+		int b = 4;
+		
+		Sample.foo(a, b); //error
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a, float b) //5
+	{
+		System.out.println("foo, long, float");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Genel olarak incelersek:
+	1. Aday metotlar: Yok
+	Örnekte aday metot bulunamadığından error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		boolean a = true;
+		int b = 4;
+		
+		Sample.fo(a, b); //error
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a, float b) //5
+	{
+		System.out.println("foo, long, float");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5
+	2. Uygun metotlar: 4
+	3. En uygun metot: 4
+	
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10;
+		int b = 4;
+		
+		Sample.foo(a, (double)b);
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a, float b) //5
+	{
+		System.out.println("foo, long, float");
+	}
+	
+	public static void bar(int b, double a) //6
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5
+	2. Uygun metotlar: 4, 5
+	3. En uygun metot: 5
+	
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		short a = 10;
+		int b = 4;
+		
+		Sample.foo((int)a, b); //error
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+
+	public static void foo(int b, double a) //4
+	{
+		System.out.println("foo, int, double");
+	}
+	
 	public static void foo(long a,  float b) //5
 	{
 		System.out.println("foo, long, float");
@@ -11269,6 +11478,91 @@ class Sample {
 		System.out.println("bar, int, double");
 	}
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki çağrıda tam uyum vardır. Genel olarak incelersek:
+	1. Aday metotlar: 1, 2, 3, 4, 5, 6
+	2. Uygun metotlar: 4
+	3. En uygun metot: 4
+	
+	Örnekte best match olduğuna dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		double b = 4;
+		
+		Sample.foo((double)a, (int)b);
+	}
+}
+
+class Sample {
+	public static void foo() //1
+	{
+		System.out.println("foo");
+	}
+	
+	public static void foo(int a) //2
+	{
+		System.out.println("foo, int");
+	}
+	
+	public static void foo(double a) //3
+	{
+		System.out.println("foo, double");
+	}
+	
+	public static void foo(double a, int b) //4
+	{
+		System.out.println("foo, double, int");
+	}
+	
+	public static void foo(int b, double a) //5
+	{
+		System.out.println("foo, int, double");
+	}
+	
+	public static void foo(long a, double b) //6
+	{
+		System.out.println("foo, long, double");
+	}
+	
+	public static void bar(int b, double a) //7
+	{
+		System.out.println("bar, int, double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Method overload resolution kavramının temel türler dışındaki bazı ayrıntıları konular içerisinde
+	ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Nesne Yönelimli Programalama Tekniği (Object Oriented Programming): Nesne yönelimli programlama tekniğini (NYPT) tek
+	bir cümle ifade etmek etmek pek mümkün değildir. Ancak bu tekniği bilen veya belirli ölçüde fikri olan birisine
+	"sınıflar kullanarak program yazma tekniğidir" denebilir. NYPT aslında anahtar kavramların birleşiminden oluşur. Bu 
+	anahtar kavramlar içiçe geçmiş daireler biçiminde düşünülebilir. Tüm bu anahtar kavramların temelinde kodun
+	okunabilir/algılanabilir olması ve iyi yönetilmesi vardır. Örneğin, benzer işi yapan metotlara aynı ismin verilmesi
+	(method overloading) programcıyı "çok şey var" duygusundan uzaklaştırıp, "az şey var" gibi bir algı oluşuturur. Bu
+	da hatırlamayı kolaylaştırır ve kodun okunabilirliğini/algılanabilirliğini artırır
+	
+	NYPT insanının doğayı algılama biçimini model alır. İnsanlar her şeyi nesne biçiminde ele alıp kullanırlar. Örneğin
+	herkesin bilgisayarı olabilse de konuşurken bunu bilgisayar olarak konuşuruz. Yani aslında bilgisayar soyut bir
+	kavramdır, örneğin bize ait olan bir bilgisayar somutlaşmıştır. Bu anlamda, herkesin sahip olduğu şey (thing) 
+	bilgisayardır. 
+	
+	NYPT'de artık fonksiyonlarla (Java'da metot) değil sınıflarla konuşulur. Böylece yine "çok şey var" duygusundan 
+	uzakkaşıp, "az şey var" algısı oluşur. Bu anlamda sınıf ve nesne seviyesinde detaylar programcıdan gizlenmiş olur.
+	Bu da yine algıyı kolaylaştırır.
+	
+	Burada anlatıların pek çok detayı vardır. Burada bir özet biçiminde ele alınmıştır. Bu kavramlar ve burada anlatılmayanlar
+	Konular içerisinde detaylandırılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
