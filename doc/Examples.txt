@@ -11563,6 +11563,352 @@ class Sample {
 	Konular içerisinde detaylandırılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	29.10.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi bir değişkenin bellekte yaratılmasıyla yani yer ayrılmasıyla, yok edilmesi yani o bellek alanının 
+	o değişken içi artık kullanılmaması arasındaki süreye değişkenin ömrü (storage duration) denir. Peki, bir değişken
+	için ayrılan bellek bölgesi neresidir? İşte bir Java uygulaması çalıştırıldığında o uygulama için iki tane
+	bellek alanı ayrılır: stack, heap. Şüphesiz aşağı seviyede başka bir alanlar da söz konusudur. Stack ve heap, Java 
+	seviyesinde ayrılan alanlar olarak düşünülebilir. Stack ve heap RAM'de organize edilir. Program çalıştırılırken bu 
+	alanların uzunlukları ayarlanabilir. Herhangi bir belirleme yapılmazsa default uzunluklar kullanılır.
+	
+	
+	Anahtar Notlar: Veri Yapıları (Data Structure): Birbiriyile genel olarak ilişkili olan verilerin belirli bir takım
+	algoritmalara göre bir arada tutulmasını sağlayan ve gerektiğinde bu verilere erişilebilen yapılara denir. Stack 
+	Last In First Out (LIFO) kuyruk biçiminde çalışan bir veri yapısıdır. Bu veri yapısında eleman ekleme işlemine "push",
+	son eklenen elemanı silme işlemine ise "pop" denilmektedir. Bu veri yapısı örneğin editörlerin "undo-redo"
+	işlemlerinde kullanılır. Örneğin undo yapıldığında undo stack'den pop yapılır ve redo stack'e push yapılır. Redo 
+	yapıldığında ise redo stack'ten pop yapılır, undo stack'e push yapılır. Stack alanında yaratma ve yok etme işlemleri 
+	stack veri yapısındaki gibi olduğundan bu alana stack alanı denir. Aslında stack alanı donanımsal olarak da 
+	desteklenen bir yapıdır.
+	
+	Yerel değişkenler ve parametre değişkenleri stack alanında yaratılır. Stack doldur boşalt biçiminde çalışan bir
+	bellek alanıdır. Böylece toplamda uzunluğundan daha fazla değişken için yer ayrılabilir.     
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yerel değişkenler akış kod bakımından bildirim noktasına geldiğinde yaratılırlar, bildirildikleri blok sonunda yok 
+	edilirler. Bu durumda bir yerel değişkeninin yaratılması push komutuyla, yok edilmesi ise pop komutuyla yapılır. Bu 
+	durumda peşpeşe bildirilen yerel değişkenler sırasıyla push edilir, ters sırada pop edilir. Bu durumda faaliyet alanı (scope)
+	ve ömür (storage duration) arasında dolaylı bir ilişki de vardır. Anımsanacağı gibi compile time ve runtime'a ilişkin
+	ayrı kavramlardır   
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		{
+			int a; //a yaratılır
+			int b; //b yaratılır
+			
+			//...
+		} // b yok edilir, a yok edilir
+	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Parametre değişkenleri metot çağrıldığında yaratılır, metot çağrısı bittiğinde yok edilir   
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.foo(10, 20); //Parametre değişkenleri a ve b yaratılır, x yaratılır ...
+		//x yok edilir, b ve a yok edilir
+		
+		//...
+		
+		Sample.foo(10, 20); //Parametre değişkenleri a ve b yaratılır, x yaratılır ...
+		//x yok edilir, b ve a yok edilir
+	}
+}
+
+class Sample {
+	public static void foo(int a, double b)
+	{
+		int x;
+		
+		x = a++;
+		
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf içerisinde, tüm metotların dışında bildirilen değişkenlere sınıf veri elemanı (class data member) denir. 
+	Bu anlamda sınıf veri elemanları sınıf içerisinde bildirilen değişkenler olarak düşünülmelidir. Veri elemanları
+	şu erişim belirleyicilere sahip olabililr: public, no-modifier, protected, private. İlgili konuya gelene kadar
+	tüm veri elemanlarını public olarak bildireceğiz. Bir veri elemanı static veya non-static olabilir. static anahtar
+	sözcüğü ile bildirildiğinde static olur. 
+	
+	Anahtar Notlar: Sınıf içerisindeki bildirimlere sınıfın elemanları (member) denir. Bu anlamda sınıfın elemanı bir
+	değişken ise buna veri elemanı (data member, member variable, field) denir. Sınıfın elemanı bir alt program ise
+	buna metot (method) denir. Sınıfın ilerideki konularda ele alacağımız başka elemanları da (member) olabilmektedir
+	
+	Bir veri elemanının faaliyet alanı ve ömrü ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+
+class Sample {
+	private static int x;
+	public static void foo()
+	{
+		
+	}
+	
+	public double y;
+	protected static float z;
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da sınıf dışında değişken bildirimi geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+int a; //error
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf bildirimi aslında bir tür bildirimidir. Bu anlamda Java'da sınıf dışında da çeşitli tür bildirimleri 
+	yapılabilmektedir. Bu şekilde yapılan tür bildirimlerine user defined types (UDT) denilmektedir. Bu durumda bir 
+	sınıf da bir UDT'dir. Aşağıdaki sınıfların her biri bir UDT'dir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Student {
+	//...
+}
+
+class SerialPort {
+	//...
+}
+
+class Device {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Madem ki sınıf bildirimi bir tür bildirimidir, bu durumda sınıf türünden değişkenler bildirilebilir. 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Student s;
+		SerialPort sp;
+		Device d;
+		
+		//...
+	}
+}
+
+class Student {
+	//...
+}
+
+class SerialPort {
+	//...
+}
+
+class Device {
+	//...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java'da türler kategoriye ikiye ayrılır: değer türleri (value types), referans türleri (reference types)
+	T bir tür ismi olmak üzere T türden bir değişken içerisinde adres tutuluyorsa T bir referans türüdür, tutulmuyorsa
+	değer türüdür. Java'da tüm temel türler değer türüdür. Yani temel türden bir değişken içerisinde adres tutulamaz.
+	Sınıflar Java'da referans türleridir. Yani bir sınıf türünden değişken içerisinde adres tutulur. Aslında genel olarak
+	temel türler dışında tüm türler (UDT'ler) Java'da referans türleridir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf türünden bir değişkene referans değişken ya da kısaca referans denir. Java seviyesinde referans terimi
+	adres (address) terimi yerine de kullanılmaktadır. Bu anlamda referans dendiğinde ya bir adres kastedilmiş olur
+	ya da adres tutabilen referans değişken kastedilmiş olur. Örneğin bir cümle içerisinde "reference of an object"
+	dendiğinde nesnenin adresi kastedilir. Ya da örneğin, "address of an object is assigned to a reference" dendiğinde
+	nesnenin adresini tutan referans kastedilmiş olur
+	
+	Peki bu referanslara nasıl değer atanacak?
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Student s; //s referans (değişkeni)
+		SerialPort sp; //sp referans (değişkeni)
+		Device d; //d referans (değişkeni)
+	
+		//...
+	}
+}
+
+class Student {
+	//...
+}
+
+class SerialPort {
+	//...
+}
+
+class Device {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	- Sınıf türünden bellekte ayrılan bir alana nesne (object) denir.
+	
+	- Nesneler heap alanında yaratılırlar. Java'da stack'de nesne yaratılamaz.
+	
+	- Java'da nesnelerin kendileri tutulamaz, adresleri tutulabilir. Bu adresler de aynı türden referans değişkenlerde 
+	tutulabilir
+	
+	- Bir nesne new operatörü ile yaratılabilir. new operatörünün genel biçimi şu şekildedir:
+	
+	 	new <sınıf ismi>([argümanlar]);
+	 	
+	 Bu operatör özel amaçlı, tek operandlı ve önek durumundadır. bu operatör bellekte ilgili türden nesnenin yaratılmasını
+	 sağlar ve yarattığı nesnenin adresini (referansını) üretir. Bir nesne için bellekte ne kadar uzunlukta yer ayrıldığı
+	 ileride ele alınacaktır. Aşağıdaki örnekte s, sp ve d birer nesne DEĞİLDİR. Nesnelerin adreslerini tutan değişkenlerdir.
+	 Örnekte *, ** ve *** ilem belirtilen deyimlerde ilgili referanslara, yaratılmış olan nesnelerin adresleri atanmıştır.
+	 Bu durumda artık ilgili referanslar nesneleri gösteriyor (reference to) duruma gelir. 
+	 
+	 - Bir nesne ilgili sınıf türünden bir örnektir. Buna ingilizce olarak "instance" terimi de kullanılır. Bu anlamda
+	 nesne yaratma içinde "create" ile birlikte "instantiate" fiili de kullanılmaktadır.
+	 
+	 - Referans ve nesne birbirlerinden farklı kavramlardır. Referans bir nesneyi gösterir ya da adres anlamında 
+	 kullanıldığında nesnenin adresidir
+	 
+	 - Her new işlemi yeni bir nesne yaratmak demektir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Student s; //s referans (değişkeni)
+		SerialPort sp; //sp referans (değişkeni)
+		Device d; //d referans (değişkeni)
+		
+		s = new Student(); //*
+		sp = new SerialPort(); //**
+		d = new Device(); //***
+
+		//...
+	}
+}
+
+class Student {
+	//...
+}
+
+class SerialPort {
+	//...
+}
+
+class Device {
+	//...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static veri elemanları her nesne için ayrıca yaratılır. Yani sınıfın non-static bir veri elemanı o sınıf
+	türünden bir nesnenin içerisinde bulunur. Yani o nesneye özeldir. Sınıfın non-static bir veri elemanına referans
+	ve nokta operatörü ile erişilebilir. Nokta operatörü özel amaçlı iki operandlı ve araek durumundadır. Nokta operatörünün
+	referans ile kullanımında ikinci operandı sınıfın veri elemanı ise o veri elemanına ilişkin değişkeni üretir. Bu 
+	durumda referans ile erişim hangi nesneye ait olduğunu belirtmiş olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s, k;
+		
+		s = new Sample();
+		k = new Sample();
+		
+		s.x = 10;
+		s.y = true;
+		k.x = 20;
+		k.y = false;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir nesne yaratıldığında o nesnenin non-static veri elemanlarına default değerler atanır. Default değer türe özgü
+	mantıksal sıfır değeridir (zero value). Örneğin, int türü için sıfır değeriyken boolean türü için false değeridir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s;
+		
+		s = new Sample();
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		
+		s.x = 10;
+		s.y = true;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte içerisine değer atanmamış bir değişken kullanıldığından error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		Sample s;
+		
+		s.x = 10;
+		s.y = true;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
