@@ -11858,7 +11858,8 @@ class Sample {
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Bir nesne yaratıldığında o nesnenin non-static veri elemanlarına default değerler atanır. Default değer türe özgü
-	mantıksal sıfır değeridir (zero value). Örneğin, int türü için sıfır değeriyken boolean türü için false değeridir
+	mantıksal sıfır değeridir (zero value or default value). Örneğin, int türü için sıfır değeriyken boolean türü için 
+	false değeridir
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -11907,6 +11908,68 @@ class Sample {
 	public boolean y;
 	
 	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	04.11.2023	
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	İki tane aynı türden referansın birbirine atanması durumunda artık her iki referans da aynı nesneyi gösterir duruma
+	gelir. Bu durumda hangi referans ile nesneye erişilmesinin farkı yoktur. Çünkü her iki referans ile de aynı nesneye
+	erişilir. Aşağıdaki örnekte k = s atama işleminden sonra k ve s aynı nesneyi gösterir duruma gelmiştir. Bu durumda
+	herhangi bir referans üzerinden yapılan bir değişiklik diğer referans ile erişilerek de görülebilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k;
+		
+		s.x = 10;
+		s.y = true;
+		
+		k = s;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+		
+		++k.x;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 Aşağıdaki örnekte adres ataması yapılmadığı için, yani atanan "ŞEY" bir adres olmadığı için b'nin değişmesi a'yı 
+	 etkilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		int b;
+		
+		b = a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+		
+		++b;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+	}
 }
 
 
