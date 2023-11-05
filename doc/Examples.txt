@@ -11824,10 +11824,10 @@ class Device {
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıfın non-static veri elemanları her nesne için ayrıca yaratılır. Yani sınıfın non-static bir veri elemanı o sınıf
-	türünden bir nesnenin içerisinde bulunur. Yani o nesneye özeldir. Sınıfın non-static bir veri elemanına referans
-	ve nokta operatörü ile erişilebilir. Nokta operatörü özel amaçlı iki operandlı ve araek durumundadır. Nokta operatörünün
-	referans ile kullanımında ikinci operandı sınıfın veri elemanı ise o veri elemanına ilişkin değişkeni üretir. Bu 
-	durumda referans ile erişim hangi nesneye ait olduğunu belirtmiş olur
+	türünden bir nesnenin içerisinde bulunur. Yani o nesneye özeldir. Sınıfın non-static bir veri elemanına sınıf dışından 
+	referans ve nokta operatörü ile erişilebilir. Nokta operatörü özel amaçlı iki operandlı ve araek durumundadır. Nokta
+	operatörünün referans ile kullanımında ikinci operandı sınıfın veri elemanı ise o veri elemanına ilişkin değişkeni 
+	üretir. Bu durumda referans ile erişim hangi nesneye ait olduğunu belirtmiş olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -12061,6 +12061,466 @@ class Date {
 	public int day, month, year;
 	//...
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	05.11.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte adres ataması yapılmadığı için, yani atanan "ŞEY" bir adres olmadığı için a'nın değişmesi b'yi 
+	etkilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int b = 10;
+		
+		Sample.foo(b);
+		
+		System.out.printf("b = %d%n", b);
+	}
+}
+
+class Sample {
+	public static void foo(int a)
+	{
+		System.out.printf("foo:a = %d%n", a);
+		++a;
+		System.out.printf("foo:a = %d%n", a);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ** ile belirtilen deyimden sonra s artık yeni nesneyi gösterir durumdadır. Her new işleminin yeni
+	bir nesne yaratmak anlamına geldiğini anımsayınız
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k;
+		
+		s.x = 10;
+		s.y = true;
+		
+		k = s;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+		System.out.println("---------------------------------------------");
+		
+		++k.x;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+		System.out.println("---------------------------------------------");
+		
+		s = new Sample(); //**
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+		System.out.println("---------------------------------------------");
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static veri elemanları nesneye ait değildir. Yani static veri elemanlarına erişim için nesne yaratılması
+	gerekmez. Sınıfın static veri elemanı sınıfın bir elemanı (member) ilk kez kullanıldığında yaratılır ve program
+	sonuna kadar yaşar. Sınıfın bir elemanı ilk kez kullanıldığından tüm static veri elemanları yaratılırlar. Bu durumda
+	sınıfın static bir veri elemanı toplamda bir tanedir. Sınıfın static bir veri elemanına sınıf dışından sınıf ismi ve
+	nokta operatörü ile erişilir. Sınıfın static bir veri elemanı yaratıldığında default değer verilir. Sınıfın static
+	bir veri elemanı stack'de yaratılamaz. Aşağı seviyede değişebilse de Java programcısı açısından "dolaylı olarak 
+	heap'de yaratılır" olarak düşünülebilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("Sample.x = %d, Sample.y = %b%n", Sample.x, Sample.y);
+		Sample.x = 10;
+		Sample.y = true;
+		System.out.printf("Sample.x = %d, Sample.y = %b%n", Sample.x, Sample.y);
+	}
+}
+
+class Sample {
+	public static int x;
+	public static boolean y;
+	
+	//...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir veri elemanına sınıf dışından sınıf ismi ve nokta operatörü ile erişilemez. Çünkü non-static
+	veri elemanları nesneye aittir ve referans olmadan hangi nesneye ait olduğu bilinemez
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.x = 10; //error
+		Sample.y = true; //error
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir veri elemanına sınıf dışından referans ve nokta operatörü ile de erişilebilir. Ancak bunun sınıf
+	ismi ile erişmekten hiç bir farkı yoktur. Bu dilin garamerinin bir sonucudur. Ancak programcı açısından bu tercih
+	edilmemesi gereken bir kullanımdır. Çünkü okunabililirliği/algılanabilirliği olumsuz etkiler. Bu anlamda programcı
+	açısından bu adeta geçersiz gibi düşünülmelidir (gönlümüzün error'u).
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+	
+		s.x = 10;
+		s.y = true;
+		System.out.printf("Sample.x = %d, Sample.y = %b%n", Sample.x, Sample.y);
+	}
+}
+
+class Sample {
+	public static int x;
+	public static boolean y;
+	
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte yaratıkların sayısı ve askerlerin sayısı sınıfları kullanan programcı tarafından tutulmaktadır
+	Bu durumda diğer türler için de sayaçlar tutulacaksa programcı açısından iki temel sorun oluşabilecektir:
+	1. İlgili değişkenlere isim bulma zahmeti oluşacaktır
+	2. Programcı sayaçları artırma ve azaltma işlemlerinde hata yapabilir
+	
+	Örnek durumu göstermek için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		DemoGameApp.run();
+	}
+}
+
+class DemoGameApp {
+	public static void run()
+	{
+		int soldierCount = 0;
+		int alienCount = 0;
+		
+		for (int i = 0; i < 10; ++i) {
+			Alien a = new Alien();
+			
+			++alienCount;
+			
+			//...
+		}
+		
+		for (int i = 0; i < 20; ++i) {
+			Soldier s = new Soldier();
+			
+			++soldierCount;
+			
+			//...
+		}
+		
+		System.out.printf("Number of aliens:%d%n", alienCount);
+		System.out.printf("Number of soldiers:%d%n", soldierCount);
+		//...
+	}
+}
+
+class Alien {
+	public int armCount;
+	public int color;
+	//...
+}
+
+class Soldier {
+	public int title;
+	public int gunCount;
+	//...
+}
+
+class Building {
+	//...
+}
+
+class Animal {
+	//...
+}
+
+class Citizen {
+	//...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki problemler, sayaç sınıf içerisinde static bir veri elemanı olarak bildirilirse çözülebilir. Aşağıdaki
+	örnekte sayacın artırılması noktası şu an için önemsizdir. Static ve non-static veri elemanının kullanımına 
+	odaklanınız. Örnek durumu göstermek için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		DemoGameApp.run();
+	}
+}
+
+class DemoGameApp {
+	public static void run()
+	{
+		for (int i = 0; i < 10; ++i) {
+			Alien a = new Alien();
+	
+			//...
+		}
+		
+		for (int i = 0; i < 20; ++i) {
+			Soldier s = new Soldier();
+			
+			//...
+		}
+		
+		System.out.printf("Number of aliens:%d%n", Alien.count);
+		System.out.printf("Number of soldiers:%d%n", Soldier.count);
+		//...
+	}
+}
+
+class Alien {
+	public static int count;
+	public int armCount;
+	public int color;
+	//...
+	
+	public Alien()
+	{
+		++count;
+	}
+	//...
+}
+
+class Soldier {
+	public static int count;
+	public int title;
+	public int gunCount;
+	//...
+	
+	public Soldier()
+	{
+		++count;
+	}
+	//...
+}
+
+class Building {
+	public static int count;
+	//...
+}
+
+class Animal {
+	public static int count;
+	//...
+}
+
+class Citizen {
+	public static int count;
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu sınıf dışından referans ve nokta operatörü ile çağrılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k = new Sample();
+		
+		s.foo();
+		k.foo();
+	}
+}
+
+class Sample {
+	public void foo()
+	{
+		System.out.println("foo");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu sınıf dışından sınıf ismi ile çağrılamaz  
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.foo(); //error
+	}
+}
+
+class Sample {
+	public void foo()
+	{
+		System.out.println("foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu sınıf dışından sınıf ismi ve nokta operatörü ile çağrılabilir. Bunu zaten kursun ilk 
+	günlerinden beri kullanıyoruz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample.foo();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("foo");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu sınıf dışından referans ve nokta operatörü ile de çağrılabilir. Ancak sınıf ismi ile 
+	çağırmaktan farkı yoktur. Programcı static metotları her zaman sınıf ismi ile çağırmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		
+		s.foo(); //gönlümüzün error'u
+	}
+}
+
+class Sample {
+	//...
+	public static void foo()
+	{
+		System.out.println("foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Static ve non-static metotların çağrılma biçimine bakıldığında non-static metotların nesne ile
+	ilişkili olduğu, static metotların ise nesne ile ilişkili olmadığı anlaşılmaktadır. Bu ilişki ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki erişimlerin hepsinin ilgili sınıfın dışından yapılan erişimler olduğuna dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu içerisinde, aynı sınıfın non-static bir veri elemanına doğrudan (nokta operatörü kullanmadan)
+	erişilebilir. Bu durumda erişilen non-static veri elemanı non-static metodun çağrısında kullanılan referansın 
+	gösterdiği nesneye ait olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k = new Sample();
+		
+		s.set(10);
+		k.set(20);
+		s.print();
+		k.print();
+	}
+}
+
+class Sample {
+	public int x;
+	 
+	public void set(int a)
+	{
+		x = a;
+	}
+	
+	public void print()
+	{
+		System.out.printf("x = %d%n", x);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu içerisinde, aynı sınıfın non-static bir metodu doğrudan çağrılabilir. Bu durumda
+	çağrılan non-static metot, onu çağıran non-static metodun çağrılmasında kullanılan referans ile çağrılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k = new Sample();
+		
+		s.setAndPrint(10);
+		k.setAndPrint(20);
+	}
+}
+
+class Sample {
+	public int x;
+	 
+	public void set(int a)
+	{
+		x = a;
+	}
+	
+	public void setAndPrint(int a)
+	{
+		set(a);
+		System.out.printf("x = %d%n", x);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki iki kurala göre sınıfın non-static bir metodu içerisinde aynı sınıfın non-static elemanlarına doğrudan
+	erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 
