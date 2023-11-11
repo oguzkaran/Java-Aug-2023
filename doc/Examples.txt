@@ -12522,6 +12522,194 @@ class Sample {
 	erişilebilir
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	11.11.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu içerisinde aynı sınıfın static bir veri elemanına doğrudan erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("Sample.y = %d%n", Sample.y);
+		Sample s = new Sample();
+		
+		s.set(20);
+		System.out.printf("Sample.y = %d%n", Sample.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public static int y;
+	 
+	public void set(int a)
+	{
+		x = a;
+		y = ++a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın non-static bir metodu içerisinde aynı sınıfın static bir metodu doğrudan çağrılabilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("Sample.y = %d%n", Sample.y);
+		Sample s = new Sample();
+		
+		s.set(20);
+		System.out.printf("Sample.y = %d%n", Sample.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public static int y;
+	 
+	public void set(int a)
+	{
+		x = a;
+		setY(++x);
+	}
+	
+	public static void setY(int b)
+	{
+		y = b;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki iki kurala göre sınıfın non-static bir metodu içerisinde aynı sınıfın static elemanlarına doğrudan
+	erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki dört kurala göre sınıfın non-static bir metodu içerisinde aynı sınıfın tüm elemanlarına doğrudan
+	erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu içerisinde aynı sınıfın non-static bir veri elemanına doğrudan erişilemez 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public int x;
+	 
+	public static void set(int a)
+	{
+		x = a; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu içerisinde aynı sınıfın non-static bir metodu doğrudan çağrılamaz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public int x;
+	 
+	public void set(int a)
+	{
+		x = a;
+	}
+	
+	public static void setAndPrint(int a)
+	{
+		set(a); //error
+		System.out.printf("x = %d%n", x);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki iki kurala göre sınıfın static bir metodu içerisinde aynı sınıfın non-static elemanlarına doğrudan
+	erişilemez
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu içerisinde aynı sınıfın static bir veri elemanına doğrudan erişilebilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		Sample.set(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	 
+	public static void set(int a)
+	{
+		x = a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın static bir metodu içerisinde aynı sınıfın static bir metodu doğrudan çağrılabilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		System.out.printf("Sample.x = %d%n", Sample.x);
+		Sample.setAndPrint(20);
+		System.out.printf("Sample.x = %d%n", Sample.x);
+	}
+}
+
+class Sample {
+	public static int x;
+	 
+	public static void set(int a)
+	{
+		x = a;
+	}
+	
+	public static void setAndPrint(int a)
+	{
+		set(a);
+		System.out.printf("x = %d%n", x);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki iki kurala göre sınıfın static bir metodu içerisinde aynı sınıfın static elemanlarına doğrudan
+	erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki dört kurala göre sınıfın static bir metodu içerisinde aynı sınıfın yalnızca static elemanlarına doğrudan
+	erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki sekiz kurala göre sınıfın non-static bir metodu içerisinde aynı sınıfın tüm elemanlarına doğrudan
+	erişilebilirken, static bir metodu içerisinde yalnızca static elemanlarına doğrudan erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Programcı bir metodu static mi non-static mi yazacağına nasıl karar verecektir? Bir metot non-static bir elemana
+	doğrudan erişmeyecekse static yapılmalıdır. Yani bir metodun çağrılması için ortada bir nesnenin olması gerekmiyorsa
+	metot static yapılmalıdır. Böylelikle, bir metodun static yapılması, non-static bir metodun okunabilirliğini 
+	artırır. Çünkü, bu convention ile kodu okuyan kişi non-static bir metot gördüğünde metodun sınıfın non-static bir
+	elemanına erişitiğini yani ortada bir nesnenin olması gerektiğini anlar 
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
