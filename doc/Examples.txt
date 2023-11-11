@@ -12710,6 +12710,143 @@ class Sample {
 	elemanına erişitiğini yani ortada bir nesnenin olması gerektiğini anlar 
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte dorğudan erişim yapılmadığına dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class Sample {
+	public int x;
+	 
+	public static void set(int a)
+	{
+		Sample s = new Sample();
+		
+		s.x = 10;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Point sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Point p1 = new Point();
+		Point p2 = new Point();
+		
+		p1.print();
+		p2.print();
+		
+		p1.x = 3.456;
+		p1.y = 567.89;
+		p2.x = 400;
+		p2.y = -345;
+		
+		p1.print();
+		p2.print();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Point sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Point p1 = new Point();
+		Point p2 = new Point();
+		
+		p1.x = 10;
+		p1.y = 20;
+		p2.x = -345;
+		p2.y = 400;
+		
+		p1.print();
+		p2.print();
+		
+		p1.offset(-10, 20);
+		p2.offset(-20);
+		
+		p1.print();
+		p2.print();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Point sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Point p1 = new Point();
+		Point p2 = new Point();
+		
+		p1.x = 100;
+		p1.y = 200;
+		p2.x = 103;
+		p2.y = 196;
+		
+		p1.print();
+		p2.print();
+		
+		double dist = p1.distance(p2);
+		
+		System.out.printf("Distance:%f%n", dist);
+		
+		dist = p1.distance(103, 196);
+		
+		System.out.printf("Distance:%f%n", dist);
+		
+		dist = p1.distance();
+		
+		System.out.printf("Distance:%f%n", dist);
+	}
+}
+
+class Point {
+	public double x, y;
+	
+	//...
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
