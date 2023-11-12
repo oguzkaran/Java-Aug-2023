@@ -12847,6 +12847,258 @@ class Point {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	12.11.2023	
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Nesne Yaratılması Adımları: Nesne yaratılması 3 tane adımın sonunda tamamlanmaktadır. Yani akış new operatörüne 
+	geldiğinde aşağıdaki 3 adım tamamlanınca nesne yaratılmış olur yani başka bir deyişle nesnenin adresi elde edilmiş
+	olur. Adımlar şunlardır:
+	1. Bellekte yer ayrılır.
+	2. non-static olan ve final olmayan veri elemanlarına default değerler verilir.
+	3. Constructor (ctor) çağrılır.
+	
+	Bu 3 adımdan herhangi bir tanesinde bir problem olursa örneğin ctor içerisinde exception oluşursa nesnenin
+	yaratılması tamamlanmamış olur ve adres elde edilemez. Yine örneğn heap de yer kalmaması durumunda 1. adımda yer 
+	ayrılamayacağından nesne yaratılamaz. Yani nesnenin yaratılması için kesinlikle bu 3 adımın da tamamlanmış olması 
+	gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Ctor aşağıdaki özelliklere sahip bir metottur:
+	- Sınıfı yazan programcı herhangi bir ctor yazmazsa derleyici tarafından parametresiz ctor public ve içi boş olarak
+	yazılır. Parametresiz ctor'a default ctor denilmektedir. Programcı sınıfa herhangi ctor yazarsa derleyici artık
+	default ctor'u yazmaz. Artık default ctor gerekirse sınıfı yazan programcı tarafından yazılmalıdır. 
+
+	- Ctor sınıf ismi ile aynı isimde olan ve geri dönüş değeri kavramı olmayan (void da yazılmayan) bir metottur. 
+	Sınıf ismi ile aynı isimde olan bir metoda geri dönüş değeri bilgisi yazıldığında error oluşmaz ancak bu artık ctor 
+	değildir. Şüphesiz sınıf ismi ile aynı isimde olan ancak ctor olmayan bir metot yazılmamalıdır.
+	
+	- Ctor'un da metotlarda olduğu gibi erişim belirleyicisi olabilir.
+	
+	- Ctor overload edilebilir.
+	
+	- Hangi ctor'un çağrılacağı ne operatöründe geçilen argümanlara göre method overload resolution kurallarına göre
+	belirlenir. 
+	
+	- Ctor non-static bir metottur. Bu anlamda sınıfın non-static elemanlarına (tabii ki static elemanları da)
+	doğrudan erişilebilir.
+	
+	- Ctor'dan önce non-static olan ve final olmayan veri elemanlarına default değerler verilir.
+	
+	- Ctor içerisinde istenirse sonlandırmak için void bir metot gibi return deyimi tek başına kullanılabilir. Bu sonlandırma
+	normal bir sonlandırmadır yani nesnenin yaratılması tamamlanmış olur.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s1 = new Sample(); //default ctor
+		
+		System.out.println("------------------------------------------");
+		Sample s2 = new Sample(10); //Sample, int
+		
+		System.out.println("------------------------------------------");
+		Sample s3 = new Sample('a'); //Sample, int
+		
+		System.out.println("------------------------------------------");
+		
+		Sample s4 = new Sample(10, 2.3); //Sample, int, double
+		
+		System.out.println("------------------------------------------");
+		Sample s5 = new Sample(10, 20); //Sample, int, double
+	}
+}
+
+class Sample {
+	public Sample()
+	{
+		System.out.println("I am a default ctor of Sample");
+	}
+	
+	public Sample(int a)
+	{
+		System.out.println("I am a ctor of Sample with parameter type int");
+	}
+	
+	public Sample(int a, double b)
+	{
+		System.out.println("I am a ctor of Sample with parameters type int and double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte programcı Sample sınıfına int parametreli bir ctor eklediği için derleyici artık default ctor'u
+	yazmaz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample(); //error
+	}
+}
+
+class Sample {
+	public Sample(int a)
+	{
+		System.out.println("I am a ctor of Sample with parameter type int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bir metodun gövdesinin boş olması genel olarak anlamsızdır. Yani çağrılsa da çağrılmasa da aynı 
+	etkidedir. Şüphesiz programcı metodu bildirip daha sonra kodlarını yazmak üzere gövdesini boş bırakabilir. Bu başka
+	bir durumdur. Ancak ctor'un gövdesinin boş olması anlamlıdır. Çünkü bu durumda nesne, non-static veri elemanlarınde
+	default değerleri olacak şekilde yaratılmış olur. Eğer ilgili ctor yazılmazsa nesne o şekilde yaratılamaz. Yani 
+	ctor'un gövdesinin boş olması ile bir metodun gövdesinin boş olması aynı şey değildir. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz. Örnek durumu göstermek için yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s1 = new Sample(10, true);
+		Sample s2 = new Sample(-10, true);
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	public Sample(int a, boolean b)
+	{
+		if (a < 0)
+			return;
+		
+		x = a;
+		y = b;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Ctor içerisinde, adından ve yapısından da anlaşılabileceği gibi bir nesnenin yaratılma adımlarında ilk işlemler 
+	yapılır. Tipik olarak non-static veri elemanlarına değerler verilebilir. Ayrıca, örneğin bir nesnenin yaratılması
+	işleminde bir bağlantının sağlanması (connect) gerekiyorsa bu işlem tipik olarak ctor içerisinde yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s1 = new Sample(10, true);
+		Sample s2 = new Sample();
+		
+		System.out.printf("s1.x = %d, s1.y = %b%n", s1.x, s1.y);
+		System.out.printf("s2.x = %d, s2.y = %b%n", s2.x, s2.y);
+	}
+}
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	public Sample()
+	{
+		
+	}
+	
+	public Sample(int a, boolean b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	//...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Point sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Point p1 = new Point(100, 200);
+		Point p2 = new Point();
+		Point p3 = new Point(2.345);
+		
+		p1.print();
+		p2.print();
+		p3.print();
+	}
+}
+
+class Point {
+	public double x, y;
+	
+	public Point()
+	{
+		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
