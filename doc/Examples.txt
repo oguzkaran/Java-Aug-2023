@@ -12889,6 +12889,8 @@ class Point {
 	
 	- Ctor içerisinde istenirse sonlandırmak için void bir metot gibi return deyimi tek başına kullanılabilir. Bu sonlandırma
 	normal bir sonlandırmadır yani nesnenin yaratılması tamamlanmış olur.
+	
+	- Programcı ctor'u çağıramaz. Programcı ctor'un çağrılmasına yol açan kodu yazar
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -13097,6 +13099,406 @@ class Point {
 	}
 }
 
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Rassal (Random) Sayı Üretimi: Bilgisayarlar ile gerçek hayattaki rassallık sağlanamaz. Çünkü gerçek hayatta rassallığı
+	etkileyen pek çok durum vardır ve bunların bazıları henüz öngörülememektedir. Dolayısıyla bilgisayar programlarıyla
+	belirlenemez. Bilgisayarlarda kullanılan rassallığa "pseudo random" denilmektedir. Java'da özellike Java 17'den 
+	itibaren rassal sayı üretimine ilişkin pek çok algoritma kullanılabilmektedir. java.util.Random isimli bir sınıf 
+	genek olarak eskiden beri kullanılmaktadır. Bu sınıfın rassal sayı üretimi orta kalitededir. Random sayı üretimine
+	ilişkin diğer algoritmalar burada kullanılmayacaktır. Java 17'den itibaren Random sınıfına ilişkin rassal sayı 
+	üretimine "legacy random" denilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Random sınıfının default ctor'u ile her nesne yaratıldığında auynı koddan farklı dizilim elde edilir. Bunun detayı 
+	ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Ranom sınıfının parametresiz nextInt metodu her çağrıda int türü sınırları içerisinde üretilmiş rassal sayıya
+	geri döner 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.println(r.nextInt());
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Random sınıfının parametresiz nextInt metodu her çağrıda int türü sınırları içerisinde üretilmiş rassal sayıya
+	geri döner 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.println(r.nextInt());	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Random sınıfının int türden bound parametreli overload'u [0, bound) aralığında üretilmiş rassal sayıya geri döner
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%d ", r.nextInt(100)); //[0, 100)
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 17 ile birlikte Random sınıfının nextInt metodunun int türden origin ve bound parametreli bir overload'u vardır
+	
+	Anahtar Notlar: İki parametreli nextInt metodu Java 17 ile birlikte doğrudan sınıfına eklenmemiştir. Bu işlemin
+	nasıl yapıldığı arayüzler (interfaces) konusuyla birlikte ele alınacaktır. Bu sebeple şu an için Random sınıfına
+	eklenmiştir denebilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%d ", r.nextInt(1, 100)); //[1, 100)
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Random sınıfının nextDouble metodu [0, 1) aralığında double türden rassal olarak üretilmiş sayıya geri döner
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%f%n", r.nextDouble()); //[1, 100)
+
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 17 ile birlikte Random sınıfının nextDouble metodunun double türden origin ve bound parametreli bir overload'u 
+	vardır
+	
+	Anahtar Notlar: İki parametreli nextDouble metodu Java 17 ile birlikte doğrudan sınıfına eklenmemiştir. Bu işlemin
+	nasıl yapıldığı arayüzler (interfaces) konusuyla birlikte ele alınacaktır. Bu sebeple şu an için Random sınıfına
+	eklenmiştir denebilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%f%n", r.nextDouble(2.345, 2.346));
+
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 17 ile birlikte Random sınıfının nextDouble metodunun double türden bound parametreli bir overload'u 
+	vardır
+	
+	Anahtar Notlar: İki parametreli nextDouble metodu Java 17 ile birlikte doğrudan sınıfına eklenmemiştir. Bu işlemin
+	nasıl yapıldığı arayüzler (interfaces) konusuyla birlikte ele alınacaktır. Bu sebeple şu an için Random sınıfına
+	eklenmiştir denebilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%f%n", r.nextDouble(0.0001)); //[0, 0.0001)
+
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Benzer şekilde nextLong metotları da long türden sayı üretmek için kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%d%n", r.nextLong());
+		
+		System.out.println("-----------------------------------------------------------");
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%d%n", r.nextLong(-40_000_000_000L, 40_000_000_001L));
+		
+		System.out.println("-----------------------------------------------------------");
+		
+		for (int i = 0; i < count; ++i)
+			System.out.printf("%d%n", r.nextLong(40_000_000_001L));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Random sınıfının nextBoolean metodu
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i) 
+			System.out.printf("%b%n", r.nextBoolean());
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 17 öncesinde [min, bound) aralığında int türden rassal sayı üretimi aşağıdaki gibi yapılabilir. Şüphesiz
+	pek çok yöntem olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		while (true) {
+			System.out.print("Kaç tane sayı üretmek istersiniz?");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			System.out.print("Minimum değeri giriniz:");
+			int min = Integer.parseInt(kb.nextLine());
+			
+			System.out.print("Sınır değerini giriniz:");
+			int bound = Integer.parseInt(kb.nextLine());
+			
+			for (int i = 0; i < count; ++i)
+				System.out.printf("%d ", r.nextInt(bound - min) + min); //r.nextInt(min, bound); -> Since Java 17
+			
+			System.out.println();
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 17 öncesinde [min, bound) aralığında double türden rassal sayı üretimi aşağıdaki gibi yapılabilir. Şüphesiz
+	pek çok yöntem olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		while (true) {
+			System.out.print("Kaç tane sayı üretmek istersiniz?");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			System.out.print("Minimum değeri giriniz:");
+			double min = Double.parseDouble(kb.nextLine());
+			
+			System.out.print("Sınır değerini giriniz:");
+			double bound = Double.parseDouble(kb.nextLine());
+			
+			for (int i = 0; i < count; ++i)
+				System.out.printf("%f%n", r.nextDouble() * (bound - min) + min); //r.nextDouble(min, bound); -> Since Java 17
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Hilesiz bir paranın atılması deneyinde yazı gelme olasılığını yaklaşık olarak hesaplayan basit bir 
+	simülasyon programı yazınız
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		CoinTailProbabilitySimulationApp.run();
+	}
+}
+
+
+class CoinTailProbabilitySimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			CoinTailProbabilitySimulation simulation = new CoinTailProbabilitySimulation();
+			
+			simulation.run(count);
+			
+			System.out.printf("p = %f%n", simulation.p);
+		}
+		
+	}
+}
+
+class CoinTailProbabilitySimulation {
+	public double p;
+	
+	public void run(int n)
+	{
+		int count = 0;
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			count += r.nextInt(2);
+		
+		p = (double)count / n;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Hilesiz bir paranın atılması deneyinde yazı gelme olasılığını yaklaşık olarak hesaplayan basit bir 
+	simülasyon programı yazınız
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		CoinTailProbabilitySimulationApp.run();
+	}
+}
+
+
+class CoinTailProbabilitySimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			CoinTailProbabilitySimulation simulation = new CoinTailProbabilitySimulation();
+			
+			simulation.run(count);
+			
+			System.out.printf("p = %f%n", simulation.p);
+		}
+		
+	}
+}
+
+class CoinTailProbabilitySimulation {
+	public double p;
+	
+	public void run(int n)
+	{
+		int count = 0;
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			if (r.nextBoolean())
+				++count;
+		
+		p = (double)count / n;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: İki zar atıldığında zarların çift (ikisinin de aynı) gelme olasılığını yaklaşık olarak hesaplayan
+	basit bir simülasyon programını yazınız
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 
