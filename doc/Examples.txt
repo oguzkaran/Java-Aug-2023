@@ -13445,6 +13445,8 @@ class CoinTailProbabilitySimulation {
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Hilesiz bir paranın atılması deneyinde yazı gelme olasılığını yaklaşık olarak hesaplayan basit bir 
 	simülasyon programı yazınız
+	
+	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -13496,10 +13498,526 @@ class CoinTailProbabilitySimulation {
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Sınıf Çalışması: İki zar atıldığında zarların çift (ikisinin de aynı) gelme olasılığını yaklaşık olarak hesaplayan
-	basit bir simülasyon programını yazınız
+	18.11.2023
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: İki zar atıldığında zarların çift (ikisinin de aynı) gelme olasılığını yaklaşık olarak hesaplayan
+	basit bir simülasyon programını yazınız
+	
+	Not: İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		DiceProbabilitySimulationApp.run();
+	}
+}
+
+
+class DiceProbabilitySimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			DiceProbabilitySimulation simulation = new DiceProbabilitySimulation();
+			
+			simulation.run(count);
+			
+			System.out.printf("p = %f%n", simulation.p);
+		}
+		
+	}
+}
+
+class DiceProbabilitySimulation {
+	public double p;
+	
+	public static boolean areSame(java.util.Random r)
+	{
+		return r.nextInt(1, 7) == r.nextInt(1, 7);
+	}
+	
+	public void run(int n)
+	{
+		int count = 0;
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < n; ++i)
+			if (areSame(r))
+				++count;
+		
+		p = (double)count / n;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Algoritması ne olursa olsun "pseudo random" sayı üretimi genel olarak bir tohum (seed) değerinden başlar. Bu anlamda
+	aslında her sayı üretiminde tohum değeri ilgili yömteme göre güncellenir. Bu durumda tohum değeri bir nesne için
+	hep aynı verildiğinde aynı çağrılarda aynı dizilim elde edilir.  Bu durumda tohum değeri her yaratılan Random
+	nesnesi için mümkün olduğunca farklı verilirse bu durumda örneğin program her çalıştırıldığında farklı dizilim
+	elde edilir. İşte Random sınıfının default ctor'u ile nesne yartıldığında ilgili tohum değeri önceki nesnelerden 
+	mümkün olduğunca farklı verilir. Random sınıfının long türden seed parametreli ctor'u ile nesne tohum değeri
+	verilerek de yaratılabilmektedir. Ayrıca setSeed metodu ile de yaratılmış olan bir Random nesnesi için o anki
+	tohum değeri değiştirilebilmektedir.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnek her çalıştırıldığında farklı bir dizilim elde edilecektir.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Random r = new java.util.Random();
+		
+		for (int i = 0; i < 11; ++i)
+			System.out.printf("%d ", r.nextInt(1, 11));
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnek her çalıştırıldığında aynı dizilim elde edilecektir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Random r = new java.util.Random(1000);
+		
+		for (int i = 0; i < 11; ++i)
+			System.out.printf("%d ", r.nextInt(1, 11));
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte üretilen ilk 10 sayının dizilimi her çalıştırmada farklı olacaktır. Üretilen ikinci 10 sayının
+	dizilimi her çalıştırmada girilen tohum değerine bağlı olacağından aynı tohum değerleri için aynı olacaktır 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Random r = new java.util.Random();
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Tohum değerini giriniz:");
+		long seed = kb.nextLong();
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+		
+		r.setSeed(seed);
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Her ne kadar nasıl yaptığını söylemese de tohum değerinin farklı verilebilmesi için zamana bağlı değerler kullanılır.
+	System sınıfının currentMillis metodu 01.01.1970 gece yarısından (00:00:00.000) çağrılan zamana kadar geçen milisaniye
+	sayısına geri döner. Bu durumda programcı tohum değeri olarak bu değeri verirse yine her defasında farklı tohum
+	değeri elde edilmiş olur. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Random r = new java.util.Random(System.currentTimeMillis());
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Tohum değerini giriniz:");
+		long seed = kb.nextLong();
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+		
+		r.setSeed(seed);
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Benzer şekilde JVM'in yüksek çözünürlüklü zaman kaynağına (high resolution time source) ilişkin milisaniye değerine
+	geri döner. Genel olarak bu değer surrentMillis metodundan elde edilen değerden daha hassastır. Bu detayların
+	önemi yoktur. Ancak bu metot da her defasında farklı tohum değeri belirlemede kullanılabilir. Hatta Random sınıfının
+	pek çok implementasyonunda default ctor'da bu metot çağrılarak tohım değeri belirlenir. Şüphesiz böyle olmak zorunda
+	değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Random r = new java.util.Random(System.nanoTime());
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Tohum değerini giriniz:");
+		long seed = kb.nextLong();
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+		
+		r.setSeed(seed);
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	System.currentMillis ve System.nanoTime metotlarının detaylarının şu an için önemi yoktur. Aslında bu metotların 
+	programcı tarafından kullanım amacı çoğu zaman tohumm değeri belirlemek değildir. Zaten default ctor tohum değerini 
+	her çağrıldığında farklı olacak şekilde belirlediğinden yukarıdaki örnekte bu metotların çağrılması gerekmez. Ancak 
+	şöyle spesifik bir örnekte gerekebilir: Tohum değeri bir nesne için o an akış her oraya geldiğinde farklı dizilim 
+	elde edilmek istenirse kullanılabilir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Tohum değerini giriniz:");
+		long seed = kb.nextLong();
+		
+		java.util.Random r = new java.util.Random(seed);
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+		
+		r.setSeed(System.nanoTime());
+		
+		for (int i = 0; i < 10; ++i)
+			System.out.printf("%02d ", r.nextInt(100));
+		
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Tohum değerini giriniz:");
+			long seed = kb.nextLong();
+			
+			java.util.Random r = new java.util.Random(seed);
+			
+	 		
+			for (int i = 0; i < 10; ++i)
+				System.out.printf("%02d ", r.nextInt(100));
+			
+			System.out.println();
+			
+			r.setSeed(System.nanoTime());
+			
+			for (int i = 0; i < 10; ++i)
+				System.out.printf("%02d ", r.nextInt(100));
+			
+			System.out.println();
+		
+			if (seed == 0)
+				break;
+		}	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		
+		System.out.print("Tohum değerini giriniz:");
+		long seed = kb.nextLong();
+		
+		java.util.Random r = new java.util.Random(seed);
+			
+		for (int i = 0; i < 10; ++i) {
+			System.out.println("---------------------------------");
+			for (int k = 0; k < 10; ++k)
+				System.out.printf("%02d ", r.nextInt(100));
+			
+			System.out.println();
+			
+			r.setSeed(System.nanoTime());
+			
+			for (int k = 0; k < 10; ++k)
+				System.out.printf("%02d ", r.nextInt(100));
+			
+			System.out.println();
+			
+			System.out.println("---------------------------------");
+	
+		}	
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{	
+		GenerateRandomPointsApp.run();	
+	}
+}
+
+class GenerateRandomPointsApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Input width, height, code and count:");
+		int width = kb.nextInt();
+		int height = kb.nextInt();
+		long code = kb.nextLong();
+		int count = kb.nextInt();
+		java.util.Random r = new java.util.Random(code);
+		
+		for (int i = 0; i < count; ++i) {
+			Point pixel = PointUtil.createRandomnPoint(r, 0, width, 0, height);
+			
+			//...
+			
+			pixel.print();
+		}
+	}
+}
+
+
+class PointUtil {
+	public static Point createRandomnPoint(java.util.Random r, int minX, int boundX, int minY, int boundY)
+	{
+		return new Point(r.nextInt(minX, boundX), r.nextInt(minY, boundY));
+	}
+}
+
+class Point {
+	public double x, y;
+	
+	public Point()
+	{
+		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Paketler (Packages) ve İsim Arama (Name Lookup): Aşağıdaki maddelerde "user defined type (UDT)" olarak belirtilen
+	kavram için şu ana kadar ki bilgilerimizle sınıf düşünülebilir. Ancak ileride başka UDT'ler de göreceğiz.
+	
+	Java kodlarını içeren ve genellikle ".java" uzantılı dosyalara yani derlenen dosyalara "derleme birimi (compilation unit)"
+	denir. Java'da eğer birden fazla UDT varsa, her bir UDT ayrı bir derleme birimi olarak düşünülebilir
+	
+	Paraketlere ilişkin detaylar:
+	- javac her bir UDT için ayrı bir ".class" uzantılı dosya üretir. Bu dosyalara "byte code" dendiğini anımsayınız. UDT'ler
+	aynı derleme biriminde bile olsa her biri için ayrı byte code üretilir.
+	
+	- Bir UDT herhangi bir pakette olabilir. Bir proje içerisindeki UDT'lerin aynı paket altında olması zorunluluğu yoktur.
+	
+	- Bir ".class" uzantılı dosyanın, byte code'a ilişkin UDT'nin ait olduğu paketle aynı isimde bir dizinde (directory) olması
+	gerekir. Bunu IDE programlar otomatik olarak uygun dizinlerde üretirler. Derleme birimleri için böyle bir zorunluluk
+	yoktur. Yani bir .java uzantılı dosya herhangi bir yerde derlenebilir. Ancak Java'da kullanılan IDE'lerin neredeyse
+	hepsi derleme birimleri için de pakete ilişkin directory'yi zorunlu tutar.
+	
+	- Bir UDT'nin ismine bulunduğu paket dışından paket ismi ve nokta operatörü ile erişilebilir. Bir UDT'ye bulunduğu
+	paket dışında erişilebilmesi için o UDT public olarak bildirilmesi gerekir. public olarak bildirilmeyen yani yalnızca
+	kendi paketi içerisindeki diğer UDT'ler erişilebilen UDT'lere "friendly" terimi kullanılır. Bazı kaynaklar friendly
+	terimi yerine "internal" terimini de kullanırlar.
+	
+	- Farklı paketlerde bulunan UDT'lerin byte code'larının bulunduğu pakete ilişkin dizinlerin yani aslında paketi
+	belirten dizinin uygulamanın çalışmaya başladığı yerde olması gerekir. Bu durumda tüm paketler burada konuşlanmalıdır.
+	
+	- Uygulamada kullanılan sınıflar içerisinde bir tane main metodu olmak zorunda değildir. java programına verilen sınıfın
+	uygun main metodu çalıştırılır. main metodunun yapısı aşağıdaki gibi olmalıdır:
+	
+		public static void main(String [] args)
+	
+	Bu yapıda değişebilecek tek şey args ismidir. java programına verilen sınıfın main metoduna yani akışın
+	başladığı metoda "entry point" denir.
+	
+	- public olarak bildirilen bir UDT'nin ismi ile aynı isimde bir .java dosyasında bildirilmesi gerekir. Aksi
+	durumda error oluşur. Bu durumda bir java dosyası içerisinde, dosya ile aynı isimde olan bir sınıf public 
+	olabilir.
+	
+	- Bir java dosyasında public bir sınıf (yani dosya ismi ile aynı olan sınıf public olarak) olmak zorunda değildir.
+	
+	- Bir java dosyasında dosya ismi ile aynı isimde bir sınıfa da olmak zorunda değildir. Ancak bu durum pratikte pek
+	tercih edilmez.
+	
+	- Bir java dosyasında public olmayan istenildiği kadar sınıf bildirilebilir
+	
+	- Bu UDT'lerin hepsi aynı pakette bildirilmiş olur
+	
+	- Bir java dosyasında yalnızca bir paket bildirimi yapılabilir. Paket bildirimi tüm diğer kodlardan önce yazılmalıdır.
+	
+	- Birden fazla java dosyasında aynı paket bildirimi yapılabilir. Bu durumda bu dosyalardaki tüm UDT'ler aynı pakette
+	bildirilmiş olur. 
+	
+	- Aynı paket içerisinde aynı isimde birden fazka UDT bildirimi geçersizdir.
+	
+	- Farklı paketler içerisinde aynı isimde UDT'lerin bildirimi yapılabilir.  
+	
+	- Bir paketin alt paketleri olabilir. Alt paket bildiriminin genel biçimi şu şekildedir:
+		package <paket ismi>[.<alt paket ismi>.<alt paket ismi> ...]
+	Alt paket içerisindeki UDT'lerin byte code'ları paket hiyerarşisi içerisinde uygun alt dizinde bulunmak zorundadır.
+	Yine IDE programlar bunu otomatik olarak yaparlar.
+	
+	- Paket içiçe bile olsa farklı paketlerdir. Yani örneğin csd.util paketi içerisinde Point isimli bir sınıf varsa
+	csd içerisinde de point isimli bir sınıf olabilir. Çünkü paketler farklıdır, isim çakışması oluşmaz
+	
+	- Paketler isim çakışmasını engellemek için düşünülmüştür. Paketler ile farklı firmalar kendi paket isimleriyle
+	UDT'leri yazdıklarında UDT'lerin isimleri aynı olsa diğerleriyle birlikte aynı uygulamada kullanılabilirler.
+	
+	-  Paket isimleri genelde firmaya özgü tekil (unique) olan domain isminden üretilir. Örneğin CSD'nin paketleri, 
+	domain'i "csystem.org" olduğundan "org.csystem" paketi altında yazılabilir. Bu bir convention'dır ve firmalar özellikle
+	genel UDT'ler için buna mutlaka uyarlar. Pratikte domain ismi altında doğrudan UDT bildirilmez, en az bir tane paket 
+	altında bildirilir. Yani bu convention'da domain ismi paket hiyerarşisinin taban paketini temsil eder. Programcı
+	sınıfları koyacağı paketleri okunabilir isim çakışması olasılığının çok çok aza indirecek şekilde bildirmelidir. Bu 
+	anlamda alt paketlerin fazla olması sorun oluşturmaz. Paket isimlendirmede programcının anlamlı olacak şekilde cömert
+	olması gerekir.
+	
+	- Java'nın standart tüm paketleri ve UDT'leri java isimli bir paketin altında bildirilmiştir. Bu anlamda programcının
+	java paketi altında bir bildirim yapması tavsiye edilmez. Zaten yukarıdaki convention'a uyan programcı böyle bir 
+	bildirim yapmaz. 
+	
+	- java.lang paketi altındaki tüm UDT'ler her yerden görülebilirdir. Yani bu paket altındaki tüm UDT isimlerinde doğrunda
+	erişilebilir. Ayrıca belirtilmesi gerekmez. İleride göreceğimiz "import bildirimi" yapılmasına da gerek olmaz. Örneğin
+	String sınıfı, System sınıfı, Integer, Character gibi sınıflar java.lang paketi altında bildirilmiştir.   
+	
+	- Hiç bir paket altında bildirilmeyen UDT'ler "isimsiz paket (unnamed package)" içerisinde bildirilmiş olur. Pratikte
+	bir uygulama içerisinde isimsiz altında UDT bildirimi yapılmaz.  
+-----------------------------------------------------------------------------------------------------------------------*/
 
 
 
