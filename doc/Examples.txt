@@ -14133,51 +14133,50 @@ class Complex {
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Paketler (Packages) ve İsim Arama (Name Lookup): Aşağıdaki maddelerde "user defined type (UDT)" olarak belirtilen
-	kavram için şu ana kadar ki bilgilerimizle sınıf düşünülebilir. Ancak ileride başka UDT'ler de göreceğiz.
+	Paketler (Packages) ve İsim Arama (Name Lookup):
+	Anımsanacağı gibi bir Java programı genel olarak paketlerden oluşur demiştik.  
+	Aşağıdaki maddelerde "user defined type (UDT)" olarak belirtilen kavram için şu ana kadar ki bilgilerimizle sınıf 
+	düşünülebilir. Ancak ileride başka UDT'ler de göreceğiz.
 	
-	Java kodlarını içeren ve genellikle ".java" uzantılı dosyalara yani derlenen dosyalara "derleme birimi (compilation unit)"
-	denir. Java'da eğer birden fazla UDT varsa, her bir UDT ayrı bir derleme birimi olarak düşünülebilir
+	Java kodlarını içeren ve genellikle ".java" uzantılı dosyalara yani derlenen dosyalara "derleme birimi (compilation/translation unit)"
+	denir. Java'da eğer birden fazla UDT varsa, her bir UDT ayrı bir derleme birimi olarak düşünülebilir.
 	
 	Paketlere ilişkin detaylar:
 	- javac her bir UDT için ayrı bir ".class" uzantılı dosya üretir. Bu dosyalara "byte code" dendiğini anımsayınız. UDT'ler
-	aynı derleme biriminde bile olsa her biri için ayrı byte code üretilir.
+	aynı derleme biriminde bile olsalar her biri için ayrı byte code üretilir.
 	
 	- Bir UDT herhangi bir pakette olabilir. Bir proje içerisindeki UDT'lerin aynı paket altında olması zorunluluğu yoktur.
 	
 	- Bir ".class" uzantılı dosyanın, byte code'a ilişkin UDT'nin ait olduğu paketle aynı isimde bir dizinde (directory) olması
 	gerekir. Bunu IDE programlar otomatik olarak uygun dizinlerde üretirler. Derleme birimleri için böyle bir zorunluluk
-	yoktur. Yani bir .java uzantılı dosya herhangi bir yerde derlenebilir. Ancak Java'da kullanılan IDE'lerin neredeyse
-	hepsi derleme birimleri için de pakete ilişkin directory'yi zorunlu tutar.
+	yoktur. Yani bir .java uzantılı dosya herhangi bir yerde derlenebilir. Ancak Java'da kullanılan IDE'lerin neredeyse hepsi
+	derleme birimleri için de pakete ilişkin directory'yi zorunlu tutar.
 	
 	- Bir UDT'nin ismine bulunduğu paket dışından paket ismi ve nokta operatörü ile erişilebilir. Bir UDT'ye bulunduğu
-	paket dışında erişilebilmesi için o UDT public olarak bildirilmesi gerekir. public olarak bildirilmeyen yani yalnızca
+	paket dışında erişilebilmesi için o UDT'nin public olarak bildirilmesi gerekir. public olarak bildirilmeyen yani yalnızca
 	kendi paketi içerisindeki diğer UDT'ler erişilebilen UDT'lere "friendly" terimi kullanılır. Bazı kaynaklar friendly
 	terimi yerine "internal" terimini de kullanırlar.
 	
-	- Farklı paketlerde bulunan UDT'lerin byte code'larının bulunduğu pakete ilişkin dizinlerin yani aslında paketi
-	belirten dizinin uygulamanın çalışmaya başladığı yerde olması gerekir. Bu durumda tüm paketler burada konuşlanmalıdır.
+	- Farklı paketlerde bulunan UDT'lerin byte code'larının bulunduğu pakete ilişkin dizinlerin yani aslında paketi belirten 
+	dizinin uygulamanın çalışmaya başladığı yerde olması gerekir. Bu durumda tüm paketler burada konuşlandırılmalıdır.
 	
 	- Uygulamada kullanılan sınıflar içerisinde bir tane main metodu olmak zorunda değildir. java programına verilen sınıfın
 	uygun main metodu çalıştırılır. main metodunun yapısı aşağıdaki gibi olmalıdır:
 	
 		public static void main(String [] args)
 	
-	Bu yapıda değişebilecek tek şey args ismidir. java programına verilen sınıfın main metoduna yani akışın
-	başladığı metoda "entry point" denir.
+	Bu yapıda değişebilecek tek şey args ismidir. java programına verilen sınıfın main metoduna yani akışın başladığı metoda
+	"entry point" denir. Entry point olarak kullanılan main'in ait olduğu UDT'nin kesinlikle bir sınıf olması gerekir.
 	
-	- public olarak bildirilen bir UDT'nin ismi ile aynı isimde bir .java dosyasında bildirilmesi gerekir. Aksi
-	durumda error oluşur. Bu durumda bir java dosyası içerisinde, dosya ile aynı isimde olan bir sınıf public 
-	olabilir.
+	- public olarak bildirilen bir UDT, ismi ile aynı isimde bir .java dosyasında bildirilmesi gerekir. Aksi durumda error 
+	oluşur. Bu durumda bir java dosyası içerisinde, dosya ile aynı isimde olan bir sınıf public olabilir.
 	
-	- Bir java dosyasında public bir sınıf (yani dosya ismi ile aynı olan sınıf public olarak) olmak zorunda değildir.
+	- Bir java dosyasında public bir sınıf olmak zorunda değildir. Bu durumda bildirilen sınıfların friendly olması gerekir.
 	
 	- Bir java dosyasında dosya ismi ile aynı isimde bir sınıfa da olmak zorunda değildir. Ancak bu durum pratikte pek
 	tercih edilmez.
 	
-	- Bir java dosyasında public olmayan istenildiği kadar sınıf bildirilebilir
-	
-	- Bu UDT'lerin hepsi aynı pakette bildirilmiş olur
+	- Bir java dosyasında public olmayan istenildiği kadar sınıf bildirilebilir. Bu UDT'lerin hepsi aynı pakette bildirilmiş olur.xx
 	
 	- Bir java dosyasında yalnızca bir paket bildirimi yapılabilir. Paket bildirimi tüm diğer kodlardan önce yazılmalıdır.
 	
@@ -14193,31 +14192,284 @@ class Complex {
 	Alt paket içerisindeki UDT'lerin byte code'ları paket hiyerarşisi içerisinde uygun alt dizinde bulunmak zorundadır.
 	Yine IDE programlar bunu otomatik olarak yaparlar.
 	
-	- Paket içiçe bile olsa farklı paketlerdir. Yani örneğin csd.util paketi içerisinde Point isimli bir sınıf varsa
-	csd içerisinde de point isimli bir sınıf olabilir. Çünkü paketler farklıdır, isim çakışması oluşmaz
+	- Paketler içiçe bile olsa farklı paketlerdir. Yani örneğin csd.util paketi içerisinde Point isimli bir sınıf varsa
+	csd içerisinde de Point isimli bir sınıf olabilir. Çünkü paketler farklıdır, isim çakışması oluşmaz
 	
-	- Paketler isim çakışmasını engellemek için düşünülmüştür. Paketler ile farklı firmalar kendi paket isimleriyle
-	UDT'leri yazdıklarında UDT'lerin isimleri aynı olsa diğerleriyle birlikte aynı uygulamada kullanılabilirler.
+	- Paketler isim çakışmasını engellemek için düşünülmüştür. Paketler ile farklı firmalar kendi paket isimleriyle UDT'leri 
+	yazdıklarında UDT'lerin isimleri aynı olsa bile diğerleriyle birlikte aynı uygulamada kullanılabilirler.
 	
-	-  Paket isimleri genelde firmaya özgü tekil (unique) olan domain isminden üretilir. Örneğin CSD'nin paketleri, 
+	- Paket isimleri genelde firmaya özgü tekil (unique) olan domain isminden üretilir. Örneğin CSD'nin paketleri, 
 	domain'i "csystem.org" olduğundan "org.csystem" paketi altında yazılabilir. Bu bir convention'dır ve firmalar özellikle
 	genel UDT'ler için buna mutlaka uyarlar. Pratikte domain ismi altında doğrudan UDT bildirilmez, en az bir tane paket 
 	altında bildirilir. Yani bu convention'da domain ismi paket hiyerarşisinin taban paketini temsil eder. Programcı
-	sınıfları koyacağı paketleri okunabilir isim çakışması olasılığının çok çok aza indirecek şekilde bildirmelidir. Bu 
+	sınıfları koyacağı paketleri okunabilir ve isim çakışması olasılığının çok çok aza indirecek şekilde bildirmelidir. Bu 
 	anlamda alt paketlerin fazla olması sorun oluşturmaz. Paket isimlendirmede programcının anlamlı olacak şekilde cömert
-	olması gerekir.
+	olması gerekir. Paketler, yine bir convention olarak tamamı küük harf olacak şekilde isimlendirilir. Birden fazla 
+	kelimeden oluşan paket isimleri bitişik yazılır.
 	
 	- Java'nın standart tüm paketleri ve UDT'leri java isimli bir paketin altında bildirilmiştir. Bu anlamda programcının
-	java paketi altında bir bildirim yapması tavsiye edilmez. Zaten yukarıdaki convention'a uyan programcı böyle bir 
-	bildirim yapmaz. 
+	java paketi altında bir bildirim yapması tavsiye edilmez. Zaten yukarıdaki convention'a uyan programcı böyle bir bildirim
+	yapmaz. 
 	
-	- java.lang paketi altındaki tüm UDT'ler her yerden görülebilirdir. Yani bu paket altındaki tüm UDT isimlerinde doğrunda
+	- java.lang paketi altındaki tüm UDT'ler her yerden görülebilirdir. Yani bu paket altındaki tüm UDT isimlerine doğrudan
 	erişilebilir. Ayrıca belirtilmesi gerekmez. İleride göreceğimiz "import bildirimi" yapılmasına da gerek olmaz. Örneğin
-	String sınıfı, System sınıfı, Integer, Character gibi sınıflar java.lang paketi altında bildirilmiştir.   
+	String sınıfı, System sınıfı, Integer sınıfı, Character sınıfı gibi sınıflar java.lang paketi altında bildirilmiştir.   
 	
 	- Hiç bir paket altında bildirilmeyen UDT'ler "isimsiz paket (unnamed package)" içerisinde bildirilmiş olur. Pratikte
-	bir uygulama içerisinde isimsiz altında UDT bildirimi yapılmaz.  
+	bir uygulama içerisinde isimsiz paket altında UDT bildirimi yapılmaz. Bunun nedeni ileride anlaşılacaktır  
 -----------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------
+	FILE NAME	: Complex.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 19th November 2023
+	
+	Complex class that represents a complex number
+	
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math;
+
+public class Complex {
+	public double real, imag;
+	
+	public static Complex add(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 + re2, im1 + im2);
+	}
+	
+	public static Complex subtract(double re1, double im1, double re2, double im2)
+	{
+		return add(re1, im1, -re2, -im2);
+	}
+	
+	public static Complex multiply(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
+	}
+	
+	public Complex()
+	{
+	}
+	
+	public Complex(double re)
+	{
+		real = re;
+	}
+	
+	public Complex(double re, double im)
+	{
+		real = re;
+		imag = im;
+	}
+	
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+	
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+	
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+	
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+	
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+	
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+	
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+	
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+	
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+	
+	public Complex conjugate()
+	{
+		return new Complex(real, -imag);
+	}
+	
+	public Complex negate()
+	{
+		return new Complex(-real, -imag);
+	}
+	
+	public void inc()
+	{
+		++real;
+	}
+	
+	public void dec()
+	{
+		--real;
+	}
+	
+	public void print()
+	{
+		System.out.printf("%f + %f * i%n", real, imag);
+	}
+}
+
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 19th November 2023
+	
+	Point class that represents a 2 dimensional point
+	
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class Point {
+	public double x, y;
+	
+	public Point()
+	{
+		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return Math.sqrt(Math.pow(x - a, 2) + Math.pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir isim iki biçimde kullanılabilir: nitelikli (qualified), niteliksiz (unqualified)
+	
+	Bir isim nokta operatörünün sağında kalıyorsa nitelikli kullanılmış olur. Kalmıyorsa niteliksiz kullanılmış olur.
+	
+	Anahtar Notlar: Burada nitelikli (qualified) ve niteliksiz (unqualified) terimleri olumlu ya da olumsuz anlamda 
+	değildir. Burada kullanım biçimini belirtir.
+	
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{	
+		Sample s; //Sample niteliksiz kullanılmıştır
+		
+		s = new Sample(); //s ve Sample niteliksiz kullanılmıştır
+		s.foo(10); //s niteliksiz, foo nitelikli kullanılmıştır
+		
+		System.out.printf("s.x = %d%n", s.x); //System niteliksiz, out nitelikli, printf nitelikli, s niteliksiz ve x niteklikli kullanılmıştır		
+	}
+}
+
+class Sample {
+	public int x;
+	
+	public void foo(int a)
+	{
+		x = a; //x ve a niteliksiz kullanılmıştır
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyici kullanılan bir ismi önce arar, bulursa doğru kullanılıp kullanılmadığına bakar. Eğer bulamazsa veya bulur
+	ancak yanlış kullanıldığını anlarsa error oluşur. Derleyici bildirilen isimleri doğal olarak aramaz. Derleyici
+	ismin kullanımına göre ismi nitelikli veya niteliksiz olarak arar. İşte nitelikli ve niteliksiz isim arama (name lookup)
+	kuralları burada ele alınacaktır
+	
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { //App aranmaz
+	public static void main(String [] args) //main aranmaz, String niteliksiz aaranır, args aranmaz
+	{	
+		Sample s; //Sample niteliksiz aranız, s aranmaz
+		
+		s = new Sample(); //s ve Sample niteliksiz aranır
+		s.foo(10); //s niteliksiz, foo nitelikli aranız
+		
+		System.out.printf("s.x = %d%n", s.x); //System niteliksiz, out nitelikli, printf nitelikli, s niteliksiz ve x niteklikli aranır		
+	}
+}
+
+class Sample { //Sample aranmaz
+	public int x; //x aranmaz
+	
+	public void foo(int a) //foo ve a aranmaz
+	{
+		x = a; //x ve a niteliksiz aranır
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bu bölümde nitelikli ve niteliksiz isim arama kuralları anlatılacaktır. Bu kuralların her birisinin
+	genel ve özel durumları vardır. Özel durumlar ayrıca ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 
