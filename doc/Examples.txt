@@ -14762,11 +14762,85 @@ class App {
 }
 
 
-
 package csd;
 
 public class Sample {
 	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Alt paket isimleri niteliksiz isim aramaya dahil edilmez. Başka bir deyişle, bir paket ismi niteliksiz isim aramada
+	görmezden gelinir. Bir paket isminin niteliksiz olarak kullanılabilmesi için onun paket hiyerarşisinde en üstte 
+	olması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		company.hr.Staff s; //error
+	}
+}
+
+
+
+package org.csystem.app.company.hr;
+
+public class Staff {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	import bildirimleri (import declarations): import bildirimleri niteliklendirmeyi azaltmak ve dolaysıyla kodu daha
+	yalın yazmak amacıyla kullanılır. import bildirimlerinin UDT ismi bakımından iki kullanım biçimi vardır:
+	1. Yıldızlı import bildirimi (import on demand declaration):
+	2. Yıldızsız import bildirimi (import single type declaration):
+	
+	import bildirimleri paket bildiriminden sonra tüm diğer bildirimlerden önce olmalıdır. Birden fazla import bildirimi
+	geçerlidir ve bildirim sırasının önemi yoktur. import bildirimleri niteliksiz aramalar için geçerlidir. import
+	bildirimleri yalnızca bildirildikleri derleme biriminde geçerlidir.
+	
+	Anahtar Notlar: import bildirimleri bir kütüphaneyi projeye dahil etmek demek DEĞİLDİR. Bir kütüphaneyi projeye dahil
+	etmek için başka yöntemler kullanılmaktadır. 
+	
+	Anahtar Notlar: Yukarıdaki yıldızlı ve yıldızsız terimleri tamamen Oğuz Karan tarafından uydurulmuştur. Bunlar
+	gerçek terimlerin gerçek tercümeleri değildir. Kolay algılanması açısında bu şekilde Türkçeleştirilmiştir. 
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yıldızlı import bildirimi (import on demand declaration): Yıldızlı import bildiriminin genel biçimi şu şekildedir:
+		import <paket ismi>[.<alt paket ismi>].*;
+	Niteliksiz arama genel kurallarına göre paket içerisnde bulunamayan bir isim yıldızlı import bildirimlerine ilişkin
+	paketlerde aranır. Burada tüm yıldızlı import bildirimlerine bakılır ancak alt ve üst paketlere yine bakılmaz. Yani 
+	bu bildirim isim arama genel kurallarına göre, paket içerisine isim aarama anlamında başka bir paketi adeta enjekte 
+	etmektir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.*;
+import org.csystem.math.geometry.*;
+import org.csystem.math.*;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		Random r = new Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i) {
+			Complex z = new Complex(r.nextDouble(3.4, 5.6), r.nextDouble(3.4, 5.6));
+			Point p = new Point(r.nextDouble(3.4, 5.6), r.nextDouble(3.4, 5.6));
+			
+			System.out.println("------------------------");
+			z.print();
+			p.print();
+			System.out.println("------------------------");
+		}
+	}
 }
 
 
