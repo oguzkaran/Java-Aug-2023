@@ -14399,6 +14399,187 @@ public class Point {
 	}
 }
 
+/*--------------------------------------------------------
+	FILE NAME	: NumberUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 19th November 2023
+	
+	Utility class for numeric operations
+	
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.numeric;
+
+public class NumberUtil {
+	public static int digitsCount(int val)
+	{
+		return val == 0 ? 1 : (int)Math.log10(Math.abs(val)) + 1;
+	}
+
+	
+	public static int digitsSum(int val)
+	{
+		int total = 0;
+		
+		while (val != 0) {
+			total += val % 10;
+			val /= 10;
+		}
+		
+		return Math.abs(total);
+	}
+	
+
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;
+		
+		return result;
+	}
+	
+	public static int getDigitsPowSum(int val)
+	{
+		int n = digitsCount(val);
+		int result = 0;
+		
+		while (val != 0) {
+			result += Math.pow(val % 10, n);
+			val /= 10;
+		}
+		
+		return result;
+	}
+	
+	public static boolean isArmstrong(int val)
+	{
+		return val >= 0 && getDigitsPowSum(val) == val;
+	}
+
+	
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+		
+		if (val % 2 == 0)
+			return val == 2;
+		
+		if (val % 3 == 0)
+			return val == 3;
+		
+		if (val % 5 == 0)
+			return val == 5;
+		
+		if (val % 7 == 0)
+			return val == 7;
+	
+		for (long i = 11; i * i <= val; i += 2)		
+			if (val % i == 0)
+				return false;
+		
+		return true;		
+	}
+
+	
+	public static int mid(int a, int b, int c)
+	{
+		if (a <= b && b <= c || c <= b && b <= a)
+			return b;
+		
+		if (b <= a && a <= c || c <= a && a <= b)
+			return a;
+		
+		return c;
+	}
+	
+	public static long nextClosestPrime(long val)
+	{		
+		while (!isPrime(++val))
+			;
+		
+		return val;		
+	}
+	
+
+	public static int nextFibonacciNumber(int val)
+	{
+		if (val < 0)
+			return 0;
+		
+		int prev1 = 1, prev2 = 0;
+		
+		while (true) {
+			int next = prev1 + prev2;
+			
+			if (next > val)
+				return next;
+			
+			prev2 = prev1;
+			prev1 = next;
+		}
+	}
+
+	public static int nthFibonacciNumber(int n)
+	{
+		if (n <= 2)
+			return n - 1;
+		
+		int prev1 = 1, prev2 = 0, val = prev1 + prev2;
+		
+		for (int i = 3; i < n; ++i) {
+			prev2 = prev1;
+			prev1 = val;
+			val = prev1 + prev2;
+		}
+		
+		return val;
+	}
+	
+	
+	public static long nthPrime(int n)
+	{
+		long val = 2;
+		int count = 0;
+		
+		while (true) {
+			if (isPrime(val))
+				++count;
+			
+			if (count == n)
+				return val;
+			
+			++val;
+		}
+	}
+
+
+	public static long previousClosestPrime(long val)
+	{		
+		while (!isPrime(--val))
+			;
+		
+		return val;
+	}
+
+	
+	public static int reversed(int val)
+	{
+		int result = 0;
+		
+		while (val != 0) {
+			result = result * 10 + val % 10;
+			val /= 10;
+		}
+		
+		return result;
+	}
+}
+
+
 /*----------------------------------------------------------------------------------------------------------------------
 	Bir isim iki biçimde kullanılabilir: nitelikli (qualified), niteliksiz (unqualified)
 	
@@ -14796,9 +14977,9 @@ public class Staff {
 	1. Yıldızlı import bildirimi (import on demand declaration):
 	2. Yıldızsız import bildirimi (import single type declaration):
 	
-	import bildirimleri paket bildiriminden sonra tüm diğer bildirimlerden önce olmalıdır. Birden fazla import bildirimi
+	import bildirimleri paket bildiriminden sonra ve tüm diğer bildirimlerden önce olmalıdır. Birden fazla import bildirimi
 	geçerlidir ve bildirim sırasının önemi yoktur. import bildirimleri niteliksiz aramalar için geçerlidir. import
-	bildirimleri yalnızca bildirildikleri derleme biriminde geçerlidir.
+	bildirimleri yalnızca bildirildikleri derleme biriminde geçerlidir. Bu nedenle import bildirimleri geçişli de değildir.
 	
 	Anahtar Notlar: import bildirimleri bir kütüphaneyi projeye dahil etmek demek DEĞİLDİR. Bir kütüphaneyi projeye dahil
 	etmek için başka yöntemler kullanılmaktadır. 
@@ -14810,7 +14991,7 @@ public class Staff {
 /*----------------------------------------------------------------------------------------------------------------------
 	Yıldızlı import bildirimi (import on demand declaration): Yıldızlı import bildiriminin genel biçimi şu şekildedir:
 		import <paket ismi>[.<alt paket ismi>].*;
-	Niteliksiz arama genel kurallarına göre paket içerisnde bulunamayan bir isim yıldızlı import bildirimlerine ilişkin
+	Niteliksiz arama genel kurallarına göre paket içerisinde bulunamayan bir isim yıldızlı import bildirimlerine ilişkin
 	paketlerde aranır. Burada tüm yıldızlı import bildirimlerine bakılır ancak alt ve üst paketlere yine bakılmaz. Yani 
 	bu bildirim isim arama genel kurallarına göre, paket içerisine isim aarama anlamında başka bir paketi adeta enjekte 
 	etmektir
@@ -14844,15 +15025,534 @@ class App {
 }
 
 
-
+/*----------------------------------------------------------------------------------------------------------------------
+	26.11.2023	
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
+	Arama tüm yıldızlı import bildirimleriyle belirtilen paketlerin hepsinde yapılır. Eğer isim birden fazla yerde 
+	bulunursa error oluşur (ambiguity).  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+
+import csd.*;
+import msd.*;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Mample m;
+		Sample s; //error:ambiguous
+	}
+}
+
+
+
+package msd;
+
+public class Sample {
+
+}
+
+package msd;
+
+public class Mample {
+
+}
+
+package csd;
+
+public class Sample {
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yıldızsız import bildirimi (import single type declaration): Yıldızsz import bildiriminin genel biçimi şu şekildedir:
+		import <paket ismi>[.<alt paket ismi>].<UDT ismi>;
+	Bu bildirimde belirtilen UDT ismi artık derleme birimi boyunca doğrudan kullanılabilir. Ya da başka bir deyişle 
+	buradakiş bildirim, bu ismin doğrudan kullanıldığını gördüğünde artık bu pakettekini anla demektir. Yani bu isim
+	için niteliksiz isim arama genel kuralları uygulanmaz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+import org.csystem.math.geometry.Point;
+import org.csystem.math.Complex;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		Random r = new Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		
+		int count = kb.nextInt();
+		
+		for (int i = 0; i < count; ++i) {
+			Complex z = new Complex(r.nextDouble(3.4, 5.6), r.nextDouble(3.4, 5.6));
+			Point p = new Point(r.nextDouble(3.4, 5.6), r.nextDouble(3.4, 5.6));
+			
+			System.out.println("------------------------");
+			z.print();
+			p.print();
+			System.out.println("------------------------");
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yıldızsız import bildiriminde farklı paketlerdeki aynı isimler birden fazla kez bildirilemez. Bu şekilde bir bildirimde
+	isimin kullanılmasına da gerek yoktur. Bildirim doğrudan hatalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import csd.Sample;
+import msd.Sample; //error
+import msd.*;
+
+class App { 
+	public static void main(String [] args) 
+	{
+		Mample s;
+	}
+}
+
+
+package msd;
+
+public class Sample {
+
+}
+
+package msd;
+
+public class Mample {
+
+}
+
+package csd;
+
+public class Sample {
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Programcı mümkün olduğunca yıldızsız import bildirimini tercih etmelidir. Aslında doğru kullanıldıktan
+	sonra bunun hiç bir önemi yoktur. IDE'ler de genel olarak yıldızsız import bildirimine yönlendirir. Örneğin Eclipse
+	tüm yıldızlı import bildirimlerini yıldızsız olacak şekilde optimize eder. IntelliJ IDEA ise aynı paketten belirli
+	sayıda yıldızsız import bildirimini yıldızlı yapacak şekilde optimize eder. Bu kullanım programcıdan programcıya
+	değişebilse de genel olarak IDE'nin default yaklaşımı uygulanır. Şüphesiz yıldızsız import bildirimi ile isim 
+	çakışması olasılığı çok daha azdır ve daha kolay düzenlenebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte niteliksiz isim arama genel kuralları uygulandığından org.csystem.app paketeindeki Sample sınıfının
+	foo metodu çağrılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import csd.*;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample.foo();
+	}
+}
+
+package csd;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("csd.foo");
+	}
+}
+
+package org.csystem.app;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("org.csystem.app.foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte niteliksiz isim arama genel kuralları uygulanmadığından csd paketeindeki Sample sınıfının foo
+	metodu çağrılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import csd.Sample;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample.foo();
+	}
+}
+
+package csd;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("csd.foo");
+	}
+}
+
+package org.csystem.app;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("org.csystem.app.foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte niteliksiz isim arama genel kuralları uygulandığından org.csystem.app paketeindeki Sample sınıfının
+	foo metodu çağrılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import csd.*;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample.foo();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("org.csystem.app.foo");
+	}
+}
+
+
+package csd;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("csd.foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte Sample sınıfı aynı derleme biriminde bildirildiğinden Sample ismi için yıldızsız import bildirimi
+	geçersizdir  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import csd.Sample; //error
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample.foo();
+	}
+}
+
+class Sample {
+	public static void foo()
+	{
+		System.out.println("org.csystem.app.foo");
+	}
+}
+
+package csd;
+
+public class Sample {
+	public static void foo()
+	{
+		System.out.println("csd.foo");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	import static bildirimleri (import static declarations): Bu bildirim Java 5 ile birlikte dile eklenmiştir. Bu bildirim
+	static elemanların niteliklendirilmesinin azaltılması için kullanılmaktadır. Diğer import bildirimleri ile aynı yerde 
+	bulunmalıdır. Yine sıralamanın bir önemi yoktur. import static bildiriminin de genel olarak iki kullanım biçimi vardır:
+	1. Yıldızlı import static bildirimi (import static on demand declaration)
+	2. Yıldızsız import static bildirimi (import static single member declaration) 
 	
+	Bu bildirimlerde niteliksiz kullanılan static elemanın algı açısından, kullanılan UDT'ye ait olduğu durumu oluşmamalıdır. Yani 
+	okunabilirliği etkilemediği sürece kullanılması tavsiye edilir
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
-
+	 Yıldızlı import static bildiriminin genel biçimi şu şekildedir:
+	 	import static <paket ismi>[.<alt paket ismi>].<UDT ismi>.*
+	 Bu bildirimle derleyici bir ismi import bildirimlerinde arama noktasına geldiğinde, ilgili UDT içerisindeki static
+	 elemanlara da bakılır
 ----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static java.lang.Math.*;
+
+import java.util.Scanner;
+
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("sqrt(%f) = %f%n", a, sqrt(a));
+		System.out.printf("log(%f) = %f%n", a, log10(a));
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 26th November 2023
+	
+	Point class that represents a 2 dimensional point
+	
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.*;
+
+public class Point {
+	public double x, y;
+	
+	public Point()
+	{
+		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return sqrt(pow(x - a, 2) + pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 Yıldızsız import static bildiriminin genel biçimi şu şekildedir:
+	 	import static <paket ismi>[.<alt paket ismi>].<UDT ismi>.<static eleman ismi>
+	 Bu bildirimle yine niteliksiz isim arama genel kuralları uygulanmaz ve bildirilen static eleman ismi o derleme 
+	 biriminde niteliksiz olarak kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static java.lang.Math.sqrt;
+import static java.lang.Math.log10;
+
+import java.util.Scanner;
+
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("sqrt(%f) = %f%n", a, sqrt(a));
+		System.out.printf("log(%f) = %f%n", a, log10(a));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte App sınıfının sqrt metodu çağrılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static java.lang.Math.sqrt;
+import static java.lang.Math.log10;
+
+import java.util.Scanner;
+
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("sqrt(%f) = %f%n", a, sqrt(a));
+		System.out.printf("log(%f) = %f%n", a, log10(a));
+	}
+	
+	public static double sqrt(double a)
+	{
+		System.out.println("App.sqrt");
+		
+		return Math.sqrt(a);
+	}
+}
+
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte uygun (applicable) bir sqrt metodu App sınıfı içerisinde bulunmadığından error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static java.lang.Math.sqrt;
+import static java.lang.Math.log10;
+
+import java.util.Scanner;
+
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		double a = kb.nextDouble();
+		
+		System.out.printf("sqrt(%f) = %f%n", a, sqrt(a)); //error
+		System.out.printf("log(%f) = %f%n", a, log10(a));
+	}
+	
+	public static double sqrt(int a)
+	{
+		System.out.println("App.sqrt");
+		
+		return Math.sqrt(a);
+	}
+	
+	public static double sqrt(long a)
+	{
+		System.out.println("App.sqrt");
+		
+		return Math.sqrt(a);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 26th November 2023
+	
+	Point class that represents a 2 dimensional point
+	
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.sqrt;
+import static java.lang.Math.pow;
+
+public class Point {
+	public double x, y;
+	
+	public Point()
+	{
+		
+	}
+	
+	public Point(double a)
+	{
+		x = a;
+	}
+	
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+	
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+	
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+	
+	public double distance(double a, double b)
+	{
+		return sqrt(pow(x - a, 2) + pow(y - b, 2));
+	}
+	
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+	
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+	
+	public void print()
+	{
+		System.out.printf("(%f, %f)%n", x, y);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Yukarıda anlatılan isim arama ve paketlere ilişkin kuralların dışında da bazı ayrıntılar bulunmaktadır.
+	Bu ayrıntılar pratikte kullanılmadığından burada ele alınmamıştır. Bu ayrıntılar genel olarak dilin matematiğinden 
+	doğan ayrıntılardır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 
