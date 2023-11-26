@@ -15552,6 +15552,160 @@ public class Point {
 	doğan ayrıntılardır.
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfı ve yazılarla işlemler:
+	Neredeyse her uygulamada yazılarla işlemler yapılmaktadır. Programlamada yazı dendiğinde akla string terimi gelir. 
+	Java'da yazılarla işlemlerde kullanılan en temel sınıf java.lang paketi içerisindeki String sınıfıdır. String sınıfının
+	yararlı pek çok metodu bulunmaktadır. Programcı açısından bu sınıf yazılarla bir işlem gerektiğinde ilk tercih edilecek
+	sınıf olmalıdır. Yani programcı yazılarla yapılan bir işlem için bu sınıfta ilgili metodun olup olmadığına bakmalı
+	yoksa diğer sınıflara bakmalı veya kendi yazmalıdır. String sınıfına zaman içerisinde pek çok metot da eklenmiştir.
+	Özellikle Java 11 ile eklenen bir grup metot ile String sınıfı daha da yetenekli hale gelmiştir. String sınıfı
+	immutable bir sınıftır. Bir sınıf türünden nesnenin içeriği yani veri elemanları sınıf dışında değiştirilemiyorsa 
+	bu tarz sınıflara immutable sınıflar denir. Bu anlamda String sınıfı ile tutulan bir yazı değiştirilemez. Bu durumda
+	yazı üzerinde değişiklik yapan metotlar var mıdır? Eğer varsa bunlar nasıl işlem yapmaktadır? Bu sınıfın yazı üzerinde
+	değişiklik yapan metotları vardır. Bu metotlar nesnenin içeriğini değiştiremeyeceğine göre değiştirilmiş yazıyı 
+	tutan yeni String referansına geri dönerler. String sınıfı yazının içsel olarak nasıl tutulduğu ayrıca ele alınacaktır. 
+	Ancak şu kesindir ki, String nesnesi içerisinde yazının kendisi tutulamaz. Çünkü Java'da aynı türden nesnelerin
+	uzunlukları (bellekte kapladığı alan) aynıdır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyici bir string literal gördüğünde ve özdeş string sabitini daha önce görmemişse şu şekilde bir kod üretir: 
+	"Çalışma zamanında String türden ilgili karakterleri tutacak bir nesne yarat ve o nesnenin referansını ver". Bu 
+	durumda bir string literal bir String referansı olarak kullanılabilir. print ve println metotlarının String 
+	parametreli overload'ları vardır ve bunlar aldıkları String referansına ilişkin yazıyı ekrana basarlar. printf 
+	metodu ile s format karakter kullanıldığında bir String formatlanabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "ankara";
+		
+		System.out.println(s);
+		System.out.printf("Yazı:%s%n", s);
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Scanner sınıfının nextLine metodu, klavyeden enter basılıncaya kadar (enter hariç) girilen yazının karakterlerinden 
+	oluşan bir yazıya ilişkin String referansına geri döner
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+	
+		System.out.printf("Girilen Yazı:(%s)%n", s);
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının toUpperCase metodu bir yazının tamamını büyük harfe çevirir. Benzer şekilde toLowerCase metodu
+	yazının tamamnın küçük harfe çevirir. Şüphesiz bu metotlar yazıyı değiştiremez. Değiştirilmiş yazıya ilişkin yeni bir
+	String referansına geri döner
+	
+	Anahtar Notlar: toLowerCase ve toUpperCase metotları büyük harf küçük harf çevrimini dil desteğine göre yaparlar. Buna
+	"localization" ya da "locale" denir. Bu metotlarının parametresiz overload'ları uygulamanın çalıştığı sistemin
+	localization'ına bakarak işlem yaparlar. Localization kavramı "Java ile Uygulama 1" kursunda ele alınacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+	
+		String upper = s.toUpperCase();
+		String lower = s.toLowerCase();
+		
+		System.out.printf("s = %s%n", s);
+		System.out.printf("upper = %s%n", upper);
+		System.out.printf("lower = %s%n", lower);
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazı durumlarda aynı referans ile yeni nesne gösterilerek devam edilebilir. Bu durumda mantıksal olarak yazı değiştirilmiş
+	gibi işlem yapılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+	
+		s = s.toUpperCase();
+		
+		System.out.printf("s = %s%n", s);
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının length isimli metodu ile yazının kaç tane karakterden oluştuğu bilgisi elde edilebilir. charAt
+	metodu parametresi ile aldığı indeks numarasındaki karaktere geri döner. İndeks numarası sıfırdan başlar
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+	
+		int len = s.length();
+		
+		for (int i = 0; i < len; ++i)
+			System.out.printf("%c ", s.charAt(i));
+		
+		System.out.println();
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	charAt metoduna pozitif ya da negatif bakımdan sınırlar dışında değer verildiğinde exception oluşur. Verilecek 
+	indeks değerleri [0, length()) aralığında olmalıdır.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+		
+		System.out.printf("ch = %c%n", s.charAt(5));
+	}	
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
