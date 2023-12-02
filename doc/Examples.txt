@@ -16104,6 +16104,246 @@ class StringUtilReverseTest {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir yazının boş String olup olmadığı String sınıfının isEmpty isimli metodu ile test edilebilir  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.println(s.isEmpty() ? "Boş String" : "Boş string değil");
+		}
+		
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Klavyeden elma girilene kadar alınan yazıları aralarında - karakteri ile birleştirip yeni bir 
+	String elde eden programı yazınız. Örneğin: ankara, istanbul, izmir girişleri için ankara-istanbul-izmir yazısı
+	elde edilecektir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		ConcatWithHyphenApp.run();
+	}
+}
+
+class ConcatWithHyphenApp {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			if (!sb.isEmpty())
+				sb.append("-");
+			
+			sb.append(s);
+		}
+		
+		String str = sb.toString();
+		
+		System.out.println(str);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının substring metotları ile bir yazının içerisindeki bir kısmı elde edilebilmektedir. StringBuilder 
+	sınıfının da substring metodu vardır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "ankara";
+		
+		System.out.println(s.substring(2));
+		System.out.println(s.substring(2, 5)); //[2, 5)
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Klavyeden elma girilene kadar alınan yazıları aralarında - karakteri ile birleştirip yeni bir 
+	String elde eden programı yazınız. Örneğin: ankara, istanbul, izmir girişleri için ankara-istanbul-izmir yazısı
+	elde edilecektir  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		ConcatWithHyphenApp.run();
+	}
+}
+
+class ConcatWithHyphenApp {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+					
+			sb.append(s).append('-');
+		}
+		
+		String str = sb.substring(0, sb.length() - 1);
+		
+		
+		System.out.println(str);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının char parametreli indexOf metodu aldığı karakterin yazı içerisindeki ilk görüldüğü indeks numarasına
+	geri döner. Karakter bulunamazsa -1 değerine geri döner. Benzer şekilde char ve int parametreli overload'ı aldığı 
+	karakteri ikinci parametresi ile aldığı indeks numarasından itibaren yazı içerisinde ilk gördüğü indeks numarasına
+	geri döner
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "Bugün hava çok güzel. Bu çok güzel havada gezilebilir mi?";
+		char c = 'ç';
+		int index = s.indexOf(c);
+		
+		System.out.printf("Index = %d%n", index);
+		
+		index = s.indexOf(c, 12);
+		
+		System.out.printf("Index = %d%n", index);
+		
+		index = s.indexOf(c, 26);
+		
+		System.out.printf("Index = %d%n", index);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının String parametreki indexOf metotları yazı içerisinde yazı aramak için kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "Bugün hava çok güzel. Bu çok güzel havada gezilebilir mi?";
+		String c = "çok";
+		int index = s.indexOf(c);
+		
+		System.out.printf("Index = %d%n", index);
+		
+		index = s.indexOf(c, 12);
+		
+		System.out.printf("Index = %d%n", index);
+		
+		index = s.indexOf(c, 26);
+		
+		System.out.printf("Index = %d%n", index);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının lastIndexOf metotları yazı aramayı sondan itibaren yapar
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "Bugün hava çok güzel. Bu çok güzel havada gezilebilir mi?";
+		char c = 'ç';
+		String str = "çok";
+		int index = s.lastIndexOf(c);
+		
+		System.out.printf("Index = %d%n", index);
+		
+		index = s.lastIndexOf(str);
+		
+		System.out.printf("Index = %d%n", index);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir iki yazıdan birincisi içerisinde, ikincisinden kaç tane olduğuna geri
+	dönen countString isimli metodu StringUtil sınıfı içerisinde yazınız ve test ediniz. Benzer şekilde case-insensitive
+	olarak çalışan countStringIgnoreCase isimli metoda yazınız. 
+	Örneğin: aaa yazısı içerisinde aa'dan 2 tane olmalı
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilCountStringTest.run();
+	}
+}
+
+class StringUtilCountStringTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Birinci yazıyı giriniz:");
+			String s1 = kb.nextLine();
+			
+			if ("elma".equals(s1))
+				break;
+			
+			System.out.print("İkinci yazıyı giriniz:");
+			String s2 = kb.nextLine();
+			
+			System.out.printf("Count:%d%n", StringUtil.countString(s1, s2));
+			System.out.printf("Count:%d%n", StringUtil.countStringIgnoreCase(s1, s2));
+		}
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
