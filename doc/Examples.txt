@@ -15706,6 +15706,404 @@ class App {
 	}	
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	02.12.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Uzunluğu sıfır olan yani içerisinde hiç bir karalkterin bulunmadığı string'lere boş string (empty string) denir ve 
+	en kolay iki tane çift tırnağın yanyana yazılması biçiminde elde elde edilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s = "";
+		
+		System.out.printf("Length:%d%n", s.length());
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aynı türden iki referansın == veya != operatörü ile karşılaştırılması, iki referansın da aynı nesneyi gösterip
+	göstermediğinin karaşılaştırılması yani adres karşılaştırması demektir 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample s1 = new Sample(10);
+		Sample s2 = new Sample(10);
+		
+		
+		System.out.printf("s1.x = %d%n", s1.x);
+		System.out.printf("s2.x = %d%n", s2.x);
+		System.out.println(s1 == s2 ? "Aynı nesne" : "Farklı nesneler");
+		System.out.println(s1 != s2 ? "Farklı nesneler" : "Aynı nesne");
+	}	
+}
+
+class Sample {
+	public int x;
+	
+	public Sample(int a)
+	{
+		x = a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Farklı türden referanslar zaten == veya != operatörleri ile işleme sokulamazlar 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample s = new Sample(10);
+		Mample m = new Mample(10);
+		
+	
+		System.out.println(s == m ? "Aynı nesne" : "Farklı nesneler"); //error
+		System.out.println(s != m ? "Farklı nesneler" : "Aynı nesne"); //error
+	}	
+}
+
+class Sample {
+	public int x;
+	
+	public Sample(int a)
+	{
+		x = a;
+	}
+}
+
+class Mample {
+	public int x;
+	
+	public Mample(int a)
+	{
+		x = a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Referanslar aynı türden olsa bile >, <=, <, >= operatörleri ile işleme sokulamazlar 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Sample s1 = new Sample(10);
+		Sample s2 = new Sample(10);
+	
+
+		System.out.println(s1 < s2 ? "s1 < s2" : "s1 >= s2"); //error
+	}	
+}
+
+class Sample {
+	public int x;
+	
+	public Sample(int a)
+	{
+		x = a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki yazının aynı (özdeş) olup olmadığı == veya != operatörü ile karşılaştırılamaz 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Birinci yazıyı giriniz:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("İkinci yazıyı giriniz:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1 == s2 ? "Aynı yazı" : "Farklı yazılar");
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	İki yazının aynı olup olmadığının karşılaştırılması için equals metodu kullanılabilir. equals metodu case-sensitive'dir 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Birinci yazıyı giriniz:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("İkinci yazıyı giriniz:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1.equals(s2) ? "Aynı yazı" : "Farklı yazılar");
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	case-insensitive bir özdeşlik karşılaştırması için equalsIgnoreCase metodu kullanılabilir. Bu metot şüphesiz default
+	olarak işletim sisteminin dil ayarlarına göre büyük-küçük harf belirlemesi yapmaktadır. Dile göre büyük-küçük harf
+	belirlemesi burada ele alınmayacaktır 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Birinci yazıyı giriniz:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("İkinci yazıyı giriniz:");
+		String s2 = kb.nextLine();
+		
+		System.out.println(s1.equalsIgnoreCase(s2) ? "Aynı yazı" : "Farklı yazılar");
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 İki yazıyı birleştirmek (concatenation) için concat metodu kullanılabilir. Şüphesiz bu metot yeni bir String 
+	 referansına geri döner 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Birinci yazıyı giriniz:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("İkinci yazıyı giriniz:");
+		String s2 = kb.nextLine();
+		
+		String s = s1.concat(s2);
+		
+		System.out.printf("Yazı: %s%n", s);
+	}	
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 + operatörünün operandları String türündense bu durumda iki yazı birleştirilir. Bu + operatörünün extra bir 
+	 özelliğidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Birinci yazıyı giriniz:");
+		String s1 = kb.nextLine();
+		
+		System.out.print("İkinci yazıyı giriniz:");
+		String s2 = kb.nextLine();
+		
+		String s = s1 + " " + s2;
+		
+		System.out.printf("Yazı: %s%n", s);
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	+ operatörünün operandlarından biri String türündense, diğeri hangi türde olursa olsun değerin yazı (String)
+	karşılığı elde edilir. Bir tür için yazı karşılığının teknik olarak nasıl elde edildiği ileride detaylı olarak
+	ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Derece bilgisini giriniz:");
+		double degree = kb.nextDouble();
+		String message = "Bugün hava " + degree + " derece olacak";
+		
+		System.out.println(message);
+		
+	}	
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte println metoduna geçilen ifade önce hesaplanır sonra println çağrılır değil mi?
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Derece bilgisini giriniz:");
+		double degree = kb.nextDouble();
+		
+		System.out.println("Bugün hava " + degree + " derece olacak");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Derleyici özdeş String literal'lar için tek bir nesne yaratılacak şekilde kod üretir. Bu durumda özdeş String ikinci 
+	defa yazılırsa daha önce yaratılmış olan nesnenin referansı anlamına gelir. String sınıfı immutable bir sınıf 
+	olduğundan aynı nesneyi birden fazla referansın göstermesi durumunda herhahngi bir referans üzerinden değişiklik
+	yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		String s1 = "ankara";
+		String s2 = "ankara";
+		
+		System.out.println(s1 == s2 ? "Aynı yazı" : "Farklı yazılar");
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir yazının tersini döndüren reverse isimli metodu StringUtil sınıfı içerisinde
+	yazınız ve aşağıdaki kod ile test ediniz
+	
+	Not: reverse metodunu bu gerçekleştirimi (implementation) çok kolay olmasına karşın çok büyük yazılar için efektif
+	bir yöntem değildir. Çünkü bu yöntemde sürekli String nesneleri yartatılmış ve eski nesneden kopşartılmıştır. Bu da
+	göre maliyetli olabilir. Daha efektif yöntemler ileride ele alınacaktır 
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilReverseTest.run();
+	}
+}
+
+class StringUtilReverseTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.printf("Yazının tersi:%s%n", StringUtil.reverse(s));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+package org.csystem.util.string;
+
+public class StringUtil {
+	public static String reverse(String s)
+	{
+		String str = "";
+		
+		for (int i = s.length() - 1; i >= 0; --i)
+			str += s.charAt(i);
+		
+		return str;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfına yardımcı immutable olmayan StringBuilder isimli bir sınıf vardır. Bu sınıf ile tutulan yazı üzerinde
+	değişiklik yapılabilmektedir. Bu sınıf String sınıfına alternatif olarak düşünülmemelidir. Bu sınıf String sınıfının
+	immutable olmasının dezavantaj oluşturduğu durumlarda yardımcı olarak kullanılmaktadır. StringBuilder sınıfının 
+	append metotları ile yazının sonuna ekleme yapılabilir. StringBuilder sınıfının  metotları aynı StringBuilder 
+	referansına geri dönerler. StringBuilder sınıfının diğer metotları kurs içerisinde çeşitli örneklerle ele alınacaktır.
+	StrşngBuilder sınıfının içsel detayları "Java ile Uygulama Geliştirme 1" kursunda ele alınacaktır. StrinBuilder sınıfının
+	String parametreli ctor'u ile bir String'dan bir StringBuilder nesnesi elde edilebilir. Yine StringBuilder sınıfının
+	reverse metodu ile StringBuilder ile tutulan yazı ters yüz edilebilir. StringBuilder sınıfının toString metodu ile
+	StringBuilder ile tutulan yazıyı tutan bir String nesnesine ilişkin referans elde edilebilir. StringBuilder sınıfı da
+	java.lang paketi içerisinde bildirilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilReverseTest.run();
+	}
+}
+
+class StringUtilReverseTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.printf("Yazının tersi:%s%n", StringUtil.reverse(s));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
