@@ -13,6 +13,11 @@ package org.csystem.util.string;
 import java.util.Random;
 
 public class StringUtil {
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+	
 	public static int countString(String s1, String s2)
 	{
 		int count = 0;
@@ -31,10 +36,31 @@ public class StringUtil {
 	
 	public static String generateRandomTextEN(Random random, int count)
 	{
-		//TODO:
+		return generateRandomText(random, count, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	}
 	
 	public static String generateRandomTextTR(Random random, int count)
+	{
+		return generateRandomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");
+	}
+	
+	public static String generateRandomText(Random random, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+		
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(random.nextInt(len)));
+		
+		return sb.toString();
+	}
+	
+	public static boolean isPangramEN(String s)
+	{
+		//TODO:
+	}
+	
+	public static boolean isPangramTR(String s)
 	{
 		//TODO:
 	}

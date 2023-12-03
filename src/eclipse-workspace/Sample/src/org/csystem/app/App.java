@@ -1,12 +1,16 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Sınıf Çalışması: Parametresi ile aldığı Random referansı ile int türden count bilgisi için, her biri rasgele 
-	üretilmiş count tane Türkçe karakterden oluşan yazıya geri dönen generateRandomTextTR ve  her biri rasgele  üretilmiş
-	count tane İngilizce karakterden oluşan yazıya geri dönengenerateRandomTextEN metotlarını StringUtil sınıfı içerisinde
-	yazınız ve aşağıdaki kod ile test ediniz   
+	Sınıf Çalışması: Parametresi ile aldığı bir yazının Türkçe pangram olduğunu test eden isPangramTr ve İnglizce pangram
+	olduğunu test eden isPangramEN metotlarını StringUtil sınıfı içerisinde yazınız ve test ediniz. 
+	
+	Pangram: İçerisinde özel isim geçmeyen ve ilgili dilin alfabesinde tüm karakterlerin kullanıldığı cümlelere denir.
+	
+	Programda özel isim ve anlamlı olması durumlarına bakılmayacaktır
+	
+	İnglizce Pangram: The quick brown fox jumps over the lazy dog
+	Türkçe Pangram: Pijamalı hasta yağız şoföre çabucak güvendi
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
-import java.util.Random;
 import java.util.Scanner;
 
 import org.csystem.util.string.StringUtil;
@@ -14,25 +18,25 @@ import org.csystem.util.string.StringUtil;
 class App { 
 	public static void main(String [] args) 
 	{	
-		StringUtilGenerateRandomTextTest.run();
+		StringUtilCapitalizeTest.run();
 	}
 }
 
-class StringUtilGenerateRandomTextTest {
+class StringUtilCapitalizeTest {
 	public static void run()
 	{
 		Scanner kb = new Scanner(System.in);
-		Random random = new Random();
 		
 		while (true) {
-			System.out.print("Bir sayı giriniz:");
-			int count = Integer.parseInt(kb.nextLine());
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
 			
-			if (count <= 0)
+			if ("elma".equals(s))
 				break;
-				
-			System.out.printf("Text:%s%n", StringUtil.generateRandomTextEN(random, count));
-			System.out.printf("YAzı:%s%n", StringUtil.generateRandomTextTR(random, count));
+			
+			System.out.println(StringUtil.capitalize(s));
 		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
 	}
 }

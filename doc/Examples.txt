@@ -16345,6 +16345,190 @@ class StringUtilCountStringTest {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
+	03.12.2023  
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı Random referansı ile int türden count bilgisi için, her biri rasgele 
+	üretilmiş count tane Türkçe karakterden oluşan yazıya geri dönen generateRandomTextTR ve  her biri rasgele  üretilmiş
+	count tane İngilizce karakterden oluşan yazıya geri dönengenerateRandomTextEN metotlarını StringUtil sınıfı içerisinde
+	yazınız ve aşağıdaki kod ile test ediniz 
+	Açıklama: Metot count değeri pozitif olmama kontrolü yapmayacaktır  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilGenerateRandomTextTest.run();
+	}
+}
+
+class StringUtilGenerateRandomTextTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		Random random = new Random();
+		
+		while (true) {
+			System.out.print("Bir sayı giriniz:");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+				
+			System.out.printf("Text:%s%n", StringUtil.generateRandomTextEN(random, count));
+			System.out.printf("Yazı:%s%n", StringUtil.generateRandomTextTR(random, count));
+		}
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnekte generateRandomTextEN metodu aşağıdaki gibi de yazılabilir. Şüphesiz bir önceki yöntem daha
+	genel olma eğilimindedir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		GenerateRandomTextENTest.run();
+	}
+}
+
+class GenerateRandomTextENTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		Random random = new Random();
+		
+		while (true) {
+			System.out.print("Input count:");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+				
+			System.out.printf("Text:%s%n", Util.generateRandomTextEN(random, count));
+		}
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class Util {
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		
+		for (int i = 0; i < count; ++i)
+			sb.append((char)((random.nextBoolean() ? 'A' : 'a') + random.nextInt(26)));
+		
+		return sb.toString();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Character sınıfının çeşitli metotları ile bir karakter ile işlemler yapılabilmektedir. Örneğin isXXX static metotları 
+	ile bir karakterin hangi karakter biçiminde olduğu anlaşılabilir. Örneğin, isWhitespace metodu bri karakterin
+	whitespace karakter olup olmadığını test eder. isDigit metodu bir karakterin rakam karakteri olup olmadığını 
+	test eder. toXXX metotları ise bri karakteri çevirek için kullanılabilir. Örneğin toUpperCase metodu bir karakteri
+	büyük harfe çevirmek için, toLowerCase metodu ise bir karakteri küçük harfe çevirmek için kullanılır. Character
+	sınıfının String sınıfına yardımcı olarak kullanılabilen pek çok metodu da bulunmaktadır. Bunlar için dokümantasyona
+	başvurulabilir  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		char c1 = '\n';
+		char c2 = '1';
+		char c3 = 'D';
+		char c4 = 'd';
+		
+		
+		System.out.println(Character.isWhitespace(c1));
+		System.out.println(Character.isDigit(c2));
+		System.out.println(Character.isLetter(c3));
+		System.out.println(Character.isLowerCase(c4));
+		System.out.println(Character.toUpperCase(c4));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	substring metodunun tek parametreli overload'una yazının uzunluğu index olarak verildiğinde exception oluşmaz, boş 
+	string'e geri döner. Benzer şekilde iki parametreli overload'una geçilen indeks değerleri aynı ise yine boş string'e
+	geri döner  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.print("Bir yazı giriniz:");
+		String s = kb.nextLine();
+		
+		System.out.println(s.substring(s.length()).isEmpty());
+		System.out.println(s.substring(0, 0).isEmpty());
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir yazıyı baş harfini büyük geri kalan harflerini küçük olacak şekilde
+	dönüştüren ve bu yazıya geri dönen capitalize isimli metodu StringUtil içerisinde yazınız ve aşağıdaki kod ile
+	test ediniz  
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilCapitalizeTest.run();
+	}
+}
+
+class StringUtilCapitalizeTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.println(StringUtil.capitalize(s));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
 
