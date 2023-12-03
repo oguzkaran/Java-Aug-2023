@@ -1,28 +1,36 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Sınıf Çalışması: Parametresi ile aldığı bir yazının Türkçe pangram olduğunu test eden isPangramTr ve İnglizce pangram
-	olduğunu test eden isPangramEN metotlarını StringUtil sınıfı içerisinde yazınız ve test ediniz. 
-	
-	Pangram: İçerisinde özel isim geçmeyen ve ilgili dilin alfabesinde tüm karakterlerin kullanıldığı cümlelere denir.
-	
-	Programda özel isim ve anlamlı olması durumlarına bakılmayacaktır
-	
-	İnglizce Pangram: The quick brown fox jumps over the lazy dog
-	Türkçe Pangram: Pijamalı hasta yağız şoföre çabucak güvendi
+	Sınıf Çalışması: Aşağıda prototipleri verilen metotları StringUtil sınıfı içerisinde yazınız ve test ediniz
+		public static String padLeading(String s, int newLen, char ch);
+		public static String padLeading(String s, int newLen);
+		public static String padTrailing(String s, int newLen, char ch);
+		public static String padTrailing(String s, int newLen);
+	Açıklamalar:
+		- padLeading metodunun 3 parametreli overload'u aldığı yazının uzunluğu newLen ile aldığı değerden küçükse
+		yazıyı baştan, üçüncü parametresi ile aldığı karakter ile besleyecektir. Örneğin:
+		 	padLeading("ankara", 11, 'x');
+		 çağrısı için 
+		 	xxxxxankara
+		 yazısına dönecektir.
+		 newLen değeri yazının uzunluğundan büyük değilse aynı yazıya geri dönecektir
+		 
+		 - padLeading metodunun 2 parametreli overload'u yazıyı space ile besleyecektir
+		 
+		 - padTrailing metotları, padLeading metotlarının sondan besleyen versiyonları olarak yazılacaktır
+		 
+		 - Java 11 öncesine yazıyor varsayılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 import java.util.Scanner;
 
-import org.csystem.util.string.StringUtil;
-
 class App { 
 	public static void main(String [] args) 
 	{	
-		StringUtilCapitalizeTest.run();
+		TrimLeadingTarilingTest.run();
 	}
 }
 
-class StringUtilCapitalizeTest {
+class TrimLeadingTarilingTest {
 	public static void run()
 	{
 		Scanner kb = new Scanner(System.in);
@@ -34,9 +42,38 @@ class StringUtilCapitalizeTest {
 			if ("elma".equals(s))
 				break;
 			
-			System.out.println(StringUtil.capitalize(s));
+			System.out.printf("(%s)%n", s);
+			System.out.printf("(%s)%n", Util.trim(s));
+			System.out.printf("(%s)%n", Util.trimLeading(s));
+			System.out.printf("(%s)%n", Util.trimTrailing(s));
 		}
+	}
+}
+
+class Util {
+	public static String trim(String s)
+	{
+		return trimTrailing(trimLeading(s));
+	}
+	
+	public static String trimLeading(String s)
+	{
+		int len = s.length();
+		int i = 0;
 		
-		System.out.println("Tekrar yapıyor musunuz?");
+		for (; i < len && Character.isWhitespace(s.charAt(i)); ++i)
+			;
+		
+		return s.substring(i);
+	}
+	
+	public static String trimTrailing(String s)
+	{
+		int i = s.length() - 1;
+		
+		for (; i >= 0 && Character.isWhitespace(s.charAt(i)); --i)
+			;
+		
+		return s.substring(0, i + 1);
 	}
 }

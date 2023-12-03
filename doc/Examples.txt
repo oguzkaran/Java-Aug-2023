@@ -16523,7 +16523,245 @@ class StringUtilCapitalizeTest {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir yazının Türkçe pangram olduğunu test eden isPangramTr ve İnglizce pangram
+	olduğunu test eden isPangramEN metotlarını StringUtil sınıfı içerisinde yazınız ve test ediniz. 
+	
+	Pangram: İçerisinde özel isim geçmeyen ve ilgili dilin alfabesinde tüm karakterlerin kullanıldığı cümlelere denir.
+	
+	Programda özel isim ve anlamlı olması durumlarına bakılmayacaktır
+	
+	İnglizce Pangram: The quick brown fox jumps over the lazy dog
+	Türkçe Pangram: Pijamalı hasta yağız şoföre çabucak güvendi
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
 
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		StringUtilIsPangramTest.run();
+	}
+}
+
+class StringUtilIsPangramTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		StringUtilIsPangramTRTest.run(kb);
+		StringUtilIsPangramENTest.run(kb);
+	}
+}
+
+class StringUtilIsPangramTRTest {
+	public static void run(Scanner kb)
+	{
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.println(StringUtil.isPangramTR(s) ? "Pangram" : "Pangram değil");
+		}
+	}
+}
+
+
+class StringUtilIsPangramENTest {
+	public static void run(Scanner kb)
+	{
+		while (true) {
+			System.out.print("Input a text:");
+			String s = kb.nextLine();
+			
+			if ("quit".equals(s))
+				break;
+			
+			System.out.println(StringUtil.isPangramEN(s) ? "Pangram" : "Not a Pangram");
+		}
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının trim metodu yazının başındaki ve sonundaki boşluk karakterlerini siler. Aradaki boşluk karakterlerine
+	dokunmaz. Java 11 ile birlikte strip, stripLeading ve stripTrailing denilen 3 tane boşluk (whitespace) silen metot daha
+	eklenmiştir. strip metodu yazının başındaki ve sonundaki boşluk karakterlerini siler, stripLeading yalnızca yazının
+	başındaki boşluk karakterlerini siler, stripTrailing ise yazının yalnızca sonundaki boşluk karakterlerini siler.
+	Peki trim ile strip arasında ne fark vardır?
+	
+	Java'da aşağıdaki koşullardan birini sağlayan bir karakter whitespace karakterdir. Tersine whitespace bir karakter
+	aşağıdaki koşullardan birini sağlar (if and only if):
+  	
+  	- Karakter "Unicode space" karakter ve "Non-breaking space" olmayan karakterlerdendir. 
+  	Unicode space karakterler şunlardır:  Space Seperator, Line Seperator, Paragraph Seperator. Bu karakterler
+  	UNICODE'da çeşitli kategorilerdir. Detaylar burada ele alınmayacaktır. Bu karakter Character sınıfının
+  	SPACE_SEPERATOR, LINE_SEPERATOR, PARAGRAPH_SEPERATOR isimli static veri elemanları ile elde edilebilir. 
+  	non-breaking space karakterler şunlardır: '\u00A0', '\u2007', '\u202F'
+  	
+  	- '\t' horizontal tabulation
+  	
+  	- '\n' line feed (LF)
+  	
+  	- '\u000B' vertical tabulation
+  	
+  	- '\f' form tabulation
+  	
+  	- '\r' carriage return (CR)
+  	
+  	- '\u001C' file separator
+  	
+  	- '\u001D' group separator
+  	
+  	- '\u001E' record separator
+  	
+  	- '\u001F' unit separator
+  	
+  	Character sınıfının isWhitespace metodu bir karakter için bu koşullara bakar. 
+  	
+  	trim metodu dökumana göre '\u0020''den küçük veya eşit olan whitespace karakterleri siler. strip metodu 
+  	yukarıda anlatılan koşullara uyan whitespace karakterleri siler
+  	
+  	Yukarıda anlatılanların detayları vardır. Şu aşamada önemsizdir. 
+  	
+  	Bu durumda programcı Java 11+ ile çalışıyorsa, tüm whitespace karakterler için strip metodunu çağırmalıdır. Java 11
+  	öncesi için tüm whitespace karakterleri atan bir trim metotları yazılıp utility bir kütüphane oluşturulabilir.
+  	
+  	Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.println("Bir yazı giriniz:");
+		String s = kb.nextLine();
+		
+		System.out.printf("(%s)%n", s);
+		System.out.printf("(%s)%n", s.trim());
+		System.out.printf("(%s)%n", s.strip()); //Since Java 11
+		System.out.printf("(%s)%n", s.stripLeading()); //Since Java 11
+		System.out.printf("(%s)%n", s.stripTrailing()); //Since Java 11
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Java 11 öncesinde çalılıldığı varsayımıyla aşağıda prototipleri verilen metotları Util isimli 
+	sınıfta yazınız ve test ediniz.
+		public static String trim(String s);
+		public static String trimLeading(String s);
+		public static String trimTrailing(String s);
+	Açıklamalar:
+		- trim metodu baştakı ve sondaki, trimLeading metodu yalnızca baştaki, trimTrailing metodu yalnızca sondaki
+		whitespace karakterleri atacaktır. 
+		- Atılacak karakterler whitespace tanımına uyan tüm karakterlerdir.
+		- Java 11 öncesinde çalışıldığı varsayımından dolayı stripXXX metotları kullanılamayacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		TrimLeadingTarilingTest.run();
+	}
+}
+
+class TrimLeadingTarilingTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.printf("(%s)%n", s);
+			System.out.printf("(%s)%n", Util.trim(s));
+			System.out.printf("(%s)%n", Util.trimLeading(s));
+			System.out.printf("(%s)%n", Util.trimTrailing(s));
+		}
+	}
+}
+
+class Util {
+	public static String trim(String s)
+	{
+		return trimTrailing(trimLeading(s));
+	}
+	
+	public static String trimLeading(String s)
+	{
+		int len = s.length();
+		int i = 0;
+		
+		for (; i < len && Character.isWhitespace(s.charAt(i)); ++i)
+			;
+		
+		return s.substring(i);
+	}
+	
+	public static String trimTrailing(String s)
+	{
+		int i = s.length() - 1;
+		
+		for (; i >= 0 && Character.isWhitespace(s.charAt(i)); --i)
+			;
+		
+		return s.substring(0, i + 1);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı bir yazının palindrom olup olmadığını test eden isPalindrome isimli
+	metodu StringUtil sınıfı içerisinde yazınız test ediniz
+	Açıklamalar:
+		- Yalnızca alfabetik karakterleri tersten okunduğunda aynısı olan yazılara palindrom denir. Örneğin
+			Anastas mum satsana
+			Ey Edip Adana'da pide ye
+			Ali Papila
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Aşağıda prototipleri verilen metotları StringUtil sınıfı içerisinde yazınız ve test ediniz
+		public static String padLeading(String s, int newLen, char ch);
+		public static String padLeading(String s, int newLen);
+		public static String padTrailing(String s, int newLen, char ch);
+		public static String padTrailing(String s, int newLen);
+	Açıklamalar:
+		- padLeading metodunun 3 parametreli overload'u aldığı yazının uzunluğu newLen ile aldığı değerden küçükse
+		yazıyı baştan, üçüncü parametresi ile aldığı karakter ile besleyecektir. Örneğin:
+		 	padLeading("ankara", 11, 'x');
+		çağrısı için 
+		 	xxxxxankara
+		yazısına dönecektir.
+		newLen değeri yazının uzunluğundan büyük değilse aynı yazıya geri dönecektir
+		 
+		- padLeading metodunun 2 parametreli overload'u yazıyı space ile besleyecektir
+		 
+		- padTrailing metotları, padLeading metotlarının sondan besleyen versiyonları olarak yazılacaktır
+		 
+		- Java 11 öncesine yazıyor varsayılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	
+---------------------------------------------------------------------------------------------------------------------*/
 
 
 

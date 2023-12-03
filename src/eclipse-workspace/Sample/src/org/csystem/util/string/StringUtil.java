@@ -57,12 +57,23 @@ public class StringUtil {
 	
 	public static boolean isPangramEN(String s)
 	{
-		//TODO:
+		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuvwxyz");
 	}
 	
 	public static boolean isPangramTR(String s)
 	{
-		//TODO:
+		return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+	}
+	
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+		
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+		
+		return true;
 	}
 	
 	public static String reverse(String s)
