@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 2nd December 2023
+	LAST UPDATE	: 3rd December 2023
 	
 	Utility class for string operations
 	
@@ -9,6 +9,8 @@
 	All Rights Free
 ---------------------------------------------------------*/
 package org.csystem.util.string;
+
+import java.util.Random;
 
 public class StringUtil {
 	public static int countString(String s1, String s2)
@@ -25,6 +27,16 @@ public class StringUtil {
 	public static int countStringIgnoreCase(String s1, String s2)
 	{
 		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+	
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		//TODO:
+	}
+	
+	public static String generateRandomTextTR(Random random, int count)
+	{
+		//TODO:
 	}
 	
 	public static String reverse(String s)
