@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 3rd December 2023
+	LAST UPDATE	: 9th December 2023
 	
 	Utility class for string operations
 	
@@ -55,6 +55,36 @@ public class StringUtil {
 		return sb.toString();
 	}
 	
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+		
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+			
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+			
+			char cRight = Character.toLowerCase(s.charAt(right));
+			
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+			
+			if (cLeft != cRight)
+				return false;
+			
+			++left;
+			--right;
+		}
+		
+		return true;
+	}
+	
 	public static boolean isPangramEN(String s)
 	{
 		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuvwxyz");
@@ -75,6 +105,31 @@ public class StringUtil {
 		
 		return true;
 	}
+	
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+		
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;	
+	}
+	
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+	
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+		
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+	
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+	
 	
 	public static String reverse(String s)
 	{

@@ -16726,6 +16726,11 @@ class Util {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
+	09.12.2023  	
+---------------------------------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Parametresi ile aldığı bir yazının palindrom olup olmadığını test eden isPalindrome isimli
 	metodu StringUtil sınıfı içerisinde yazınız test ediniz
 	Açıklamalar:
@@ -16733,7 +16738,77 @@ class Util {
 			Anastas mum satsana
 			Ey Edip Adana'da pide ye
 			Ali Papila
+			
+	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.util.string.test;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+public class StringUtilIsPalindromeTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.println(StringUtil.isPalindrome(s) ? "Palindrom" : "Palindrom değil");
+		}
+	}
+	
+	public static void main(String [] args)
+	{
+		run();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Temel türden bir değeri yazıya çevirmek için String sınıfının valueOf static metotları kullanılabişlir
+	
+	Anahtar Notlar: Aldığı parametrelere göre nesneyi yaratan static metotlara "factory method" denilmektedir. Şüphesiz
+	burada ctor kastedilmemektedir.
+	
+	Aslında temel türden bir değer yazıya şu şekilde de çevrilebilir:
+		a temel türden bir ifade olmak üzere a + ""
+	Ancak bu durumda valueOf metodunun kullanılması tavsiye edilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		int a = 10;
+		String s;
+		
+		s = String.valueOf(a);
+		
+		System.out.println(s);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfına Java 11 ile birlikte repeat isimli bir metot eklenmiştir. Bu metot aldığı int türden parametrenin
+	değeri kadar yazıyı çoklar
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App { 
+	public static void main(String [] args) 
+	{	
+		System.out.println("ankara".repeat(3));
+	}
+}
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Aşağıda prototipleri verilen metotları StringUtil sınıfı içerisinde yazınız ve test ediniz
@@ -16753,9 +16828,56 @@ class Util {
 		- padLeading metodunun 2 parametreli overload'u yazıyı space ile besleyecektir
 		 
 		- padTrailing metotları, padLeading metotlarının sondan besleyen versiyonları olarak yazılacaktır
-		 
-		- Java 11 öncesine yazıyor varsayılacaktır
+		
+		Metotlar Java 11 öncesinde yazıldığı için aşağıdaki metot da StringUtil sınıfında bulunması iyi bir yaklaşımdır:
+		public static String repeat(char ch, int count)
+		{
+			StringBuilder sb = new StringBuilder(count);
+			
+			while (count-- > 0)
+				sb.append(ch);
+		
+			return sb.toString();
+		}
+		
+		Java 11 ile birlikte repeat metodu eklendiğinden StringUtil sınıfına ayrıca bir repeat metodunu eklemeye
+		gerek yoktur
 ----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.util.string.test;
+
+import java.util.Scanner;
+
+import org.csystem.util.string.StringUtil;
+
+public class StringUtilPadLeadingTrailingTest {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+		
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+			
+			if ("elma".equals(s))
+				break;
+			
+			System.out.print("Bir sayı giriniz:");
+			int len = Integer.parseInt(kb.nextLine());
+			
+			System.out.printf("(%s)%n", s);
+			System.out.printf("(%s)%n", StringUtil.padLeading(s, len, 'x'));
+			System.out.printf("(%s)%n", StringUtil.padLeading(s, len));
+			System.out.printf("(%s)%n", StringUtil.padTrailing(s, len, 'x'));
+			System.out.printf("(%s)%n", StringUtil.padTrailing(s, len));
+		}
+	}
+	
+	public static void main(String [] args)
+	{
+		run();
+	}
+}
 
 
 
