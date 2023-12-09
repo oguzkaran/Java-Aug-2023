@@ -110,7 +110,7 @@ public class StringUtil {
 	{
 		int len = s.length();
 		
-		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;	
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
 	}
 	
 	public static String padLeading(String s, int newLen)

@@ -16809,7 +16809,6 @@ class App {
 }
 
 
-
 /*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Aşağıda prototipleri verilen metotları StringUtil sınıfı içerisinde yazınız ve test ediniz
 		public static String padLeading(String s, int newLen, char ch);
@@ -16879,14 +16878,280 @@ public class StringUtilPadLeadingTrailingTest {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının format metodu printf metodu gibi çalışır. Formatladığı yazıyı ekrana basmaz String olarak döndürür
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Bir sayı giriniz:");
+		int a = kb.nextInt();
+
+		String message = String.format("Sayı:%d", a);
+
+		System.out.println(message);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Bir sınıf türünden nesnenin yazısal karşılığının anlamlı olması durumunda o sınıfa bir convention
+	olarak toString metodu yazılır. Bu isim JavaSE açısından da önemlidir. Önemi ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------
+	FILE NAME	: Complex.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 9th December 2023
+
+	Complex class that represents a complex number
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math;
+
+public class Complex {
+	public double real, imag;
+
+	public static Complex add(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 + re2, im1 + im2);
+	}
+
+	public static Complex subtract(double re1, double im1, double re2, double im2)
+	{
+		return add(re1, im1, -re2, -im2);
+	}
+
+	public static Complex multiply(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
+	}
+
+	public Complex()
+	{
+	}
+
+	public Complex(double re)
+	{
+		real = re;
+	}
+
+	public Complex(double re, double im)
+	{
+		real = re;
+		imag = im;
+	}
+
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.real, z.imag);
+	}
+
+	public Complex add(double val)
+	{
+		return add(real, imag, val, 0);
+	}
+
+	public Complex add(Complex other)
+	{
+		return add(real, imag, other.real, other.imag);
+	}
+
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.real, z.imag);
+	}
+
+	public Complex subtract(double val)
+	{
+		return subtract(real, imag, val, 0);
+	}
+
+	public Complex subtract(Complex other)
+	{
+		return subtract(real, imag, other.real, other.imag);
+	}
+
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.real, z.imag);
+	}
+
+	public Complex multiply(double val)
+	{
+		return multiply(real, imag, val, 0);
+	}
+
+	public Complex multiply(Complex other)
+	{
+		return multiply(real, imag, other.real, other.imag);
+	}
+
+	public Complex conjugate()
+	{
+		return new Complex(real, -imag);
+	}
+
+	public Complex negate()
+	{
+		return new Complex(-real, -imag);
+	}
+
+	public void inc()
+	{
+		++real;
+	}
+
+	public void dec()
+	{
+		--real;
+	}
+
+	public String toString()
+	{
+		return String.format("%f + %f * i", real, imag);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 9th December 2023
+
+	Point class that represents a 2 dimensional point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.sqrt;
+import static java.lang.Math.pow;
+
+public class Point {
+	public double x, y;
+
+	public Point()
+	{
+	}
+
+	public Point(double a)
+	{
+		x = a;
+	}
+
+	public Point(double a, double b)
+	{
+		x = a;
+		y = b;
+	}
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(Point other)
+	{
+		return distance(other.x, other.y);
+	}
+
+	public double distance(double a, double b)
+	{
+		return sqrt(pow(x - a, 2) + pow(y - b, 2));
+	}
+
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+
+	public void offset(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+
+	public String toString()
+	{
+		return String.format("(%f, %f)", x, y);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının replace metotları aldıkları yazı içerisindeki bir karakterin veya yazının tümünü değiştirir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		String s = "Bugün hava çok yağmurlu, çok yağmurlu havalarda şemsiye alınız";
+
+		System.out.println(s.replace('ç', 't'));
+		System.out.println(s.replace("çok", "az"));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Soru: Aşağıdaki programın çıktısı ne olur? Neden?
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		System.out.println("Java" + 12 + 34);
+		System.out.println(12 + 34 + "Java");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Soru: Aşağıdaki repeat metodunu döngü kullanmadan ve Java 11 ile eklenen repeat metodunu kullanmadan yazınız.
+		public static String repeat(char ch, int count)
+		{
+			StringBuilder sb = new StringBuilder(count);
+
+			while (count-- > 0)
+				sb.append(ch);
+
+			return sb.toString();
+		}
+	Not: Örnek şu ana kadar öğrtendiklerimizle yapılmıştır. Başka yöntemler de vardır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		System.out.println(Util.repeat1('x', 4));
+		System.out.println(Util.repeat2('x', 4));
+	}
+}
+
+class Util {
+	public static String repeat1(char ch, int count)
+	{
+		return String.format("%0" + count + "d", 0).replace('0', ch);
+	}
+
+	public static String repeat2(char ch, int count)
+	{
+		return String.format("%" + count + "c", ' ').replace(' ', ch);
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
   	
 ---------------------------------------------------------------------------------------------------------------------*/
-
-
-
 
 /*----------------------------------------------------------------------------------------------------------------------
 

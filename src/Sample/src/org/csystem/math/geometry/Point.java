@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Point.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 26th November 2023
+	LAST UPDATE	: 9th December 2023
 	
 	Point class that represents a 2 dimensional point
 	
@@ -18,7 +18,6 @@ public class Point {
 	
 	public Point()
 	{
-		
 	}
 	
 	public Point(double a)
@@ -58,8 +57,8 @@ public class Point {
 		y += dy;
 	}
 	
-	public void print()
+	public String toString()
 	{
-		System.out.printf("(%f, %f)%n", x, y);
+		return String.format("(%f, %f)", x, y);
 	}
 }

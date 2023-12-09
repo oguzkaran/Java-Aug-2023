@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Complex.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 19th November 2023
+	LAST UPDATE	: 9th December 2023
 	
 	Complex class that represents a complex number
 	
@@ -107,10 +107,10 @@ public class Complex {
 	{
 		--real;
 	}
-	
-	public void print()
+
+	public String toString()
 	{
-		System.out.printf("%f + %f * i%n", real, imag);
+		return String.format("%f + %f * i", real, imag);
 	}
 }
 

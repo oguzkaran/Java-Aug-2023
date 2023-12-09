@@ -102,7 +102,6 @@ public class NumberUtil {
 		
 		return val;		
 	}
-	
 
 	public static int nextFibonacciNumber(int val)
 	{
