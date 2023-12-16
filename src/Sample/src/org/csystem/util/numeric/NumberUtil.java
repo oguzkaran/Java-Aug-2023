@@ -16,7 +16,6 @@ public class NumberUtil {
 		return val == 0 ? 1 : (int)Math.log10(Math.abs(val)) + 1;
 	}
 
-	
 	public static int digitsSum(int val)
 	{
 		int total = 0;
@@ -28,7 +27,6 @@ public class NumberUtil {
 		
 		return Math.abs(total);
 	}
-	
 
 	public static int factorial(int n)
 	{
@@ -58,7 +56,6 @@ public class NumberUtil {
 		return val >= 0 && getDigitsPowSum(val) == val;
 	}
 
-	
 	public static boolean isPrime(long val)
 	{
 		if (val <= 1)

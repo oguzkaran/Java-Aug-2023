@@ -17147,11 +17147,528 @@ class Util {
 	}
 }
 
+/*--------------------------------------------------------
+	FILE NAME	: StringUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 9th December 2023
+
+	Utility class for string operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.string;
+
+import java.util.Random;
+
+public class StringUtil {
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int index = -1;
+
+		while ((index = s1.indexOf(s2, index + 1)) != -1)
+			++count;
+
+		return count;
+	}
+
+	public static int countStringIgnoreCase(String s1, String s2)
+	{
+		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		return generateRandomText(random, count, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	}
+
+	public static String generateRandomTextTR(Random random, int count)
+	{
+		return generateRandomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");
+	}
+
+	public static String generateRandomText(Random random, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(random.nextInt(len)));
+
+		return sb.toString();
+	}
+
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+
+			char cRight = Character.toLowerCase(s.charAt(right));
+
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+
+			if (cLeft != cRight)
+				return false;
+
+			++left;
+			--right;
+		}
+
+		return true;
+	}
+
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuvwxyz");
+	}
+
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+	}
+
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+
+		return true;
+	}
+
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
+	}
+
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+
+
+	public static String reverse(String s)
+	{
+		return new StringBuilder(s).reverse().toString();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	16.12.2023
+---------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Diziler (Arrays): Elemanları aynı türden olan ve bellekte peşpeşe olacak şekilde yaratılan veri yapılarıdır. Diziler
+	önemli veri yapılarından biridir. Java'da diziler sınıfsal olarak temsil edilirler. Yani bir dizi heap'de yaratılır.
+	Java'da stack'de dizi yaratılamaz. Mademki diziler sınıfsal temsil edilmiştir, o zaman dizi türünden bir referans
+	değişken de söz konusudur. Bir dizi referans değişkeni iki şekilde bildirilebilir:
+		1. <tür> [] <değişken ismi>
+		2. <tür> <değişken ismi>[]
+	Burada tür dizinin her bir elemanının türüdür. []'ler değişkenin bir dizi referansı olduğunu belirtir. Örneğin:
+		int [] a;
+		int a[];
+	Burada dizinin her bir elemanının türü int'dir. Diğer bir deyişle a int türden bir dizi referansıdır. Bir burada
+	birinci biçimi tercih edeceğiz.
+
+	Bir dizi nesnesi yani bir dizi yaratmak için yine new operatörü kullanılır. Dizi yaratmak için new operatörünün
+	kullanımının genel biçimi şu şekildedir:
+	    new <tür>[<int türüne doğrudan dönüşebilen ifade>];
+    Burada tür dizinin her bir elemanınn türüdür, [] içerisinde ise dizinin eleman sayısı (uzunluğu) belirtilmiş olur. Burada da
+    new operatörü yaratılmış olan dizinin adresini üretir. Java'da yaratılmış olan bir dizinin uzunluğu yani eleman
+    sayısı değiştirilemez. Yani bir dizi büyütülüp küçültülemez. Dizinin uzunluk bilgisi sabit ifadesi olmak zorunda
+    değildir. Dizinin uzunluğu length isimli bir veri elemanı ile elde edilebilir. length elemanı final olarak
+    bildirilmiştir. Yani değeri değiştirilemez. final değişkenler ileride ele alınacaktır. Dizinin her bir elemanına
+    [] operatörü ile erişilebilir. [] operatörü iki operandlı araek durumunda bir operatördür. Operatörün birinci operandı
+    bir dizi referansı olmalıdır. Bu referans ['den önce yazılır. [ ile ] arasında int türüne dönüşebilen bir indeks
+    numarası yazılır. Indeks numarası sıfır değerinden başlar. Verilen index numarası pozitif ya da negatif bakımdan
+    sınırlar dışında ise exception oluşur. Bu anlamda indeks değeri [0, length) aralığında olmalıdır. [] operatörü dizinin
+    ilgili indeksteki elemanı olan değişkeni üretir. Dizi ilk kez yaratıldığında elemanları default değerlerini alırlar.
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Dizi referansları
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a; //int türden dizi referansı
+		int b[]; //int türden dizi referansı
+		double [] c; //double türden dizi referansı
+
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Dizi referans bildirimlerinin farkı
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a, b, c;
+		int x[], y, z;
+
+		b = 10; //error
+		x = 23; //error
+		y = 20;
+
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		int [] a;
+
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+
+		a = new int[n];
+		System.out.printf("Eleman sayısı:%d%n", a.length);
+
+		for (int i = 0; i < a.length; ++i)
+			a[i] = i * 10;
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		int [] a;
+		boolean [] b;
+
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+
+		a = new int[n];
+		b = new boolean[n];
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+		for (int i = 0; i < b.length; ++i)
+			System.out.printf("%b ",b[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir diziye ilk değer verme (initialization) işlemi dizi nesnesi yaratılırken {} ile yapılır. {} içerisinde diziye
+	ilk değer olarak verilen elemanlar virgül kullanılarak listelenir. Son yazılan elemandan sonra yazılan virgül sentaks
+	olarak geçerlidir. Dizinin uzunluğu verilen eleman sayısı kadar olur. İlk değer verme işleminde new operatörünün
+	[] içerisi boş bırakılır. Boş bırakılmaması error oluşturur. Aşağıdaki örnekte diziye ilk değer verildiğine ancak
+	diziyi gösteren referansa ilk değer verilmediğine dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a;
+
+		a = new int[]{1, 2, 3, 4, 5, 6};
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte hem diziye hem de referansa ilk değer verildiğine dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a = new int[]{1, 2, 3, 4, 5, 6};
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Diziye ilk değer verilirken aynı zamanda onu gösteren referansa da ilk değer veriliyorsa new operatörü kullanılması
+	gerekmez
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a = {1, 2, 3, 4, 5, 6};
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte referansa ilk değer verilmediği noktada new operatörü kullanılmadığından dolayı error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a;
+
+		a = {1, 2, 3, 4, 5, 6}; //error
+
+		for (int i = 0; i < a.length; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun parametre değişkeni bir dizi referansı olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static org.csystem.util.array.ArrayUtil.print;
+
+class App {
+	public static void main(String [] args)
+	{
+		int [] a = {1, 2, 3, 4, 5, 6};
+
+		print(a);
+		print(a, 3);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun parametre değişkeni bir dizi referansı olduğunda metot dizi elemanları üzerinde değiştirebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import static org.csystem.util.array.ArrayUtil.print;
+import static org.csystem.util.array.ArrayUtil.swap;
+
+class App {
+	public static void main(String [] args)
+	{
+		int [] a = {1, 2, 3, 4, 5, 6};
+
+		print(a);
+
+		swap(a, 2, 3);
+		print(a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir metodun geri dönüş değeri de bir dizi referansı olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+
+import static org.csystem.util.array.ArrayUtil.*;
+
+class App {
+	public static void main(String [] args)
+	{
+		int [] a = generateRandomArray(new Random(), 10, 0, 100);
+
+		print(2, a);
+
+		swap(a, 2, 3);
+		print(2, a);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	ArrayUtil sınıfının reverse metodu
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilReverseTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            ArrayUtil.reverse(a);
+            ArrayUtil.print(2, a);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	reverse metodun başka bir implementasyonu
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String [] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		Random random = new Random();
+
+		for (int i = 0; i < count; ++i) {
+			System.out.println("----------------------------------------------------");
+			int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+			ArrayUtil.print(2, a);
+			ArrayUtil.reverse(a);
+			ArrayUtil.print(2, a);
+			System.out.println("----------------------------------------------------");
+		}
+	}
+}
+
+class Util {
+	public static void reverse(int [] a)
+	{
+		int left = 0;
+		int right = a.length - 1;
+
+		while (left < right)
+			swap(a, left++, right--);
+	}
+
+	public static void swap(int [] a, int i, int k)
+	{
+		int temp = a[i];
+
+		a[i] = a[k];
+		a[k] = temp;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	ArrayUtil sınıfının reversed metodu
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilReversedTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            int [] b = ArrayUtil.reversed(a);
+            ArrayUtil.print(2, a);
+            ArrayUtil.print(2, b);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
   	
----------------------------------------------------------------------------------------------------------------------*/
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 

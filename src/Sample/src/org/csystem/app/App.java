@@ -1,34 +1,48 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Soru: Aşağıdaki repeat metodunu döngü kullanmadan ve Java 11 ile eklenen repeat metodunu kullanmadan yazınız.
-		public static String repeat(char ch, int count)
-		{
-			StringBuilder sb = new StringBuilder(count);
-
-			while (count-- > 0)
-				sb.append(ch);
-
-			return sb.toString();
-		}
+	reverse metodun başka bir implementasyonu
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
 class App {
-	public static void main(String[] args)
+	public static void main(String [] args)
 	{
-		System.out.println(Util.repeat1('x', 4));
-		System.out.println(Util.repeat2('x', 4));
+		Scanner kb = new Scanner(System.in);
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		Random random = new Random();
+
+		for (int i = 0; i < count; ++i) {
+			System.out.println("----------------------------------------------------");
+			int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+			ArrayUtil.print(2, a);
+			ArrayUtil.reverse(a);
+			ArrayUtil.print(2, a);
+			System.out.println("----------------------------------------------------");
+		}
 	}
 }
 
 class Util {
-	public static String repeat1(char ch, int count)
+	public static void reverse(int [] a)
 	{
-		return String.format("%0" + count + "d", 0).replace('0', ch);
+		int left = 0;
+		int right = a.length - 1;
+
+		while (left < right)
+			swap(a, left++, right--);
 	}
 
-	public static String repeat2(char ch, int count)
+	public static void swap(int [] a, int i, int k)
 	{
-		return String.format("%" + count + "c", ' ').replace(' ', ch);
+		int temp = a[i];
+
+		a[i] = a[k];
+		a[k] = temp;
 	}
 }
-
