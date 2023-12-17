@@ -17973,6 +17973,12 @@ public class NumericLottery {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının basamaklarından oluşan diziye geri dönen digits
+	isimli metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz.
+	Açıklama: Metot negatif bir sayı için basamakları pozitif olarak diziye ekleyecektir
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

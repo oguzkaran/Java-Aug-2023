@@ -1,10 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Sınıf Çalışması: Rasal olarak belirlenmiş sayısal loto kuponu üreten programı aşağıdaki açıklamalara göre yazınız.
-	Açıklamalar:
-		- Bir sayısal loto kuponu sıralanmış ve elemanları tekrarlamayan [1, 49] aralığında 6 tane sayıdan oluşur
-		- NumericLottery isimli bir sınıf yazınız, sınıfın getNumbers isimli metodu ile kuponu döndürünüz. Sınıf
-		Random referansını ctor ile alacaktır
-	Not: Aşağıdaki yaklaşım görece iyi bir yaklaşım değildir
+	Sınıf Çalışması: Parametresi ile aldığı long türden bir sayının basamaklarından oluşan diziye geri dönen digits
+	isimli metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz.
+	Açıklama: Metot negatif bir sayı için basamakları pozitif olarak diziye ekleyecektir
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
