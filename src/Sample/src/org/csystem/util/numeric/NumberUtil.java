@@ -14,12 +14,23 @@ public class NumberUtil {
 
 	public static int [] digits(long val)
 	{
-		//TODO:
+		int [] result = new int[digitsCount(val)];
+		val = Math.abs(val);
+
+		for (int i = result.length - 1; i >= 0; result[i--] = (int)(val % 10), val /= 10)
+			;
+
+		return result;
+	}
+
+	public static int digitsCount(long val)
+	{
+		return val == 0 ? 1 : (int)Math.log10(Math.abs(val)) + 1;
 	}
 
 	public static int digitsCount(int val)
 	{
-		return val == 0 ? 1 : (int)Math.log10(Math.abs(val)) + 1;
+		return digitsCount((long)val);
 	}
 
 	public static int digitsSum(int val)

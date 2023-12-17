@@ -17979,6 +17979,189 @@ public class NumericLottery {
 	Açıklama: Metot negatif bir sayı için basamakları pozitif olarak diziye ekleyecektir
 ----------------------------------------------------------------------------------------------------------------------*/
 
+package org.csystem.util.numeric.test;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.numeric.NumberUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberUtilDigitsTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            long value = random.nextLong();
+
+            System.out.printf("%d -> ", value);
+            ArrayUtil.print(NumberUtil.digits(value));
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	char türden diziler: char türden diziler ile yazılar tutulabilir. char türden diziler String sınıfına bazı durumlarda
+	yardımcı olarak kullanılabilmektedir. Örneğin String'in immutable olmasının dezavantaj oluşturduğu bir durumda char
+	türden dizi ile işlem yapılabilir. Şüphesiz bu durumda StringBuilder sınıfı da kullanılabilir. String sınıfının char
+	türden dizi parametreli ctor'ları ve char türden dizi parametreli valuOf metotları ile char türden diziden bir String
+	elde edilebilir. String sınıfının toCharArray metodu ile tutulan yazının karakterlerinden oluşan yeni bir dizi
+	elde edilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının diziden String elde eden ctor ve valueOf metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{
+		char [] c = {'A', 'n', 'k', 'a', 'r', 'a'};
+
+		String s1 = new String(c);
+		String s2 = String.valueOf(c);
+		String s3 = new String(c, 0, 4);
+		String s4 = String.valueOf(c, 0, 4);
+
+		System.out.println(s1);
+		System.out.println(s2);
+		System.out.println(s3);
+		System.out.println(s4);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının diziden String elde eden ctor ve valueOf metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{
+		String s = "Ankara";
+		char [] c = s.toCharArray();
+
+		for (int i = 0; i < c.length; ++i)
+			System.out.printf("%c ", c[i]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki reverse metodunu inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("Bir yazı giriniz:");
+			String s = kb.nextLine();
+
+			if ("elma".equals(s))
+				break;
+
+			System.out.println(Util.reverse(s));
+		}
+	}
+}
+
+class Util {
+	public static String reverse(String s)
+	{
+		char [] c = s.toCharArray();
+
+		ArrayUtil.reverse(c);
+
+		return String.valueOf(c);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Scanner sınıfı aslında okuma işlemlerinde kullanılan genel bir sınıftır. Bu sınıf nesne yaratılırken
+	aldığı kaynaktan okuma yapar. Scanner sınıfınının ilgili ctor'una System.in arguman olarak verildiğinde okuma
+	standard input'tan (kabaca klavyeden) yapılır. Scanner sınıfının çalışma sistematiği dılayısıyla özellike Syetem.in'den
+	okuma yapılırken aynı nesne içim nextLine metodu ile birlikte temel türlere ilişkin nextXXX metotlarının (nextInt, nextLong vb)
+	çağrılması durumunda bazı sistemlerde problem oluşabilir. Problemin detayları ve çözümü ve dolayısıyla Scanner sınıfının
+	çalışma sistematiği ayrı bir konudur ve burada ele alınmayacaktır. Programcı açısından böylesi bir durumda nextLine
+	ile birlikte diğer metotların çağrılmaması yani yine nextLine metosdu ile alınan yazıların parseXXX metotları ile
+	ilgili değere çevrilmesi tavsiye edilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("İsmi giriniz:");
+			String name = kb.nextLine();
+
+			if ("elma".equals(name))
+				break;
+
+			System.out.print("Numarayı giriniz:");
+			int no = kb.nextInt();
+
+			System.out.printf("%s, %d%n", name, no);
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnek aşağıdaki gibi yapılarak problem giderilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("İsmi giriniz:");
+			String name = kb.nextLine();
+
+			if ("elma".equals(name))
+				break;
+
+			System.out.print("Numarayı giriniz:");
+			int no = Integer.parseInt(kb.nextLine());
+
+			System.out.printf("%s, %d%n", name, no);
+		}
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

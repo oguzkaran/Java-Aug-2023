@@ -109,9 +109,25 @@ public class ArrayUtil {
             swap(a, i, a.length - 1 - i);
     }
 
+    public static void reverse(char [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
     public static int [] reversed(int [] a)
     {
         int [] result = new int[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static char [] reversed(char [] a)
+    {
+        char [] result = new char[a.length];
 
         for (int i = a.length - 1; i >= 0; --i)
             result[result.length - 1 - i] = a[i];
@@ -132,6 +148,14 @@ public class ArrayUtil {
     public static void swap(int [] a, int i, int k)
     {
         int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
 
         a[i] = a[k];
         a[k] = temp;
