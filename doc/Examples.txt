@@ -17664,6 +17664,315 @@ public class ArrayUtilReversedTest {
         run();
     }
 }
+/*----------------------------------------------------------------------------------------------------------------------
+    17.12.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Diziler sınıfsal olarak temsil edildiğinden temel türden diziler arasında explici tür dönüşüm geçersizdir. Aslında
+	bu farklı türden referansların dönüşümüdür, dolayısıyla geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{
+		int [] a = {1, 2, 3, 4};
+		long [] b;
+
+		b = (long[])a; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Uzunluğu sıfır olan bir dizi yaratılabilir. Ortada bir dizi nesnesi vardır ancak bu dizide herhangi bir eleman
+	tutulamaz. Mantıksal olarak boş dizi biçiminde düşünülebilir. Uzunluğu sıfır olan bir dizi iki şekilde oluşturulabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{
+		int [] a = new int[0];
+		int [] b = {};
+
+		System.out.printf("Length:%d%n", a.length);
+		System.out.printf("Length:%d%n", b.length);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	ArrayUtil sınıfının sum metodu
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilSumTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            System.out.printf("Toplam%d%n", ArrayUtil.sum(a));
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	ArrayUtil sınıfının min ve max metotları
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilMinMaxTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            System.out.printf("Minimum:%d%n", ArrayUtil.min(a));
+            System.out.printf("Maksimum:%d%n", ArrayUtil.max(a));
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı int türden bir dizi ve int türden n değerine göre aşağıda açıklanan metodu
+	yazınız ve test ediniz.
+	Açıklamalar:
+		- Metot ArrayUtil sınıfı içerisinde aşağıdaki bçimde yazılacaktır:
+				public static int [] histogramData(int [] a, int n)
+		- Metot dizi içerisinde [0, n] aralığında değerler olduğu varsayımıyla bu aralıktaki her bir değerden kaç tane
+		olduğunu içeren bir diziye geri dönecektir.
+
+		- Geri döndüğü dizinin her bir elemanı indek numarasına ilişkin sayının kaç tane olduğu bilgisidir. Örneğin
+		sıfır numaralı indekse sıfır sayısının kaç tane olduğu, 1 numaralı indekste 1 sayısının kaç tane olduğu, ...,
+		n numaralı indekste n sayısının kaç tane olduğu bilgisi olacaktır
+
+		- Metot içerisinde dizinin elemanlarına ilişkin ve n sayısının pozitif olp olmamasına ilişkin bir kontrol
+		yapılmayacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilHistogramDataTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(10, 41), 0, 11);
+
+            ArrayUtil.print(2, a);
+            int [] data = ArrayUtil.histogramData(a, 10);
+
+            ArrayUtil.print(data);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Rasal olarak belirlenmiş sayısal loto kuponu üreten programı aşağıdaki açıklamalara göre yazınız.
+	Açıklamalar:
+		- Bir sayısal loto kuponu sıralanmış ve elemanları tekrarlamayan [1, 49] aralığında 6 tane sayıdan oluşur
+		- NumericLottery isimli bir sınıf yazınız, sınıfın getNumbers isimli metodu ile kuponu döndürünüz. Sınıf
+		Random referansını ctor ile alacaktır
+	Not: Aşağıdaki yaklaşım görece iyi bir yaklaşım değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.random.lottery;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumericLotteryApp {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+        NumericLottery numericLottery = new NumericLottery(random);
+
+        while (true) {
+            System.out.print("Kaç kupon oynamak istersiniz?");
+            int count = Integer.parseInt(kb.nextLine());
+
+            while (count-- > 0)
+                ArrayUtil.print(2, numericLottery.getNumbers());
+        }
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.app.random.lottery;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public class NumericLottery {
+    public Random random;
+
+    public NumericLottery(Random r)
+    {
+        random = r;
+    }
+
+    public int [] getNumbers()
+    {
+        int [] numbers = new int[6];
+        boolean repeat;
+
+        for (int i = 0; i < 6; ++i) {
+            do {
+                repeat = false;
+                numbers[i] = random.nextInt(1, 50);
+                for (int k = 0; k < i; ++k)
+                    if (numbers[i] == numbers[k]) {
+                        repeat = true;
+                        break;
+                    }
+            } while (repeat);
+        }
+
+        Arrays.sort(numbers);
+
+        return numbers;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Rasal olarak belirlenmiş sayısal loto kuponu üreten programı aşağıdaki açıklamalara göre yazınız.
+	Açıklamalar:
+		- Bir sayısal loto kuponu sıralanmış ve elemanları tekrarlamayan [1, 49] aralığında 6 tane sayıdan oluşur
+		- NumericLottery isimli bir sınıf yazınız, sınıfın getNumbers isimli metodu ile kuponu döndürünüz. Sınıf
+		Random referansını ctor ile alacaktır
+	Not: Aşağıdaki yaklaşım yukarıdaki yaklaşıma göre daha iyidir. İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.random.lottery;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumericLotteryApp {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+        NumericLottery numericLottery = new NumericLottery(random);
+
+        while (true) {
+            System.out.print("Kaç kupon oynamak istersiniz?");
+            int count = Integer.parseInt(kb.nextLine());
+
+            while (count-- > 0)
+                ArrayUtil.print(2, numericLottery.getNumbers());
+        }
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.app.random.lottery;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public class NumericLottery {
+    public Random random;
+
+    public boolean[] getFlags()
+    {
+        boolean [] flags = new boolean[50];
+
+        for (int i = 0; i < 6; ++i) {
+            int val;
+
+            do
+                val = random.nextInt(1, 50);
+            while (flags[val]);
+            flags[val] = true;
+        }
+
+        return flags;
+    }
+
+    public int [] getNumbers(boolean [] flags)
+    {
+        int [] numbers = new int[6];
+        int idx = 0;
+
+        for (int i = 1; i < 50; ++i)
+            if (flags[i])
+                numbers[idx++] = i;
+
+        return numbers;
+    }
+
+    public NumericLottery(Random r)
+    {
+        random = r;
+    }
+
+    public int [] getNumbers()
+    {
+        return getNumbers(getFlags());
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
