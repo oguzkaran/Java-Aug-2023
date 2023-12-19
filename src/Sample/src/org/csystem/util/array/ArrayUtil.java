@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: ArrayUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 17th December 2023
+	LAST UPDATE	: 19th December 2023
 
 	Utility class for array operations
 
@@ -37,7 +37,7 @@ public class ArrayUtil {
     {
         int [] result = new int[n + 1];
 
-        for (int i = 0; i < result.length; ++i)
+        for (int i = 0; i < a.length; ++i)
             ++result[a[i]];
 
         return result;
