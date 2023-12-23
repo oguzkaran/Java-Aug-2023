@@ -1,0 +1,36 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir nesnenin uzunluğu en az non-static veri elemanlarının toplam uzunluğu kadarıdır. Aynı türden nesnelerin uzunlukları
+	aynıdır. Yani başka bir deyişle aynı türden her nesne için bellekte aynı uzunlukta yer ayrılır. Ancak nesneler farklı
+	türdense aynı uzunlukta olmaları gerekmez. Bir referansın uzunluğu sistemden sisteme farklılık gösterir. Örneğin 
+	64 bit sistemlerde 8 byte iken, 32 bit sistemlerde 4 byte'dır.
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Sample k;
+		
+		s.x = 10;
+		s.y = true;
+		
+		k = s;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+		
+		++k.x;
+		
+		System.out.printf("s.x = %d, s.y = %b%n", s.x, s.y);
+		System.out.printf("k.x = %d, k.y = %b%n", k.x, k.y);
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}

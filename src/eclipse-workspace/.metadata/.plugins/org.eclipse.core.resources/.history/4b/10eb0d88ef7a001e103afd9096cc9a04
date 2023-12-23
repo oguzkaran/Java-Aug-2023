@@ -1,0 +1,19 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi Java'da 3 yerde atama yapılabilir. İstisna bir takım kurallar dışında atama işlemlerine ilişkin
+	kurallar hepsi için geçerlidir. Bir metodun parametre değişkeni bir referans olabilir 
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		
+	}
+}
+
+
+class Date {
+	public int day, month, year;
+	//...
+}
+

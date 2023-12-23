@@ -1,0 +1,31 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	 Aşağıdaki örnekte adres ataması yapılmadığı için, yani atanan "ŞEY" bir adres olmadığı için b'nin değişmesi a'yı 
+	 etkilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		int a = 10;
+		int b;
+		
+		b = a;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+		
+		++b;
+		
+		System.out.printf("a = %d, b = %d%n", a, b);
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+

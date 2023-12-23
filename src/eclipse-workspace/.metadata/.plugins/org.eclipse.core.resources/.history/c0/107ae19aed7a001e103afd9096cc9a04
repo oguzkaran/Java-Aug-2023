@@ -1,0 +1,29 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	Farklı türden referanslar birbirine explicit olarak bile atanamazlar
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		Sample s = new Sample();
+		Mample m;
+		
+		m = (Mample)s; //error
+	}
+}
+
+
+class Sample {
+	public int x;
+	public boolean y;
+	
+	//...
+}
+
+class Mample {
+	public int a;
+	public boolean b;
+	
+	//...
+}

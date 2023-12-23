@@ -1,0 +1,14 @@
+/*----------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi Java'da 3 yerde atama yapılabilir. İstisna bir takım kurallar dışında atama işlemlerine ilişkin
+	kurallar hepsi için geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		
+	}
+}
+
+
