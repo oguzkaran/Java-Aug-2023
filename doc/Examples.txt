@@ -18162,6 +18162,184 @@ class App {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+  	24.12.2023
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Dizilerin Sıraya Dizilmesi (Sorting):
+	Dizilerin sıraya dizilmesine yönelik bir çok algoritma vardır. Sıralama işleminin küçükten büyüğe diğer bir deyişle
+	artan sırada (ascending) yapılmasına doğal sıralama (natural sort order) denir. Biz burada kabarcık sıralama
+	(bubble sort) ve seçerek sıralama (selection sort) algoritmalarını kodlayacağız. Algoritmalar doğal sıralama olacak
+	şekilde anlatılacaktır ancak her ikisi de kodlanacaktır.
+
+	Anahtar Notlar: Algoritmaların karşılaştırmasına yönelik iki ölçüt vardır: hız (speed), kaynak kullanımı (resource usage).
+	Burada baskın ölçüt hızdır. Burada implemente edilen bubble sort ve selection sort algoritmaları karşılaştırılmayacaktır.
+	Algoritma analizi isimli konuda bu iki algoritmanın karşılaştırması da ayrıca yapılacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Kabarcık sıralama algoritmasında dizinin yanyana iki elemanı karşılaştırılır ve duruma göre yer değiştirilir. Her
+	yinelemede en büyük eleman daraltılmış dizinin sonuna gider. Böylece her yinelemede eskisinden bir geriye kadar
+	gidilmiş olur
+
+	Örneğin:
+	23 9 67 -8 34 -5 14 22 68 45 -10 3 16
+
+	9 23 -8 34 -5 14 22 67 45 -10 3 16 68
+
+	9 23 -8 -5 14 22 34 45 -10 3 16 67 68
+
+	...
+----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilBubbleSortTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            boolean desc = random.nextBoolean();
+
+            ArrayUtil.bubbleSort(a, desc);
+            System.out.printf("Dizi %s sıralandı:%n", desc ? "büyükten küçüğe" : "küçükten büyüğe");
+            ArrayUtil.print(2, a);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Seçerek sıralama algoritmasında en küüçük eleman bulunur, ilk eleman ile yer değiştirilir. Dizi bir daraltılır, aynı
+	işlem daraltılmış dizi için yapılır. Böylece ilerlenir
+
+	Örneğin:
+	23 9 67 -8 34 -5 14 22 68 45 -10 3 16
+
+	-10 9 67 -8 34 -5 14 22 68 45 23 3 16
+
+	-10 -8 67 9 34 -5 14 22 68 45 23 3 16
+
+	...
+----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilSelectionSortTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            boolean desc = random.nextBoolean();
+
+            ArrayUtil.selectionSort(a, desc);
+            System.out.printf("Dizi %s sıralandı:%n", desc ? "büyükten küçüğe" : "küçükten büyüğe");
+            ArrayUtil.print(2, a);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bölümleme (Partition) Algoritması: Bu algoritmada amaç, bir dizinin belirli bir koşula uyan elemanlarının dizinin
+	başında, uymayanların ise sonuna getirilmesidir. Bu işlem başka bir dizi kullanmadan yapılabilir. Dizi elde edildikten
+	sonra ilk koşula uymayan elemanın bulunduğu indeks değerine bölümleme noktası (partition point) denir. Bu işlem tipik
+	olarak şu şekilde yapılabilir. Önce dizinin ilk koşula uymayan elemanı bulunur. Sonra ikinci bir indeks ile koşula
+	uymayan ilk elemandan bir sonraki elemana konumlanılır. Eğer eleman koşula uyuyorsa koşula uymayan eleman ile yer
+	değiştirilir ve birinci indeks artırılır. İkinci indeks her durumda artırılır. Böylece ilerlenir. Bu durumda birinci
+	indeks partition point olarak elde edilmiş olur.
+	Örneğin
+	9 2 23 67 -8 34 -5 14 22 68 45 -10 3 16
+	dizisinde 11 değerinden küçük olan elemanların bölümlenmesi şu şekilde elde edilebilir:
+	1.indeks: 2
+	2.indeks: 3 -> 4
+
+	9 2 -8 67 23 34 -5 14 22 68 45 -10 3 16
+	1.indeks: 3
+	2.indeks: 5 -> 6
+
+	9 2 -8 -5 23 34 67 14 22 68 45 -10 3 16
+	1.indeks: 4
+	2.indeks: 7
+
+	...
+----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.util.array.test;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArrayUtilPartititonTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+        Random random = new Random();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("----------------------------------------------------");
+            int [] a = ArrayUtil.generateRandomArray(random, random.nextInt(5, 11), 0, 100);
+
+            ArrayUtil.print(2, a);
+            int threshold = random.nextInt(-10, 150);
+
+            System.out.printf("Eşik değeri:%d%n", threshold);
+            int partitionPoint = ArrayUtil.partition(a, threshold);
+
+            ArrayUtil.print(2, a);
+            System.out.printf("Bölümleme noktası:%d%n", partitionPoint);
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
