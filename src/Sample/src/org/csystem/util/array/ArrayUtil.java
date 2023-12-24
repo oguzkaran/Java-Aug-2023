@@ -104,8 +104,8 @@ public class ArrayUtil {
     {
         int [] result = new int[n + 1];
 
-        for (int i = 0; i < a.length; ++i)
-            ++result[a[i]];
+        for (int val : a)
+            ++result[val];
 
         return result;
     }
@@ -119,8 +119,8 @@ public class ArrayUtil {
     {
         int result = a[0];
 
-        for (int i = 0; i < a.length; ++i)
-            result = Math.max(a[i], result);
+        for (int val : a)
+            result = Math.max(val, result);
 
         return result;
     }
@@ -129,8 +129,8 @@ public class ArrayUtil {
     {
         int result = a[0];
 
-        for (int i = 0; i < a.length; ++i)
-            result = Math.min(a[i], result);
+        for (int val : a)
+            result = Math.min(val, result);
 
         return result;
     }
@@ -236,8 +236,8 @@ public class ArrayUtil {
     {
         int total = 0;
 
-        for (int i = 0; i < a.length; ++i)
-            total += a[i];
+        for (int val : a)
+            total += val;
 
         return total;
     }

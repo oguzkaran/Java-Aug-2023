@@ -10650,8 +10650,7 @@ class DateUtil {
 		
 		return dayOfYear;
 	}
-		
-	
+
 	public static boolean isValidDate(int day, int month, int year)
 	{
 		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && 1900 <= year && day <= getDays(month, year);
@@ -10664,8 +10663,6 @@ class DateUtil {
 			case 2 -> isLeapYear(year) ? 29 : 28;
 			default -> 31;
 		};
-		
-		
 	}
 	
 	public static boolean isLeapYear(int year)
@@ -18339,6 +18336,573 @@ public class ArrayUtilPartititonTest {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Referans Dizileri (Reference Arrays): Dizinin her elemanı bir referans türünden olan diziye referans dizisi denir.
+	Bu durumda dizinin her bir elemanı bir adres tutar. Bu durumda dizinin yaratılması dizinin elemanları olan referansların
+	gösterdiği nesnelerin yaratılması anlamına gelmez. Bu durumda her bir referansa default olarak null değeri atanır. Yani
+	bu referansların gösterdiği nesneler yaratılmış olmaz. Bu durumda programcının tipik olarak referans dizisini yarattıktan
+	sonra her bir referansa uygun adresi de vermesi gerekir. Aksi durumda referansların kullanılması exception oluşturur.
+
+	Anahtar Notlar: Programlamada kullanılmayan yani o bellek bölgesi için yer ayrılmayan adrese "null address" denir.
+	Sistemlerin bir çoğunda belleğin sıfır numaralı gözeneği kullanılır ancak bu zorunlu değildir. Java'da null adress
+	null isimli bir sabit (anahtar sözcük) ile temsil edilir. Referansların default değeri null'dır. İçerisinde null bulunan
+	bir referans ile sınıfın elemanlarına erişilmesi exception oluşumuna yol açar. null address detayları ileride ele
+	alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte dizi yaratılmış ancak dizinin elemanı olan referanslar null değerinde olduğundan exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Bir sayı giriniz:");
+		Sample[] samples = new Sample[kb.nextInt()];
+
+		for (int i = 0; i < samples.length; ++i)
+			samples[i].x = i * 10;
+
+		System.out.println("Dizinin elemanları yazdırılıyor:");
+
+		for (int i = 0; i < samples.length; ++i)
+			System.out.printf("%d ", samples[i].x);
+
+		System.out.println();
+	}
+}
+
+class Sample {
+	public int x;
+
+	public Sample(int a)
+	{
+		x = a;
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnek aşağıdaki gibi her bir referans değişkene bir nesnenin adresi verilerek yazılabilir. Şüphesiz bu
+	bir çözümdür, senaryoya göre başka çözümler de olabilir. Burada önemli olan referans dizisi yaratıldığında her bir
+	referansın gösterdiği nesnenin yaratılmamasıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Bir sayı giriniz:");
+		Sample[] samples = new Sample[kb.nextInt()];
+
+		for (int i = 0; i < samples.length; ++i)
+			samples[i] = new Sample(i * 10);
+
+		System.out.println("Dizinin elemanları yazdırılıyor:");
+
+		for (int i = 0; i < samples.length; ++i)
+			System.out.printf("%d ", samples[i].x);
+
+		System.out.println();
+	}
+}
+
+class Sample {
+	public int x;
+
+	public Sample(int a)
+	{
+		x = a;
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Referans dizilerine de ilk değer verilebilir. Bu durumda değerlerin uygun adresler olması gerekir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Sample s1 = new Sample(10);
+		Sample s2 = new Sample(20);
+		Sample[] samples = {s1, s2, new Sample(34), s1, new Sample(56), new Sample(67), s2};
+
+		for (int i = 0; i < samples.length; ++i)
+			System.out.printf("%d ", samples[i].x);
+
+		System.out.println();
+	}
+}
+
+class Sample {
+	public int x;
+
+	public Sample(int a)
+	{
+		x = a;
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Pratikte String türden dizilerle çok sık karşılaşılır. String türden bir dizi de aslında bir referans dizisidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		String [] cities = {"ankara", "istanbul", "izmir", "zonguldak"};
+
+		for (int i = 0; i < cities.length; ++i)
+			System.out.printf("%s%n", cities[i]);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Aşağıdaki açıklamalara göre ilgili metotları yazınız ve aşağıdaki kod ile test ediniz
+	Açıklamalar:
+		- getDayOfYear metodu parametresi ile aldığı değerlere ilişkin tarihin yılın kaçıncı günü olduğu bilgisine geri
+		dönecektir. Metot tarihin geçersiz olması durumunda -1 değerine geri dönecektir
+
+		 - getDayOfWeek metodu parametresi ile aldığı değerlere ilişkin tarihin haftanın hangi gününe karşılık geldiği bilgisine
+		 geri dönecektir. Geçersizlik durumu kontrol edilmeyecektir. Haftanın hangi gününe geldiği bilgisi şu şekilde
+		 bulunabilir: 01.01.1900 ile ilgili tarih arasındaki gün sayısı hesaplanır ve 7 değerine modu alınır. Bu durumda
+		 sıfır Pazar, 1 pazartesi, ..., 6 cumartesi'ye karşılık gelir
+
+	Not: İleride daha iyisi yazılacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.app.datetime;
+
+import java.util.Scanner;
+
+public class DemoDateApp {
+	public static void run()
+	{
+		Scanner kb = new Scanner(System.in);
+
+		while (true) {
+			System.out.print("Gün ay ve yıl bilgilerini giriniz:");
+			int day = kb.nextInt();
+			int month = kb.nextInt();
+			int year = kb.nextInt();
+
+			if (day == 0 && month == 0 && year == 0)
+				break;
+
+			DateUtil.printDateTR(day, month, year);
+		}
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+
+	public static void main(String[] args)
+	{
+		run();
+	}
+}
+
+package org.csystem.app.datetime;
+
+public class DateUtil {
+	public static int [] daysOfMonths = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	public static String [] dayOfWeeksTR = {"Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"};
+	public static String [] dayOfWeeksEN = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+	public static String [] monthsTR = {"", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
+			"Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"};
+
+	public static String [] monthsEN = {"", "January", "February", "March", "April", "May", "June", "July",
+			"August", "September", "October", "November", "December"};
+
+	public static void printDateTR(int day, int month, int year)
+	{
+		int dayOfYear = getDayOfYear(day, month, year);
+
+		if (dayOfYear == -1) {
+			System.out.println("Geçersiz tarih!...");
+			return;
+		}
+
+		int dayOfWeek = getDayOfWeek(day, month, year);
+
+		System.out.printf("%d %s %d %s tarihi yılın %d. günüdür%n", day, monthsTR[month], year,
+				dayOfWeeksTR[dayOfWeek], dayOfYear);
+
+		if (dayOfWeek == 0 || dayOfWeek == 6)
+			System.out.printf("Bugün günlerden %s, kurs var tekrar yaptınız mı?%n", dayOfWeeksTR[dayOfWeek]);
+		else
+			System.out.printf("Bugün günlerden %s, kurs günü yaklaşıyor. Tekrar yapmayı unutmayınız!...%n", dayOfWeeksTR[dayOfWeek]);
+	}
+
+	public static int getDayOfWeek(int day, int month, int year)
+	{
+		return getTotalDays(day, month, year) % 7;
+	}
+
+	public static int getTotalDays(int day, int month, int year)
+	{
+		int totalDays = getDayOfYear(day, month, year);
+
+		for (int y = 1900; y < year; ++y)
+			totalDays += isLeapYear(y) ? 366 : 365;
+
+		return totalDays;
+	}
+
+	public static int getDayOfYear(int day, int month, int year)
+	{
+		return isValidDate(day, month, year) ? getDayOfYearValue(day, month, year) : -1;
+	}
+
+	public static int getDayOfYearValue(int day, int month, int year)
+	{
+		int dayOfYear = day;
+
+		for (int m = month - 1; m >= 1; --m)
+			dayOfYear += daysOfMonths[m];
+
+		return month > 2 && isLeapYear(year) ? dayOfYear + 1 : dayOfYear;
+	}
+
+	public static String getDaySuffix(int day)
+	{
+		return switch (day) {
+			case 1, 21, 31 -> "st";
+			case 2, 22 -> "nd";
+			case 3, 23 -> "rd";
+			default -> "th";
+		};
+	}
+
+	public static boolean isValidDate(int day, int month, int year)
+	{
+		return 1 <= day && day <= 31 && 1 <= month && month <= 12 && 1900 <= year && day <= getDays(month, year);
+	}
+
+	public static int getDays(int month, int year)
+	{
+		return month == 2 && isLeapYear(year) ? 29 : daysOfMonths[month];
+	}
+
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: ArrayUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 24th December 2023
+
+	Utility class for array operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.array;
+
+import java.util.Random;
+
+public class ArrayUtil {
+    public static void bubbleSortAscending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k + 1] < a[k])
+                    swap(a, k, k + 1);
+    }
+
+    public static void bubbleSortDescending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k] < a[k + 1])
+                    swap(a, k, k + 1);
+    }
+
+    public static void selectionSortAscending(int [] a)
+    {
+        int min, minIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            min = a[i];
+            minIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (a[k] < min) {
+                    min = a[k];
+                    minIndex = k;
+                }
+
+            a[minIndex] = a[i];
+            a[i] = min;
+        }
+    }
+
+    public static void selectionSortDescending(int [] a)
+    {
+        int max, maxIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            max = a[i];
+            maxIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (max < a[k]) {
+                    max = a[k];
+                    maxIndex = k;
+                }
+
+            a[maxIndex] = a[i];
+            a[i] = max;
+        }
+    }
+
+    public static void bubbleSort(int [] a)
+    {
+        bubbleSort(a, false);
+    }
+
+    public static void bubbleSort(int [] a, boolean desc)
+    {
+        if (desc)
+            bubbleSortDescending(a);
+        else
+            bubbleSortAscending(a);
+    }
+
+    public static void fillRandomArray(Random random, int [] a, int origin, int bound)
+    {
+        fillRandomArray(random, a, a.length, origin, bound);
+    }
+
+    public static void fillRandomArray(Random random, int [] a, int count, int origin, int bound)
+    {
+        for (int i = 0; i < count; ++i)
+            a[i] = random.nextInt(origin, bound);
+    }
+
+    public static int [] generateRandomArray(Random random, int count, int origin, int bound)
+    {
+        int [] a = new int[count];
+
+        fillRandomArray(random, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [] histogramData(int [] a, int n)
+    {
+        int [] result = new int[n + 1];
+
+        for (int i = 0; i < a.length; ++i)
+            ++result[a[i]];
+
+        return result;
+    }
+
+    public static boolean isEmpty(int [] a)
+    {
+        return a.length == 0;
+    }
+
+    public static int max(int [] a)
+    {
+        int result = a[0];
+
+        for (int i = 0; i < a.length; ++i)
+            result = Math.max(a[i], result);
+
+        return result;
+    }
+
+    public static int min(int [] a)
+    {
+        int result = a[0];
+
+        for (int i = 0; i < a.length; ++i)
+            result = Math.min(a[i], result);
+
+        return result;
+    }
+
+    public static int partition(int [] a, int threshold)
+    {
+        int partitionIndex = 0;
+
+        while (partitionIndex != a.length && a[partitionIndex] < threshold)
+            ++partitionIndex;
+
+        if (partitionIndex == a.length)
+            return partitionIndex;
+
+        for (int i = partitionIndex + 1; i < a.length; ++i)
+            if (a[i] < threshold)
+                swap(a, i, partitionIndex++);
+
+        return partitionIndex;
+    }
+
+    public static void print(int [] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [] a)
+    {
+        print(n, a, a.length);
+    }
+
+    public static void print(int [] a, int count)
+    {
+        print(1, a, count);
+    }
+
+    public static void print(int n, int [] a, int count)
+    {
+        print(n, a, count, " ", "\n");
+    }
+
+    public static void print(int [] a, int count, String sep, String end)
+    {
+        print(1, a, count, sep, end);
+    }
+
+    public static void print(int n, int [] a, int count, String sep, String end)
+    {
+        String fmt = String.format("%%0%dd%%s", n);
+
+        for (int i = 0; i < count; ++i)
+            System.out.printf(fmt, a[i], sep);
+
+        System.out.print(end);
+    }
+
+    public static void reverse(int [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static void reverse(char [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static int [] reversed(int [] a)
+    {
+        int [] result = new int[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static char [] reversed(char [] a)
+    {
+        char [] result = new char[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static void selectionSort(int [] a)
+    {
+        selectionSort(a, false);
+    }
+
+    public static void selectionSort(int [] a, boolean desc)
+    {
+        if (desc)
+            selectionSortDescending(a);
+        else
+            selectionSortAscending(a);
+    }
+
+    public static int sum(int [] a)
+    {
+        int total = 0;
+
+        for (int i = 0; i < a.length; ++i)
+            total += a[i];
+
+        return total;
+    }
+
+    public static void swap(int [] a, int i, int k)
+    {
+        int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+}
+/*----------------------------------------------------------------------------------------------------------------------
+	for-each döngü deyimi (enhanced for loop): for-each döngü deyimi dolaşılabilir (iterable) türlerde kullanılabilir.
+	Diziler de dolaşılabilir türlerdir. İleri de başka dolaşılabilir sınıflar da göreceğiz. Bir sınıfın dolaşılabilir
+	olarak bildirilmesi Java ile Uygulama Geliştirme 1 kursunda ele alınacaktır. for-each döngü deyiminin genel biçimi
+	şu şekildedir:
+		for (<tür> <değişken> : <dolaşılabilir tür referansı>)
+			<deyim>
+
+	Burada döngünün her adımında döngü değişkenine bir değer atanır. Örneğin bir dizi dolaşılırken her adımda dizinin
+	o konumdaki elemanı döngü değişkenine atanmış olur. Yani dizi baştan sona dolaşılmış olur. for-each döngü deyimi bir
+	dizi için indeks gerekmedikçe kullanılmalıdır. Yani for-each döngü deyimi okunabilirliği bozmadıktan sonra kesinlikle
+	kullanılmalıdır. for-each döngü deyiminin döngü değişeknin scope'u döngü boyuncadır. Yani döngüden önce ya da sonra
+	kullanılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte kullanılan for-each döngü deyiminin yaklaşık karşılığı şu şekildedir:
+
+	{
+		int val;
+
+		for (int i = 0; i < a.length; ++i) {
+			val = a[i];
+			System.out.printf("%d ", val);
+		}
+	}
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a = {1, 2, 3, 4};
+
+		for (int val : a)
+			System.out.printf("%d ", val);
+
+		System.out.println();
+	}
+}
 
 
 
