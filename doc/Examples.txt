@@ -18874,8 +18874,8 @@ public class ArrayUtil {
 	Burada döngünün her adımında döngü değişkenine bir değer atanır. Örneğin bir dizi dolaşılırken her adımda dizinin
 	o konumdaki elemanı döngü değişkenine atanmış olur. Yani dizi baştan sona dolaşılmış olur. for-each döngü deyimi bir
 	dizi için indeks gerekmedikçe kullanılmalıdır. Yani for-each döngü deyimi okunabilirliği bozmadıktan sonra kesinlikle
-	kullanılmalıdır. for-each döngü deyiminin döngü değişeknin scope'u döngü boyuncadır. Yani döngüden önce ya da sonra
-	kullanılamaz
+	kullanılmalıdır. for-each döngü deyiminin döngü değişekeni döngü boyunca görülebilirdir. Yani döngüden önce ya da
+	sonra kullanılamaz
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
