@@ -18868,6 +18868,7 @@ public class ArrayUtil {
 	Diziler de dolaşılabilir türlerdir. İleri de başka dolaşılabilir sınıflar da göreceğiz. Bir sınıfın dolaşılabilir
 	olarak bildirilmesi Java ile Uygulama Geliştirme 1 kursunda ele alınacaktır. for-each döngü deyiminin genel biçimi
 	şu şekildedir:
+
 		for (<tür> <değişken> : <dolaşılabilir tür referansı>)
 			<deyim>
 
