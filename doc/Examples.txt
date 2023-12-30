@@ -19243,6 +19243,116 @@ public class MatrixUtilGenerateRandomSquareMatrixTest {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı int türden bir kare matrisin esas köşegeni (diagonal) üzerindeki elemanların
+	toplamına geri dönen sumDiagonal isimli metodu MatrixUtil sınıfı içerisinde yazınız ve test ediniz
+	Açıklamalar:
+		- Metot aldığı dizi dizisinin matris ve kare matris olup olmadığını kontrol etmeyecektir
+		- Esas köşegen üzerindeki elemanlar
+			1 2 3
+			4 5 6
+			7 8 9
+		matrisi için 1, 5 ve 9 elemanlarıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.matrix.test;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.matrix.MatrixUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class MatrixUtilSumDiagonalTest {
+    public static void run()
+    {
+        Random random = new Random();
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            int [][] m = MatrixUtil.generateRandomSquareMatrix(random, random.nextInt(3, 5), 0, 100);
+
+            ArrayUtil.print(2, m);
+            System.out.printf("Total:%d%n", MatrixUtil.sumDiagonal(m));
+            System.out.println("-----------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Parametresi ile aldığı int türden bir kare matrisin devriğine (transpose) geri dönen transopose
+	isimli metodu MatrixUtil sınıfı içerisinde yazınız ve test ediniz
+	Açıklamalar:
+		- Metot aldığı dizi dizisinin matris olup olmadığını kontrol etmeyecektir
+		- Bir matrisin devriği satırlarının sütun, sütunlarının satır yapıldığı matristir. Örneğin:
+			1 2 3
+			4 5 6
+		matrisinin devriği
+
+			1 4
+			2 5
+			3 6
+
+		matrisidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.matrix.test;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.matrix.MatrixUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class MatrixUtilTransposeTest {
+    public static void run()
+    {
+        Random random = new Random();
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            System.out.println("#########################################");
+            int [][] m = MatrixUtil.generateRandomMatrix(random, random.nextInt(3, 5), random.nextInt(3, 5), 0, 100);
+
+            ArrayUtil.print(2, m);
+            System.out.println("Devriği:");
+            ArrayUtil.print(2, MatrixUtil.transpose(m));
+            System.out.println("#########################################");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Bir okulda Fizik sınavı şubeler arasında ortak olarak yapılıyor olsun. Ders notları da [0, 100]
+	aralığında tamsayılar biçiminde belirlensin. Aşağıdaki açıklamalara göre ilgili basit simülasyon programını yazınız.
+	Açıklamalar:
+		- Şube sayısı ve her bir şubedeki öğrenci sayısı klavyeden girilecektir
+
+		- Alınan notlar rasgele olarak belirlenecektir
+
+		- Bu işlemlerden sonra her bir şubenin ayrı ayrı not ortalamasını, okulun bu sınav için not ortalamasını, her bir
+		şubenin en düşük ve en yüksek notunu ve okulun bu sınav için en düşük ve en yüksek notunu hesaplayınız
+
+		- Çıktıları dilediğiniz gibi yapabilirsiniz
+
+		- Mümkün olduğunca (şu ana kadar gördüklerimizle) nesne yönelimli olarak düşününüz
+----------------------------------------------------------------------------------------------------------------------*/
+
+
 
 
 

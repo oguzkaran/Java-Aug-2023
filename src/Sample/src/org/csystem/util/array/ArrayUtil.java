@@ -67,6 +67,13 @@ public class ArrayUtil {
         }
     }
 
+    public static void addBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] += val;
+    }
+
     public static void bubbleSort(int [] a)
     {
         bubbleSort(a, false);
@@ -106,6 +113,11 @@ public class ArrayUtil {
         return a;
     }
 
+    public static int [] generateRandomArray(int count, int origin, int bound)
+    {
+        return generateRandomArray(new Random(), count, origin, bound);
+    }
+
     public static int [] histogramData(int [] a, int n)
     {
         int [] result = new int[n + 1];
@@ -139,6 +151,13 @@ public class ArrayUtil {
             result = Math.min(val, result);
 
         return result;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] *= val;
     }
 
     public static int partition(int [] a, int threshold)
@@ -247,6 +266,13 @@ public class ArrayUtil {
             selectionSortDescending(a);
         else
             selectionSortAscending(a);
+    }
+
+    public static void subtractBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] -= val;
     }
 
     public static int sum(int [] a)
