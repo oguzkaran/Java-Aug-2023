@@ -18865,18 +18865,21 @@ public class ArrayUtil {
 }
 /*----------------------------------------------------------------------------------------------------------------------
 	for-each döngü deyimi (enhanced for loop): for-each döngü deyimi dolaşılabilir (iterable) türlerde kullanılabilir.
-	Diziler de dolaşılabilir türlerdir. İleri de başka dolaşılabilir sınıflar da göreceğiz. Bir sınıfın dolaşılabilir
-	olarak bildirilmesi Java ile Uygulama Geliştirme 1 kursunda ele alınacaktır. for-each döngü deyiminin genel biçimi
-	şu şekildedir:
+	Diziler de dolaşılabilir türlerdir. İleri de başka dolaşılabilir sınıflar da göreceğiz. for-each döngü deyimi Java 5
+	ile dile eklenmiştir. Bir sınıfın dolaşılabilir olarak bildirilmesi Java ile Uygulama Geliştirme 1 kursunda ele
+	alınacaktır. for-each döngü deyiminin genel biçimi şu şekildedir:
 
 		for (<tür> <değişken> : <dolaşılabilir tür referansı>)
 			<deyim>
 
 	Burada döngünün her adımında döngü değişkenine bir değer atanır. Örneğin bir dizi dolaşılırken her adımda dizinin
 	o konumdaki elemanı döngü değişkenine atanmış olur. Yani dizi baştan sona dolaşılmış olur. for-each döngü deyimi bir
-	dizi için indeks gerekmedikçe kullanılmalıdır. Yani for-each döngü deyimi okunabilirliği bozmadıktan sonra kesinlikle
-	kullanılmalıdır. for-each döngü deyiminin döngü değişekeni döngü boyunca görülebilirdir. Yani döngüden önce ya da
-	sonra kullanılamaz
+	dizi için genel olarak indeks gerekmedikçe kullanılmalıdır. Yani for-each döngü deyimi okunabilirliği bozmadıktan
+	sonra kesinlikle kullanılmalıdır. for-each döngü deyiminin döngü değişekeni döngü boyunca görülebilirdir. Yani
+	döngüden önce ya da	sonra kullanılamaz
+
+	Aslında dolaşılabilir türler için for-each döngü deyimini uygun durumda kullanmak, klasik for döngü deyimi ile
+	dolaşılabilir bir tür için yazılan kodların okunabilirliğini/algılanabilirliğini artırır
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -18904,6 +18907,342 @@ class App {
 		System.out.println();
 	}
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	30.12.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte klasik for döngü deyimi daha okunabilir/algılanabilirdir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [] a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+		for (int i = 0; i < a.length / 2; ++i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+
+		int i = 0;
+
+		for (int val : a) {
+			if (i++ == a.length / 2)
+				break;
+
+			System.out.printf("%d ", val);
+		}
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte klasik for döngü deyimi daha okunabilir/algılabilirdir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int[] a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+		for (int i = a.length - 1; i >= 0; --i)
+			System.out.printf("%d ", a[i]);
+
+		System.out.println();
+
+		int i = a.length - 1;
+
+		for (int val : a)
+			System.out.printf("%d ", a[i--]);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for-each döngü deyiminde döngü değişkenine atama işlemi implicit olarak yapılır. Aşağıdaki örnek int türünden long
+	türüne implicit conversion tanımlı olduğundan geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int[] a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+		for (long val : a)
+			System.out.printf("%d ", val);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte int türünden short türüne implicit conversion geçersiz olduğundan error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int[] a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+		for (short val : a) //error
+			System.out.printf("%d ", val);
+
+		System.out.println();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	for-each döngü deyiminde :'den sonrakı kısım bir kez yapılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		for (int val : Sample.getArray())
+			System.out.printf("%d ", val);
+
+		System.out.println();
+	}
+}
+
+class Sample {
+	public static int [] getArray()
+	{
+		System.out.println("getArray");
+
+		return new int[]{1, 2, 3, 4, 5};
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	T[] türü için T her bir elemanın türü olduğuna göre T yerine bir dizi referansı yazıldığında dizinin her bir elemanı
+	yine dizi referansı olur. Yani aslında dizimiz yine bir referans dizisidir. Bu dizilere dizi dizisi de denilmektedir.
+	Bu anlamda Java'da teknik olarak çok boyutlu dizi kavramı yoktur. Çok boyutlu dizi kullanılarak gerçekleştirilen
+	algoritmalar da yine dizi dizileri ile yazılır. Bir dizi dizisinin her bir elemanı olan dizi referanslarının hepsi
+	aynı uzunlukta dizileri gösteriyorsa, bu durumda bu dizi dizisi bir matrisi temsil edebilir. Yani mantıksal olarak
+	iki boyutlu bir dizidir ancak teknik olarak bir dizi dizisidir. Bir dizi yaratılırken dizinin türüne ilişkin kaç tane
+	[] varsa, new operatöründe o kadar sayıda [] bulunmalıdır. new operatörü ile kullanılan []'lerden en soldakinin
+	içerisi ilkdeğer verme sentaksı dışında boş bırakılamaz. Diğerleri boş bırakılabilir. Diğerleri boş bırakıldığında
+	ana dizi yaratılmış olur ancak diğer diziler yaratılmaz ve her bir referansa null değer verilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		int[][] a;
+		int [][][] b;
+		int [][][][] c;
+
+		a = new int[10][];
+		b = new int[4][][];
+		c = new int[4][][][];
+		//...
+
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte bir matris temsil edilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		System.out.print("Satır ve sütun sayılarını giriniz:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+
+		int [][] a = new int[m][];
+
+		for (int i = 0; i < m; ++i)
+			a[i] = new int[n];
+
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				a[i][j] = i + j;
+
+		for (int [] array : a) {
+			for (int val : array)
+				System.out.printf("%02d ", val);
+
+			System.out.println();
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 5 ile birlikte dizi dizi yaratılırken diğer []'in içerisinde uzunluk yazıldığında diziler otomatik olarak
+	yaratılır. Yukarıdaki örnek aşağıdaki gibi daha da basitleştirilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		System.out.print("Satır ve sütun sayılarını giriniz:");
+		int m = kb.nextInt();
+		int n = kb.nextInt();
+
+		int [][] a = new int[m][n];
+
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				a[i][j] = i + j;
+
+		for (int [] array : a) {
+			for (int val : array)
+				System.out.printf("%02d ", val);
+
+			System.out.println();
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Dizi dizilerine ilk değer verilirken de küme parantezi kullanılır. Her bir diziye ilk değer verirken de yine
+	küme parantezi yazılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.array.ArrayUtil;
+
+class App {
+	public static void main(String[] args)
+	{
+		int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+		int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8}, {9, 10, 11, 12}};
+
+		ArrayUtil.print(2, a);
+		System.out.println("----------------------");
+		ArrayUtil.print(2, b);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	MatrixUtil sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.util.matrix.test;
+
+import static org.csystem.util.matrix.MatrixUtil.isMatrix;
+
+public class MatrixUtilIsMatrixTest {
+    public static void run()
+    {
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8}, {9, 10, 11, 12}};
+
+        System.out.println(isMatrix(a) ? "Matris" : "Matris değil");
+        System.out.println(isMatrix(b) ? "Matris" : "Matris değil");
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.util.matrix.test;
+
+import static org.csystem.util.matrix.MatrixUtil.isSquareMatrix;
+
+public class MatrixUtilIsSquareMatrixTest {
+    public static void run()
+    {
+        int [][] a = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        int [][] b = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        int [][] c = {{1, 2, 3}, {4, 5, 6}, {7, 8}, {9, 10, 11, 12}};
+
+        System.out.println(isSquareMatrix(a) ? "Kare matris" : "Kare matris değil");
+        System.out.println(isSquareMatrix(b) ? "Kare matris" : "Kare matris değil");
+        System.out.println(isSquareMatrix(c) ? "Kare matris" : "Kare matris değil");
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.util.matrix.test;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.matrix.MatrixUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class MatrixUtilGenerateRandomMatrixTest {
+    public static void run()
+    {
+        Random random = new Random();
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            int [][] m = MatrixUtil.generateRandomMatrix(random, random.nextInt(3, 5), random.nextInt(3, 5), 0, 100);
+
+            ArrayUtil.print(2, m);
+            System.out.println("-----------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+
+package org.csystem.util.matrix.test;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.matrix.MatrixUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class MatrixUtilGenerateRandomSquareMatrixTest {
+    public static void run()
+    {
+        Random random = new Random();
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            int [][] m = MatrixUtil.generateRandomSquareMatrix(random, random.nextInt(3, 5), 0, 100);
+
+            ArrayUtil.print(2, m);
+            System.out.println("-----------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
 
 
 

@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: ArrayUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 24th December 2023
+	LAST UPDATE	: 30th December 2023
 
 	Utility class for array operations
 
@@ -89,6 +89,12 @@ public class ArrayUtil {
     {
         for (int i = 0; i < count; ++i)
             a[i] = random.nextInt(origin, bound);
+    }
+
+    public static void fillRandomArray(Random random, int [][] a, int origin, int bound)
+    {
+        for (int [] array : a)
+            fillRandomArray(random, array, origin, bound);
     }
 
     public static int [] generateRandomArray(Random random, int count, int origin, int bound)
@@ -185,6 +191,17 @@ public class ArrayUtil {
             System.out.printf(fmt, a[i], sep);
 
         System.out.print(end);
+    }
+
+    public static void print(int [][] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [][] a)
+    {
+        for (int [] array : a)
+            print(n, array);
     }
 
     public static void reverse(int [] a)

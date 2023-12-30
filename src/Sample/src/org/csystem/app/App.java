@@ -1,26 +1,19 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örnekte kullanılan for-each döngü deyiminin yaklaşık karşılığı şu şekildedir:
-
-	{
-		int val;
-
-		for (int i = 0; i < a.length; ++i) {
-			val = a[i];
-			System.out.printf("%d ", val);
-		}
-	}
+	Dizi dizilerine ilk değer verilirken de küme parantezi kullanılır. Her bir diziye ilk değer verirken de yine
+	küme parantezi yazılmalıdır
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Scanner;
 
 class App {
 	public static void main(String[] args)
 	{
-		int [] a = {1, 2, 3, 4};
+		Scanner kb = new Scanner(System.in);
 
-		for (int val : a)
-			System.out.printf("%d ", val);
 
-		System.out.println();
 	}
 }
 
