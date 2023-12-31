@@ -19337,8 +19337,11 @@ public class MatrixUtilTransposeTest {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
+  	31.12.2023
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
 	Sınıf Çalışması: Bir okulda Fizik sınavı şubeler arasında ortak olarak yapılıyor olsun. Ders notları da [0, 100]
-	aralığında tamsayılar biçiminde belirlensin. Aşağıdaki açıklamalara göre ilgili basit simülasyon programını yazınız.
+	aralığında tamsayılar biçiminde belirlensin. Aşağıdaki açıklamalara göre, ilgili basit simülasyon programını yazınız.
 	Açıklamalar:
 		- Şube sayısı ve her bir şubedeki öğrenci sayısı klavyeden girilecektir
 
@@ -19350,9 +19353,193 @@ public class MatrixUtilTransposeTest {
 		- Çıktıları dilediğiniz gibi yapabilirsiniz
 
 		- Mümkün olduğunca (şu ana kadar gördüklerimizle) nesne yönelimli olarak düşününüz
+	Not: İleride daha iyisi yazılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 
+package org.csystem.app.simulation.exam;
 
+public class ExamSimulationApp {
+    public static void run()
+    {
+        ExamSimulation examSimulation = new ExamSimulation("Fizik");
+
+        examSimulation.run();
+        examSimulation.printReport();
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+
+package org.csystem.app.simulation.exam;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ExamSimulation {
+    public String lectureName;
+    public int [][] grades;
+    public double [] averages;
+    public int [] maxGrades;
+    public int [] minGrades;
+    public double average;
+    public int maxGrade;
+    public int minGrade;
+
+    public int calculateAndGetSumGrades(int i)
+    {
+        maxGrades[i] = grades[i][0];
+        minGrades[i] = grades[i][0];
+        int sumGrades = 0;
+
+        for (int k = 0; k < grades[i].length; ++k) {
+            maxGrades[i] = Math.max(maxGrades[i], grades[i][k]);
+            minGrades[i] = Math.min(minGrades[i], grades[i][k]);
+            maxGrade = Math.max(maxGrades[i], maxGrade);
+            minGrade = Math.min(minGrades[i], minGrade);
+            sumGrades += grades[i][k];
+        }
+
+        return sumGrades;
+    }
+
+    public void fillGrades()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random r = new Random();
+        System.out.print("Şube sayısını giriniz:");
+        int n = Integer.parseInt(kb.nextLine());
+
+        grades = new int[n][];
+        averages = new double[n];
+        maxGrades = new int[n];
+        minGrades = new int[n];
+
+        for (int i = 0; i < grades.length; ++i) {
+            System.out.printf("%d.şube öğrenci sayısını giriniz:", i + 1);
+            grades[i] = ArrayUtil.generateRandomArray(r, Integer.parseInt(kb.nextLine()), 0, 101);
+        }
+    }
+
+    public void doSimulation()
+    {
+        int totalGrades = 0;
+        int nStudents = 0;
+        maxGrade = 0;
+        minGrade = 100;
+
+        for (int i = 0; i < grades.length; ++i) {
+            nStudents += grades[i].length;
+            int sumGrades = calculateAndGetSumGrades(i);
+
+            averages[i] = (double) sumGrades / grades[i].length;
+            totalGrades += sumGrades;
+        }
+
+        average = (double) totalGrades / nStudents;
+    }
+
+    public ExamSimulation(String name)
+    {
+        lectureName = name;
+    }
+
+    public void run()
+    {
+        fillGrades();
+        doSimulation();
+    }
+
+    public void printReport()
+    {
+        System.out.println("#################################################################");
+        printGrades();
+        for (int i = 0; i < averages.length; ++i)
+            System.out.printf("%d.şube:Ortalama:%f, En yüksek not:%d, En düşük not:%d%n", i + 1, averages[i],
+                    maxGrades[i], minGrades[i]);
+        System.out.printf("Okul Ortalaması:%f%n", average);
+        System.out.printf("En yüksek not:%d%n", maxGrade);
+        System.out.printf("En düşük not:%d%n", minGrade);
+        System.out.println("#################################################################");
+    }
+
+    public void printGrades()
+    {
+        System.out.println("-----------------------------------------------------------------");
+
+        System.out.printf("%s dersi notları:%n", lectureName);
+        for (int i = 0; i < grades.length; ++i) {
+            System.out.printf("%d.şube:", i + 1);
+            ArrayUtil.print(grades[i]);
+        }
+
+        System.out.println("-----------------------------------------------------------------");
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	String sınıfının split metodu yazıyı verilen ayraçlara göre ayırarak bir String dizisi referansına geri döner. Ancak
+	split metodu aldığı ayraçlar için regular expression (regex) kullanır. Regex oldukça detaylı bir konudur. Bu sebeple
+	burada split için en çok kullanılan regex kalıpları (pattern) ele alınacaktır. Burada anlatılanlar dışında gereken
+	pattern'ler için regex bilinmesi gerekir. Regex konusu Java ile Uygulama Geliştirme kurslarında ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	split metodunda genel olarak ayraçlar [ ile ] arasında yazılır. Bu işlem aslında veya anlamına gelir. Yani burada
+	yazılan karakterlerin en az bir tanesi görüldüğünde ayraç kabul edilir. Ancak bu kalıpta ayraçlar yanyana geldiğinde
+	aralarındaki boş string'ler de diziye dahil edilir. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		String str = "Bugün hava çok güzel. Bu güzel havada denize girilir mi?";
+		String [] words = str.split("[ .]");
+
+		for (String word : words)
+			System.out.println(word);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Ayraçların yanyana gelmesi durumunda da ayraç kabul edilmesi için yani boş string'in diziye dahil edilmemesi için
+	aşağıdaki kalıp kullanılabilir. Demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		String str = "Bugün hava çok güzel. Bu güzel havada denize girilir mi?";
+		String [] words = str.split("[. ]+");
+
+		for (String word : words)
+			System.out.println(word);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	[ ve ] karakterleri ayraç olarak ters bölü ile yazılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		String str = "Bugün [hava] çok güzel. Bu güzel havada denize girilir mi?";
+		String [] words = str.split("[\\[\\]. ]+");
+
+		for (String word : words)
+			System.out.println(word);
+	}
+}
 
 
 
