@@ -6024,7 +6024,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------	 
-	Sınıf Çalışması: Parametresi ile aldığı int türden taban ve üzs bilgisine göre a'nın b-inci kuvvetini döndüren
+	Sınıf Çalışması: Parametresi ile aldığı int türden taban ve üs bilgisine göre a'nın b-inci kuvvetini döndüren
 	pow isimli metodu NumberUtil sınıfı içerisinde yazınız ve aşağıdaki kod ile test ediniz
 	Açıklamalar:
 		- Metot üssün negatif olması durumunda 1 değerine geri dönecektir
@@ -19540,6 +19540,348 @@ class App {
 			System.out.println(word);
 	}
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Elemanlarının Erişim Belirleyicileri: Anımsanacağı gibi sınıf elemanları (member) şu erişim belirleyicilerden
+	bir tanesini alırlar: public, no-modifier, protected, private.
+
+	Burada no-modifier hiç bir erişim belirleyici yazılmaması anlamındadır. Java'da hiç bir erişim belirleyicisi
+	yazılmamasının da diğerlerinden farklı bir anlamı vardır. Burada öncelikle bu erişim belirleyicilerin sentaks ve
+	semantik kuralları ele alınacak, sonrasında NYPT'de kullanımı anlatılacaktır
+
+	Aslında bir sınıf erişim belirleyiciler anlamında 4 tane bölümden oluşur. Bir eleman hangi erişim belirleyici ile
+	bildirilmişse o bölüme eklenmiş olur. public ve private bölümün anlamı aynı paketteki sınıflar (friendly classes)
+	veya farklı paketlerdeki sınıflar için değişmemektedir. Yani private bölüme erişim aynı paketteki veya farklı
+	paketlerdeki sınıflar için değişiklik göstermez. Benzer şekilde public bölüme erişim aynı paketteki veya farklı
+	paketlerdeki sınıflar için değişiklik göstermez. Ancak no-modifier ve protected bölümleri aynı paketteki sınıfların
+	ve farklı paketlerdeki sınıfların erişimi değişiklik gösterir.
+
+	Erişim belirleyiciler, sınıf dışından erişimde geçerlidir. Sınıf içerisinde her bölüme erişilebilir.
+
+	Sentaks açısından bölümlere ilişkin elemanlar karışık sırada yazılabilir ancak şüphesiz belli bir düzende yazılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın public bölümüne aynı paketteki diğer sınıflardan erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A();
+
+		a.foo();
+		a.x = 10;
+	}
+}
+
+
+class A {
+	public int x;
+	public A()
+	{
+		//...
+	}
+
+	public void foo()
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	Sınıfın public bölümüne farklı paketteki diğer sınıflardan erişilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package x;
+
+public class A {
+	public int x;
+	public A()
+	{
+		//...
+	}
+
+	public void foo()
+	{
+		//...
+	}
+}
+
+package y;
+
+import x.A;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A();
+
+		a.foo();
+		a.x = 10;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın private bölümüne aynı paketteki diğer sınıflardan erişilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A(); //error
+		a.foo(); //error
+		a.x = 10; //error
+	}
+}
+
+
+class A {
+	private int x;
+	private A()
+	{
+		//...
+	}
+
+	private void foo()
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın private bölümüne farklı paketteki diğer sınıflardan erişilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package x;
+
+public class A {
+	private int x;
+	private A()
+	{
+		//...
+	}
+
+	private void foo()
+	{
+		//...
+	}
+}
+
+
+package y;
+
+import x.A;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A(); //error
+		a.foo(); //error
+		a.x = 10; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın no-modifier bölümü aynı paketteki diğer sınıflar için public anlamındadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+
+	}
+}
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A();
+		a.foo();
+		a.x = 10;
+	}
+}
+
+
+class A {
+	int x;
+	A()
+	{
+		//...
+	}
+
+	void foo()
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın no-modifier bölümü farklı paketteki diğer sınıflar için private anlamındadır
+----------------------------------------------------------------------------------------------------------------------*/
+package x;
+
+public class A {
+	int x;
+	A()
+	{
+		//...
+	}
+
+	void foo()
+	{
+		//...
+	}
+}
+
+package y;
+
+import x.A;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A(); //error
+		a.foo(); //error
+		a.x = 10; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın protected bölümü aynı paketteki diğer sınıflar için public anlamındadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A();
+		a.foo();
+		a.x = 10;
+	}
+}
+
+
+class A {
+	protected int x;
+	protected A()
+	{
+		//...
+	}
+
+	protected void foo()
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıfın protected bölümü farklı paketteki diğer sınıflar için türetme/kalıtım (inheritance) söz konusu değilse
+	private anlamındadadır. Türemiş sınıf (derived class) kendisine ait olan protected bölüme erişebilir.  protected
+	bölümün anlamı ve türemiş sınıf kavramı inheritance konusunda ayrıca ele alınacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+package x;
+
+public class A {
+	protected int x;
+	protected A()
+	{
+		//...
+	}
+
+	protected void foo()
+	{
+		//...
+	}
+}
+
+
+package y;
+
+import x.A;
+
+class B {
+	public void bar()
+	{
+		A a;
+
+		a = new A(); //error
+		a.foo(); //error
+		a.x = 10; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	Sınıf içerisinde her bölüme erişilebillir
+----------------------------------------------------------------------------------------------------------------------*/
+package x;
+
+public class A {
+	private int x;
+	private A()
+	{
+		//...
+	}
+
+	private void foo(int y)
+	{
+		x = y;
+		A a = new A();
+
+		a.foo(20);
+	}
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+  	Erişim Belirleyici      Aynı sınıf       Friendly sınıf      Farklı paketteki sınıf      Türemiş sınıf
+  	public                      T                   T                       T                       T
+  	protected                   T                   T                       F                       T
+  	no-modifier                 T                   T                       F                       F
+  	private                     T                   F                       F                       F
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	NYPT'de özellikle veri elemanlarının gizlenmesine encapsulation denilmektedir. Bu anlamda bu kavrama veri/bilgi
+	gizleme (data/information hiding) de denilmektedir. Bu kavram aslında gerçek hayattan programlamaya aktarılmıştır.
+	Örneğin, televizyon izleyen bir kişi televizyonun kumandası ile nasıl haberleştiğini bilmek zorunda değildir. Yani
+	bunu bilmesi ya da bilmeemsi izlemesini etkilemez. Bu durumda aslında bu kısım televizyonu izleyenden gizlenmiştir.
+	Çünkü gerek yoktur. Ancak televiyonu üreten açısından bunun bilinmesi gerekir.
+
+	Bir sınıf için iki bakış açısı söz konusudur: Sınıfı yazan bakış açısı, sınıfı kullanan bakış açısı.
+	Sınıfı yazan, sınıfa ilişkin tüm detayları ve sınıfı kullanan bakış açısını da bilmelidir. Sınıfı kullanan ise
+	içsel detayları bilmek zorunda değildir. Bu anlamda sınıfı yazana hizmet veren anlamında "server codes", kullanana
+	ise hizmet alan anlamında "client codes" da denilmektedir. Aslında bu kavramlar geneldir. Sınıfların elemanlarının
+	gizlenmesi ile NYPT'de kullanılmaktadır.
+
+	Bir sınıfın veri elemanı gizlendiğinde, dışarıdan değerinin değiştirilmesi ve/veya değerinin elde edilmesi gerekebilir.
+	Bunun için veri elemanına erişen public metotların yazılması gerekir. Gizlenmiş bir veri elemanının değerini değiştirmek
+	için yazılan public metoda set metodu (setter/mutator) denir ve bir convention olarak (genelde) set öneki ile başlatılır.
+	Gizlenmiş bir veri elemanının değerini elde etmek için yazılan public metoda get metodu (getter/accessor) denir ve
+	bir convention olarak (genelde) get öneki ile başlatılır. Veri elemanı boolean türdense tipik olarak getter is ile
+	başlatılır. Gizlenenen bir eleman için mutator ve accessor metotlarının yazılıp yazılmayacağı sınıfa yani domain'e
+	bağlıdır. Bazı veri elemanları için hiç biri yazılmayabilirken, bazı veri elemanları için bir tanesi, bazı veri
+	elemanları için ise ikisi de yazılabilir.
+
+	Bir sınıfın public ve protected bölümleri dökumante edilir. private ve no-modifier bölümleri dökumante edilmez.
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 
