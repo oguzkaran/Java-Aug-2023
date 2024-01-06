@@ -19859,6 +19859,10 @@ public class A {
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
+  	06.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
 	NYPT'de özellikle veri elemanlarının gizlenmesine encapsulation denilmektedir. Bu anlamda bu kavrama veri/bilgi
 	gizleme (data/information hiding) de denilmektedir. Bu kavram aslında gerçek hayattan programlamaya aktarılmıştır.
 	Örneğin, televizyon izleyen bir kişi televizyonun kumandası ile nasıl haberleştiğini bilmek zorunda değildir. Yani
@@ -19875,12 +19879,233 @@ public class A {
 	Bunun için veri elemanına erişen public metotların yazılması gerekir. Gizlenmiş bir veri elemanının değerini değiştirmek
 	için yazılan public metoda set metodu (setter/mutator) denir ve bir convention olarak (genelde) set öneki ile başlatılır.
 	Gizlenmiş bir veri elemanının değerini elde etmek için yazılan public metoda get metodu (getter/accessor) denir ve
-	bir convention olarak (genelde) get öneki ile başlatılır. Veri elemanı boolean türdense tipik olarak getter is ile
+	bir convention olarak (genelde) get öneki ile başlatılır. Veri elemanı boolean türdense tipik olarak getter, is ile
 	başlatılır. Gizlenenen bir eleman için mutator ve accessor metotlarının yazılıp yazılmayacağı sınıfa yani domain'e
 	bağlıdır. Bazı veri elemanları için hiç biri yazılmayabilirken, bazı veri elemanları için bir tanesi, bazı veri
 	elemanları için ise ikisi de yazılabilir.
 
 	Bir sınıfın public ve protected bölümleri dökumante edilir. private ve no-modifier bölümleri dökumante edilmez.
+
+	Bir sınıfın bir elemanının erişim belirleyicisi (yani aslında sınıfın bölümleri) diğer sınıflar için anlamldır. Sınıf
+	içerisinden erişimde elemanın hengi bölümde olduğunun önemi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: Değişken isimlendirmede bazı teknikler kullanılabilmektedir. Bu teknikler dışında da isimlendirme
+	yapılabilir. Burada anlatılanlar çok kullanılan ve bilinen tekniklerden bazılardır:
+	1. Unix stili (snake case): Bu isimlendirmede karakterlerin tamamı küçük harf ile yazılır ve birden fazla kelimeden
+	oluşuyorsa aralarına alttire karakteri yerleştirilir. Örneğin:
+		number_of_devices usb_port
+	Bu isimlendirme Java'da doğrudan tercih edilmez.
+
+	2. Camel case (lower camel case): Bu isimlendirmede kelimeler bitişik olarak yazılır. İlk kelimenin baş harfi küçük
+	diğer kelimelerin baş harfleri büyük olarak, geri kalan tüm karakterler küçük harf olacak şekilde yazılır. Örneğin:
+		numberOfDevices usbPort parseInt, nextInt, changeCase
+	Bu isimlendirme genel olarak Java'da metot isimleri, yerel değişken isimleri ve parametre değişken isimlerinde
+	tercih edilir.
+
+	3. Pascal case (upper camel case): Bu isimlendirmede kelimeler bitişik olarak yazılır. Tüm kelimelerin baş harfleri
+	büyük, geri kalan tüm karakterler küçük harf olacak şekilde yazılır. Örneğin:
+		Random, String, System, StringUtil, DataBindingUtil, TimeUnit
+	Bu isimlendirme Java'da genel olarak UDT'lerde tercih edilir.
+
+	İsimlendirmede bunlardan biri ya da birden fazlası kullanılabilir. Kullanılmak zorunda da değildir. Örneğin Java'da
+	paket isimlerinin tamamı küçük harf olacak şekilde isimlendirme yapılır ve kelimeler bitişik olarak yazılır. Örneğin
+	    java.util, org.csystem.util.math, com.springframework
+    Burada anlatılan teknikler tamamen geneldir ve bunlara isimler verilmiştir. Hatta bazen bir ya da birden fazla
+	teknik biraz değiştirilerek de kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Bazı programcılar sınıfın özellikle private veri elemanlarının isimlendirilmesinde bazı önekler
+    kullanabilmektedirler. Örneğin, "m_", "m", "d_" gibi önekler tercih edilebilmektedir. Bazı programcılar hiç bir ek
+    koymamayı yani lowerCamelCase yapmayı tercih ederler. Bu tür yaklaşımların iyisi ya da kötüsü yoktur. Geliştirici
+    ekip tarafından belirlenen kullanılır. Yani bir "convention" biçiminde kullanılır. Biz convention olarak, sınıfın
+    non-static ve private olarak bildirilmiş veri elemanlarını "m_" öneki ile başlatacağız. Eğer private veri elemanı
+    aynı zamanda static ise özel bazı durumlar dışında "ms_" ile başlatacağız
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo Date sınıfını inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Date d = new Date(11, 7, 1983);
+
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+		d.setDay(6);
+		d.setMonth(9);
+		d.setYear(2021);
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+	}
+}
+
+class Date {
+	private int m_day, m_month, m_year;
+	private int m_dayOfWeek;
+
+	//...
+
+	public Date(int day, int month, int year)
+	{
+		//...
+		m_day = day;
+		m_month = month;
+		m_year = year;
+		//...
+	}
+
+	public void setDay(int day)
+	{
+		//...
+		m_day = day;
+		//...
+	}
+
+	public int getDay()
+	{
+		return m_day;
+	}
+
+	public void setMonth(int month)
+	{
+		//...
+		m_month = month;
+		//...
+	}
+
+	public int getMonth()
+	{
+		return m_month;
+	}
+
+	public void setYear(int year)
+	{
+		//...
+		m_year = year;
+		//...
+	}
+
+	public int getYear()
+	{
+		return m_year;
+	}
+
+	public int getDayOfWeek()
+	{
+		return m_dayOfWeek;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki durumlardan en az bir tanesi varsa ilgili veri elemanı gizlenir:
+	- Sınıfların versiyonları ilerledikçe veri elemanlarının isimlerinin hatta türlerinin değiştirilmesi ile çok sık
+	karşılaşılır. Bu durumda eski kodların yeni değişikliklerden etkilenmemesi için ilgili veri elemanları gizlenir.
+
+	- Bir veri elemanının sınır değerleri olabilir. Bu durumda sınırlar dışında değer verilmemesi için veri elemanı
+	gizlenir.
+
+	- Bir veri elemanının değerinin, başka bir veri elemanının (ya da elemanlarının) değerinin değiştirilmesiyle hesaplanması
+	gerekebilir. Bu durumda yine veri elemanı gizlenir.
+
+	- Bir veri elemanı değiştiğinde değişen değere göre bir işlem yapılması gerekebilir. Örneğin, bir veritabanı bağlantısına
+	yönelik bir bilginin değişmesi durumunda eski bağlantının kopartılıp yeni bağlantının sağlanması gerekebilir. Bu durumda
+	ilgili veri elemanı gizlenir.
+
+	- Bazı durumlarda veri elemanı yukarıdaki durumlardan biri bile olmasa da gizlenebilir. Örneğin, sınıfın bir elemanı
+	dışında kalan diğer veri elemanlarının gizlenmesi gerekbilir. Bütünlüğün bozulmaması için gizlenmesi gerekmeyen bir
+	veri elemanı da gizlenebilir. Bu durumda ilgili veri elemanı için accessor ve mutator metotlar yazılır. Şüphesiz bu
+	bir örnektir ve domain'e bağlı olarak değişiklik gösterebilir.
+
+	Anahtar Notlar: Buradaki ilk 4 maddeden en az birisi varsa programcı hiç düşünmeden veri elemanını gizler. Ancak son
+	durum biraz domain'e bağlıdır.
+
+	Yukarıda durumlarla karşılaşılmaması durumunda (%3 ile %5 arası karşılaşılmaz) ilgili veri elemanı public yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte Date sınıfının kodları değişmesine rağmen, değişiklik yapılmadan önce yazılmış client code'ların
+	değiştirilmesi gerekmediğine dikkat ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Date d = new Date(11, 7, 1983);
+
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+		d.setDay(6);
+		d.setMonth(9);
+		d.setYear(2021);
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+	}
+}
+
+class Date {
+	private String m_date;
+	private int m_dayOfWeek;
+
+	//...
+
+	public Date(int day, int month, int year)
+	{
+		//06/09/2021
+		//...
+		m_date = String.format("%02d/%02d/%04d", day, month, year);
+		//...
+	}
+
+	public void setDay(int day)
+	{
+		//...
+		m_date = String.format("%02d/%02d/%04d", day, getMonth(), getYear());
+		//...
+	}
+
+	public int getDay()
+	{
+		return Integer.parseInt(m_date.substring(0, 2));
+	}
+
+	public void setMonth(int month)
+	{
+		//...
+		m_date = String.format("%02d/%02d/%04d", getDay(), month, getYear());
+		//...
+	}
+
+	public int getMonth()
+	{
+		return Integer.parseInt(m_date.substring(3, 5));
+	}
+
+	public void setYear(int year)
+	{
+		//...
+		m_date = String.format("%02d/%02d/%04d", getDay(), getMonth(), year);
+		//...
+	}
+
+	public int getYear()
+	{
+		return Integer.parseInt(m_date.substring(6));
+	}
+
+	public int getDayOfWeek()
+	{
+		return m_dayOfWeek;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazı durumlarda sınıfın public bölümünde de değişiklik yapılması gerekebilir. Bu durumda değişikliği değişikliği
+	doğrudan yapmak yerine, eskisi korunup deprecated yapılabilir. Şüphesiz bu durum yine domain'e bağlıdır. Örneğin
+	Date sınıfımızda getMonth metodu (bir sebepten) getMonthValue olarak değiştirilmek istenebilir. Bu durumda getMonth
+	metodu da deprecated yapılıp korunur ve getMonthValue eklenir. Bu durum şüphesiz sınıf dökumanlarında belirtilir.
 ----------------------------------------------------------------------------------------------------------------------*/
 
 

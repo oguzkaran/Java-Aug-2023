@@ -1,75 +1,72 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	NYPT'de özellikle veri elemanlarının gizlenmesine encapsulation denilmektedir. Bu anlamda bu kavrama veri/bilgi
-	gizleme (data/information hiding) de denilmektedir. Bu kavram aslında gerçek hayattan programlamaya aktarılmıştır.
-	Örneğin, televizyon izleyen bir kişi televizyonun kumandası ile nasıl haberleştiğini bilmek zorunda değildir. Yani
-	bunu bilmesi ya da bilmeemsi izlemesini etkilemez. Bu durumda aslında bu kısım televizyonu izleyenden gizlenmiştir.
-	Çünkü gerek yoktur. Ancak televiyonu üreten açısından bunun bilinmesi gerekir.
-
-	Bir sınıf için iki bakış açısı söz konusudur: Sınıfı yazan bakış açısı, sınıfı kullanan bakış açısı.
-	Sınıfı yazan, sınıfa ilişkin tüm detayları ve sınıfı kullanan bakış açısını da bilmelidir. Sınıfı kullanan ise
-	içsel detayları bilmek zorunda değildir. Bu anlamda sınıfı yazana hizmet veren anlamında "server codes", kullanana
-	ise hizmet alan anlamında "client codes" da denilmektedir. Aslında bu kavramlar geneldir. Sınıfların elemanlarının
-	gizlenmesi ile NYPT'de kullanılmaktadır.
-
-	Bir sınıfın veri elemanı gizlendiğinde, dışarıdan değerinin değiştirilmesi ve/veya değerinin elde edilmesi gerekebilir.
-	Bunun için veri elemanına erişen public metotların yazılması gerekir. Gizlenmiş bir veri elemanının değerini değiştirmek
-	için yazılan public metoda set metodu (setter/mutator) denir ve bir convention olarak (genelde) set öneki ile başlatılır.
-	Gizlenmiş bir veri elemanının değerini elde etmek için yazılan public metoda get metodu (getter/accessor) denir ve
-	bir convention olarak (genelde) get öneki ile başlatılır. Veri elemanı boolean türdense tipik olarak getter is ile
-	başlatılır. Gizlenenen bir eleman için mutator ve accessor metotlarının yazılıp yazılmayacağı sınıfa yani domain'e
-	bağlıdır. Bazı veri elemanları için hiç biri yazılmayabilirken, bazı veri elemanları için bir tanesi, bazı veri
-	elemanları için ise ikisi de yazılabilir.
-
-	Bir sınıfın public ve protected bölümleri dökumante edilir. private ve no-modifier bölümleri dökumante edilmez.
+	Bazı durumlarda sınıfın public bölümünde de değişiklik yapılması gerekebilir. Bu durumda değişikliği değişikliği
+	doğrudan yapmak yerine, eskisi korunup deprecated yapılabilir. Şüphesiz bu durum yine domain'e bağlıdır. Örneğin
+	Date sınıfımızda getMonth metodu (bir sebepten) getMonthValue olarak değiştirilmek istenebilir. Bu durumda getMonth
+	metodu da deprecated yapılıp korunur ve getMonthValue eklenir. Bu durum şüphesiz sınıf dökumanlarında belirtilir.
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class App {
 	public static void main(String[] args)
 	{
-		Date d = new Date();
+		Date d = new Date(11, 7, 1983);
 
-		d.setDay(234);
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+		d.setDay(6);
+		d.setMonth(9);
+		d.setYear(2021);
+		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
 	}
 }
 
 class Date {
-	private int m_day, m_month, m_year;
+	private String m_date;
 	private int m_dayOfWeek;
 
 	//...
 
+	public Date(int day, int month, int year)
+	{
+		//06/09/2021
+		//...
+		m_date = String.format("%02d/%02d/%04d", day, month, year);
+		//...
+	}
+
 	public void setDay(int day)
 	{
 		//...
-		m_day = day;
+		m_date = String.format("%02d/%02d/%04d", day, getMonth(), getYear());
+		//...
 	}
 
 	public int getDay()
 	{
-		return m_day;
+		return Integer.parseInt(m_date.substring(0, 2));
 	}
 
 	public void setMonth(int month)
 	{
 		//...
-		m_month = month;
+		m_date = String.format("%02d/%02d/%04d", getDay(), month, getYear());
+		//...
 	}
 
 	public int getMonth()
 	{
-		return m_month;
+		return Integer.parseInt(m_date.substring(3, 5));
 	}
 
 	public void setYear(int year)
 	{
 		//...
-		m_year = year;
+		m_date = String.format("%02d/%02d/%04d", getDay(), getMonth(), year);
+		//...
 	}
 
 	public int getYear()
 	{
-		return m_year;
+		return Integer.parseInt(m_date.substring(6));
 	}
 
 	public int getDayOfWeek()
@@ -77,4 +74,3 @@ class Date {
 		return m_dayOfWeek;
 	}
 }
-
