@@ -1,76 +1,41 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Bazı durumlarda sınıfın public bölümünde de değişiklik yapılması gerekebilir. Bu durumda değişikliği değişikliği
-	doğrudan yapmak yerine, eskisi korunup deprecated yapılabilir. Şüphesiz bu durum yine domain'e bağlıdır. Örneğin
-	Date sınıfımızda getMonth metodu (bir sebepten) getMonthValue olarak değiştirilmek istenebilir. Bu durumda getMonth
-	metodu da deprecated yapılıp korunur ve getMonthValue eklenir. Bu durum şüphesiz sınıf dökumanlarında belirtilir.
+	Singleton sınıfın lazy implementasyonu
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class App {
 	public static void main(String[] args)
 	{
-		Date d = new Date(11, 7, 1983);
+		Singleton s1 = Singleton.getInstance();
+		Singleton s2 = Singleton.getInstance();
 
-		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
-		d.setDay(6);
-		d.setMonth(9);
-		d.setYear(2021);
-		System.out.printf("%02d/%02d/%04d%n", d.getDay(), d.getMonth(), d.getYear());
+		System.out.println(s1 == s2 ? "Aynı nesne" : "Farklı nesneler");
 	}
 }
 
-class Date {
-	private String m_date;
-	private int m_dayOfWeek;
+class Singleton {
+	private static Singleton ms_instance;
+	private int m_value;
 
-	//...
-
-	public Date(int day, int month, int year)
+	private Singleton()
 	{
-		//06/09/2021
-		//...
-		m_date = String.format("%02d/%02d/%04d", day, month, year);
-		//...
 	}
 
-	public void setDay(int day)
+	public static Singleton getInstance()
 	{
-		//...
-		m_date = String.format("%02d/%02d/%04d", day, getMonth(), getYear());
-		//...
+		if (ms_instance == null)
+			ms_instance = new Singleton();
+
+		return ms_instance;
 	}
 
-	public int getDay()
+	public int getValue()
 	{
-		return Integer.parseInt(m_date.substring(0, 2));
+		return m_value;
 	}
 
-	public void setMonth(int month)
+	public void setValue(int value)
 	{
-		//...
-		m_date = String.format("%02d/%02d/%04d", getDay(), month, getYear());
-		//...
-	}
-
-	public int getMonth()
-	{
-		return Integer.parseInt(m_date.substring(3, 5));
-	}
-
-	public void setYear(int year)
-	{
-		//...
-		m_date = String.format("%02d/%02d/%04d", getDay(), getMonth(), year);
-		//...
-	}
-
-	public int getYear()
-	{
-		return Integer.parseInt(m_date.substring(6));
-	}
-
-	public int getDayOfWeek()
-	{
-		return m_dayOfWeek;
+		m_value = value;
 	}
 }

@@ -16,8 +16,7 @@ public class NumericLotteryApp {
             System.out.print("Kaç kupon oynamak istersiniz?");
             int count = Integer.parseInt(kb.nextLine());
 
-            while (count-- > 0)
-                ArrayUtil.print(2, numericLottery.getNumbers());
+            ArrayUtil.print(2, numericLottery.getNumbers(count));
         }
     }
     public static void main(String[] args)

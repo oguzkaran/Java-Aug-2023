@@ -1,12 +1,11 @@
 package org.csystem.app.random.lottery;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class NumericLottery {
-    public Random random;
+    private Random m_random;
 
-    public boolean[] getFlags()
+    private boolean[] getFlags()
     {
         boolean [] flags = new boolean[50];
 
@@ -14,7 +13,7 @@ public class NumericLottery {
             int val;
 
             do
-                val = random.nextInt(1, 50);
+                val = m_random.nextInt(1, 50);
             while (flags[val]);
             flags[val] = true;
         }
@@ -22,7 +21,7 @@ public class NumericLottery {
         return flags;
     }
 
-    public int [] getNumbers(boolean [] flags)
+    private int [] getNumbers(boolean [] flags)
     {
         int [] numbers = new int[6];
         int idx = 0;
@@ -34,13 +33,23 @@ public class NumericLottery {
         return numbers;
     }
     
-    public NumericLottery(Random r)
+    public NumericLottery(Random random)
     {
-        random = r;
+        m_random = random;
     }
 
     public int [] getNumbers()
     {
         return getNumbers(getFlags());
+    }
+
+    public int [][] getNumbers(int count)
+    {
+        int [][] numbers = new int[count][];
+
+        for (int i = 0; i < count; ++i)
+            numbers[i] = getNumbers();
+
+        return numbers;
     }
 }

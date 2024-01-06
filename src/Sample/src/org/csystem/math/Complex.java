@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Complex.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 9th December 2023
+	LAST UPDATE	: 6th January 2024
 	
 	Complex class that represents a complex number
 	
@@ -13,17 +13,17 @@ package org.csystem.math;
 public class Complex {
 	public double real, imag;
 	
-	public static Complex add(double re1, double im1, double re2, double im2)
+	private static Complex add(double re1, double im1, double re2, double im2)
 	{
 		return new Complex(re1 + re2, im1 + im2);
 	}
 	
-	public static Complex subtract(double re1, double im1, double re2, double im2)
+	private static Complex subtract(double re1, double im1, double re2, double im2)
 	{
 		return add(re1, im1, -re2, -im2);
 	}
 	
-	public static Complex multiply(double re1, double im1, double re2, double im2)
+	private static Complex multiply(double re1, double im1, double re2, double im2)
 	{
 		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
 	}

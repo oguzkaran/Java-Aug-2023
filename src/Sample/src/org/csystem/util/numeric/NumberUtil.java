@@ -11,7 +11,6 @@
 package org.csystem.util.numeric;
 
 public class NumberUtil {
-
 	public static int [] digits(long val)
 	{
 		int [] result = new int[digitsCount(val)];
