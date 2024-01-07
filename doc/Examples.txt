@@ -20763,6 +20763,174 @@ public class Point {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	final Anahtar Sözcüğü:
+	final Java'da bazı bildirimlerde kullanılan önemli bir anahtar sözcüktür. Bu anlamda final aşağıdaki bildirimlerde
+	kullanılır:
+		- final değişken bildiirimi
+		- final sınıf (ve bazı UDT'ler) bildirimi
+	 	- final metot bildirimi
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 final değişkenler: Anımsamacağı gibi Java'da 3 çeşit değişken vardır: local variable, parameter variable, member variable.
+	 Değişkenler final olarak bildirilebilir. Hatta final anahtar sözcüğü kullanılmasa bile belirli koşullar altında bazı
+	 değişkenler final etkisinde olabilmektedir. Bu kavrama "effectively final" denilmektedir. İleride detaylandırılacaktır.
+
+	 Bir değişken final olarak bildirildiğinde o değişkene scope'u boyunca bir kez değer verilebilir. Yani değişkenin
+	 değeri bir daha değiştirilemez. Değerinin değiştirilmesi error oluşturur.
+
+	 Anahtar Notlar: Java 8 ile birlikte yerel değişkenlerin ve parametre değişkenlerinin final olarak bildirilmesi
+	 gerekliliği neredeyse ortadan kalkmıştır. Bunun sebebi uygulama kurslarında ele alınacaktır. Ancak veri elemanlarının
+	 final olarak bildirilmesi oldukça önemlidir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 final bir yerel değişkene değeri ya initialization olarak ya da scope'u içerisinde atama yapılarak bir kez verilebilir.
+	 Bir metodun parametre değişkeni de final olabilir. Bu durumda metot içerisinde o değişkenin değeri değiştirilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		final int x;
+		final int y = 10;
+
+		x = 20;
+
+		++x; //error
+		++y; //error
+		//...
+	}
+}
+
+class Sample {
+	public static void foo(int a, final int b)
+	{
+		++a;
+		++b; //error
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 final veri elemanlarına default değerler verilmez. Yani final bir veri elemanına değer verilmesi artık sınıfı yazan
+	 programcının sorumluluğundadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+	public final int x;
+	public static final int y;
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 Sınıfın non-static ve final bir veri elemanına aşağıdaki 3 yerden yalnızca birinde değer verilebilir:
+	 	- Bildirim noktasında
+	 	- Tüm ctor'lar içerisinde
+	 	- non-static initializer elemanında
+	 Sınıfın static ve final olarak bildirilmiş bir veri elemanına aşağıdaki 2 yerden yalnızca birinde değer verilebilir:
+	 	- Bildirim noktasında
+	 	- static initializer elemanında
+
+	 static ve non-static initializer elemanları ileride ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		System.out.println(Sample.y);
+		Sample s1 = new Sample();
+		Sample s2 = new Sample();
+
+		System.out.println(s1.x);
+		System.out.println(s2.x);
+		Mample m1 = new Mample();
+		Mample m2 = new Mample(20);
+
+		System.out.println(m1.x);
+		System.out.println(m2.x);
+	}
+}
+
+class Sample {
+	public final int x = 10;
+	public static final int y = 20;
+}
+
+class Mample {
+	public final int x;
+
+	public Mample()
+	{
+		x = 0;
+	}
+
+	public Mample(int a)
+	{
+		x = a;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 final bir değişkene sabit ifadesi (constant expression) verilmesi zorunlu değildir. Sınıfın static ve final bir veri
+	 elemanına sabit ifadesi ile ilk değer verildiğinde o veri elemanı sabit ifadesi olarak kullanılabilir. Sınıfın
+	 public, static ve final bir veri elemanına sabit ifadesi ile ilk değer verildiğinde bir convention veri elemanı
+	 isimlendirmesinde tamamen büyük harfler kullanılır ve birden fazla kelime için alttire karakteri ile ayrım yapılır.
+	 public olmayan veya sabit ifadesi ile değeri verilmeyen final ve static veri elemanları için genel olarak programcı
+	 tarafından isimlendirme tekniği belirlenir. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class GameObject {
+	public void move(int direction)
+	{
+		switch (direction) {
+			case Direction.LEFT -> System.out.println("Left");
+			case Direction.RIGHT -> System.out.println("Right");
+			case Direction.TOP -> System.out.println("Top");
+			case Direction.BOTTOM -> System.out.println("Bottom");
+		}
+	}
+}
+
+class Direction {
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
+	public static final int TOP = 2;
+	public static final int BOTTOM = 3;
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	 Bir referansın final olması durumunda referansın gösterdiği nesne (yani içerisinde tuttuğu adres) değiştirilemez.
+	 Ancak nesneye ilişkin sınıf immutable değilse nesnenin bilgileri değiştirilebilir. Bu durumda bir nesne final olamaz.
+	 Bir nesnenin içeriğinin değiştirilememesi için o nesneye ilişkin sınıfın immutable olarak yazılmış olması gerekir.
+	 Bu durumda da zaten nesneyi gösteren referansın final olup olmamasının bu anlamda önemi olmaz. Immutable bir sınıf
+	 yazmanın final sınıf bildirimi ile doğrudan bir ilgisi yoktur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		final Sample s = new Sample(10);
+
+		s.x = 10;
+
+		s = null; //error
+	}
+}
+
+class Sample {
+	public int x;
+
+	public Sample(int a)
+	{
+		x = a;
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
