@@ -20489,7 +20489,7 @@ public class ExamSimulation {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	NYPT için bir takım ilkeler (principles) söz konusudur. Bunlar kısaca SOLID kısaltması ile bilinir:
+	NYPT için bir takım ilkeler (principles) söz konusudur. Bunlar kısaca SOLID kısaltması olarak bilinir:
 	Single Responsibility Principle (SRP)
 	Open Closed Principle (OCP)
 	Liskov Substitution Principle (LSP)
@@ -20514,10 +20514,11 @@ public class ExamSimulation {
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Singleton: Öyle bir sınıf olsun ki o sınıf türünden program boyunca yalnızca bir tane nesne yaratılabilsin ve istendiğinde
-    yaratılmış olan o nesnenin referansı elde edilebilsin.
+    Singleton: Öyle bir sınıf olsun ki o sınıf türünden program boyunca yalnızca bir tane nesne yaratılabilsin ve
+    yaratılmış olan o nesnenin referansı gerektiğinde elde edilebilsin.
 
     Anahtar Notlar: Singleton pattern'inin bir çok implementasyonu söz konusudur. Zaman içerisinde bunlar ele alınacaktır.
+
     Anahtar Notlar: Burada Singleton pattern'inin hangi durumlarda kullanıldığı ele alınmayacaktır.
 ----------------------------------------------------------------------------------------------------------------------*/
 
@@ -20560,6 +20561,205 @@ class Singleton {
 	public void setValue(int value)
 	{
 		m_value = value;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    07.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Tüm elemanları static olarak bildirilmiş sınıflar türünden nesne yaratmanın bir anlamı yoktur. Çünkü bir nesne ilgili
+	sınıfın non-static elemanları ve o elemanları kullanan metotlar ile anlamlıdır. İşte tüm elemanları static olarak
+	bildirilmiş bir sınıfın ctor'u bir convention olarak private yapılır. Bu convention JavaSE içerisindeki sınıflarda da
+	uygulanmıştır. Örneğin Math ve Arrays sınıflarının tüm elemanları static olarak bildirildiklerinden ctor'ları private
+	yapılmıştır. Bu tip sınıflara "utility classes" da denilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.matrix.MatrixUtil;
+import org.csystem.util.numeric.NumberUtil;
+import org.csystem.util.string.StringUtil;
+
+import java.util.Arrays;
+
+class App {
+	public static void main(String[] args)
+	{
+		Math m = new Math(); //error
+		Arrays a = new Arrays(); //error
+		ArrayUtil au = new ArrayUtil(); //error
+		NumberUtil nu = new NumberUtil(); //error
+		MatrixUtil mu = new MatrixUtil(); //error
+		StringUtil su = new StringUtil(); //errror
+
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Point sınıfının kutupsal koordinat bilgileri ile nesne yaratılabilmesi sağlanmıştır. Kullanımı daha yalın ve okunabilir
+    duruma getirmek için ctor gizlenmiş ve factory metotlarla nesne yaratılması sağlanmıştır. Buradaki yaklaşım bir sınıf
+    için ctor sayısını azaltmak olarak DÜŞÜNÜLMEMELİDİR. Bu sınıfa yani domain'e özel olarak kullanım basitleştirilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.math.geometry.test;
+
+import org.csystem.math.geometry.Point;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class PointCartesianTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            double x = random.nextDouble(-100, 100);
+            double y = random.nextDouble(-100, 100);
+
+            System.out.println("--------------------------------------------------");
+
+            System.out.printf("Generated coordinates:(%f, %f)%n", x, y);
+
+            Point p = Point.createCartesian(x, y);
+
+            System.out.printf("Point:%s%n", p.toString());
+
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.math.geometry.test;
+
+import org.csystem.math.geometry.Point;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class PointPolarTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            double radius = random.nextDouble(-10, 11);
+            double theta = random.nextDouble(-2 * Math.PI, 2 * Math.PI);
+
+            System.out.println("--------------------------------------------------");
+
+            System.out.printf("Generated radius:%f%n", radius);
+            System.out.printf("Generated theta:%f%n", theta);
+            Point p = Point.createPolar(radius, theta);
+
+            System.out.printf("Point:%s%n", p.toString());
+
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 7th January 2024
+
+	Point class that represents a 2-dimensional point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
+public class Point {
+	private double m_x, m_y;
+
+	private Point(double a, double b, boolean polar)
+	{
+		m_x = polar ? a * Math.cos(b) : a;
+		m_y = polar ? a * Math.sin(b) : b;
+	}
+
+	public static Point createCartesian(double x, double y)
+	{
+		return new Point(x, y, false);
+	}
+
+	public static Point createPolar(double radius, double theta)
+	{
+		return new Point(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public void setX(double x)
+	{
+		m_x = x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+	public void setY(double y)
+	{
+		m_y = y;
+	}
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(Point other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double a, double b)
+	{
+		return sqrt(pow(m_x - a, 2) + pow(m_y - b, 2));
+	}
+
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+
+	public void offset(double dx, double dy)
+	{
+		m_x += dx;
+		m_y += dy;
+	}
+
+	public String toString()
+	{
+		return String.format("(%f, %f)", m_x, m_y);
 	}
 }
 

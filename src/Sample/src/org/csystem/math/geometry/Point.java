@@ -1,36 +1,57 @@
 /*--------------------------------------------------------
 	FILE NAME	: Point.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 9th December 2023
+	LAST UPDATE	: 7th January 2024
 	
-	Point class that represents a 2 dimensional point
+	Point class that represents a 2-dimensional point
 	
 	Copyleft C and System Programmers Association (CSD)
 	All Rights Free
 ---------------------------------------------------------*/
 package org.csystem.math.geometry;
 
-import static java.lang.Math.sqrt;
 import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 public class Point {
-	public double x, y;
-	
-	public Point()
+	private double m_x, m_y;
+
+	private Point(double a, double b, boolean polar)
 	{
+		m_x = polar ? a * Math.cos(b) : a;
+		m_y = polar ? a * Math.sin(b) : b;
 	}
-	
-	public Point(double a)
+
+	public static Point createCartesian(double x, double y)
 	{
-		x = a;
+		return new Point(x, y, false);
 	}
-	
-	public Point(double a, double b)
+
+	public static Point createPolar(double radius, double theta)
 	{
-		x = a;
-		y = b;
+		return new Point(radius, theta, true);
 	}
-	
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public void setX(double x)
+	{
+		m_x = x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+	public void setY(double y)
+	{
+		m_y = y;
+	}
+
 	public double distance()
 	{
 		return distance(0, 0);
@@ -38,12 +59,12 @@ public class Point {
 	
 	public double distance(Point other)
 	{
-		return distance(other.x, other.y);
+		return distance(other.m_x, other.m_y);
 	}
 	
 	public double distance(double a, double b)
 	{
-		return sqrt(pow(x - a, 2) + pow(y - b, 2));
+		return sqrt(pow(m_x - a, 2) + pow(m_y - b, 2));
 	}
 	
 	public void offset(double dxy)
@@ -53,12 +74,12 @@ public class Point {
 	
 	public void offset(double dx, double dy)
 	{
-		x += dx;
-		y += dy;
+		m_x += dx;
+		m_y += dy;
 	}
 	
 	public String toString()
 	{
-		return String.format("(%f, %f)", x, y);
+		return String.format("(%f, %f)", m_x, m_y);
 	}
 }

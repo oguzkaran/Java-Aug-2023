@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: NumberUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 17th December 2023
+	LAST UPDATE	: 7th January 2024
 	
 	Utility class for numeric operations
 	
@@ -11,6 +11,10 @@
 package org.csystem.util.numeric;
 
 public class NumberUtil {
+	private NumberUtil()
+	{
+	}
+
 	public static int [] digits(long val)
 	{
 		int [] result = new int[digitsCount(val)];
