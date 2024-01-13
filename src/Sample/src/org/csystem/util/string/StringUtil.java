@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 7th January 2024
+	LAST UPDATE	: 13th January 2024
 	
 	Utility class for string operations
 	
@@ -13,6 +13,13 @@ package org.csystem.util.string;
 import java.util.Random;
 
 public class StringUtil {
+	private static final String LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+	private static final String LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+	private static final String LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+	private static final String LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+	private static final String LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+
 	private StringUtil()
 	{
 	}
@@ -40,12 +47,12 @@ public class StringUtil {
 	
 	public static String generateRandomTextEN(Random random, int count)
 	{
-		return generateRandomText(random, count, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		return generateRandomText(random, count, LETTERS_ALL_EN);
 	}
 	
 	public static String generateRandomTextTR(Random random, int count)
 	{
-		return generateRandomText(random, count, "abcçdefgğhıijklmnoöprsştuüvyzABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ");
+		return generateRandomText(random, count, LETTERS_ALL_TR);
 	}
 	
 	public static String generateRandomText(Random random, int count, String sourceText)
@@ -57,6 +64,26 @@ public class StringUtil {
 			sb.append(sourceText.charAt(random.nextInt(len)));
 		
 		return sb.toString();
+	}
+
+	public static String [] generateRandomTextsEN(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_EN);
+	}
+
+	public static String [] generateRandomTextsTR(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_TR);
+	}
+
+	public static String [] generateRandomTexts(Random random, int count, int min, int bound, String sourceText)
+	{
+		String [] texts = new String[count];
+
+		for (int i = 0; i < count; ++i)
+			texts[i] = generateRandomText(random, random.nextInt(min, bound), sourceText);
+
+		return texts;
 	}
 	
 	public static boolean isPalindrome(String s)
@@ -91,12 +118,12 @@ public class StringUtil {
 	
 	public static boolean isPangramEN(String s)
 	{
-		return isPangram(s.toLowerCase(), "abcdefghijklmnopqrstuvwxyz");
+		return isPangram(s.toLowerCase(), LETTERS_EN);
 	}
 	
 	public static boolean isPangramTR(String s)
 	{
-		return isPangram(s.toLowerCase(), "abcçdefgğhıijklmnoöprsştuüvyz");
+		return isPangram(s.toLowerCase(), LETTERS_TR);
 	}
 	
 	public static boolean isPangram(String s, String alphabet)
@@ -133,8 +160,7 @@ public class StringUtil {
 	{
 		return padTrailing(s, newLen, ' ');
 	}
-	
-	
+
 	public static String reverse(String s)
 	{
 		return new StringBuilder(s).reverse().toString();

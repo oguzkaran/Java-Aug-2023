@@ -20931,6 +20931,661 @@ class Sample {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    13.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte m_texts referansı gizlenmiştir. Referansın içerisindeki adres dışarıya verildiği için
+	ve referans da bir diziyi gösterdiği için client code içerisinde dizinin elemanları değiştirilmiş ve dolayısıyla
+	StringArrayGenerator sınıfının tuttuğu dizi de bu değişklikten etkilenmiştir. Yani referans değişkeni gizlemek ve
+	final yapmak dizi nesneninin değiştirilmesini engellememiştir. Çünkü diziler immutable değildir. Bu durumda sınıfı
+	yazan programcı da getTexts metodunun dokümantasyonunda bu durumu genellikle belirtir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.string.StringUtil;
+
+import java.util.Random;
+
+class App {
+	public static void main(String[] args)
+	{
+		StringArrayGenerator generator = new StringArrayGenerator(new Random(), 10, 5, 11);
+		String [] texts = generator.getTexts();
+
+		for (String s : texts)
+			System.out.printf("%s ", s);
+
+		System.out.println();
+
+		for (int i = 0; i < texts.length; ++i)
+			texts[i] = texts[i].toLowerCase();
+
+		for (String s : texts)
+			System.out.printf("%s ", s);
+
+		System.out.println();
+
+		for (String s : generator.getTexts())
+			System.out.printf("%s ", s);
+	}
+}
+
+class StringArrayGenerator {
+	private final String [] m_texts;
+
+	public StringArrayGenerator(Random random, int count, int min, int bound)
+	{
+		m_texts = StringUtil.generateRandomTextsEN(random, count, min, bound);
+	}
+
+	public String [] getTexts()
+	{
+		return m_texts;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnek aşağıdaki gibi dizinin bir kopyası çıkartılarak yapılabilir. Bu durumda sınıfı yazan programcı da
+	getTexts metodunun dokümantasyonunda bu durumu belirtir.
+
+	Anahtar Notlar: Arrays sınıfının copyOf metodu birinci parametresi ile aldığı dizinin, ikinci parametresi ile
+	newLength tane elemanından oluşan yeni bir dizi referansına geri döner
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.string.StringUtil;
+
+import java.util.Arrays;
+import java.util.Random;
+
+class App {
+	public static void main(String[] args)
+	{
+		StringArrayGenerator generator = new StringArrayGenerator(new Random(), 10, 5, 11);
+		String [] texts = generator.getTexts();
+
+		for (String s : texts)
+			System.out.printf("%s ", s);
+
+		System.out.println();
+
+		for (int i = 0; i < texts.length; ++i)
+			texts[i] = texts[i].toLowerCase();
+
+		for (String s : texts)
+			System.out.printf("%s ", s);
+
+		System.out.println();
+
+		for (String s : generator.getTexts())
+			System.out.printf("%s ", s);
+	}
+}
+
+class StringArrayGenerator {
+	private final String [] m_texts;
+
+	public StringArrayGenerator(Random random, int count, int min, int bound)
+	{
+		m_texts = StringUtil.generateRandomTextsEN(random, count, min, bound);
+	}
+
+	public String [] getTexts()
+	{
+		return Arrays.copyOf(m_texts, m_texts.length);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekkte dizinin referansı gizlenmiştir yani client code'a verilmemiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.string.StringUtil;
+
+import java.util.Random;
+
+class App {
+	public static void main(String[] args)
+	{
+		StringArrayGenerator generator = new StringArrayGenerator(new Random(), 10, 5, 11);
+		int len = generator.length();
+
+		for (int i = 0; i < len; ++i)
+			System.out.printf("%s ", generator.getText(i));
+
+		System.out.println();
+	}
+}
+
+class StringArrayGenerator {
+	private final String [] m_texts;
+
+	public StringArrayGenerator(Random random, int count, int min, int bound)
+	{
+		m_texts = StringUtil.generateRandomTextsEN(random, count, min, bound);
+	}
+
+	public int length()
+	{
+		return m_texts.length;
+	}
+
+	public String getText(int index)
+	{
+		return m_texts[index];
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Bir veri elemanının final olması algoritmik açıdan kodu değiştirimiyorsa ve final yapılması sentaks
+    olarak error oluşturmuyorsa final olarak bildirilmesi her zaman iyi bir tekniktir. Pek çok static kod analizi
+    arası da default olarak final yapma uyarısı verir. Ancak programcının nasılsa uyarı verir düşüncesiyle değil, iyi bir
+    teknik olarak bunu tasarımda düşünmesi ve ona göre kodu yazması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    NumericLottery sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.random.lottery;
+
+import java.util.Random;
+
+public class NumericLottery {
+    private final Random m_random;
+
+    private boolean[] getFlags()
+    {
+        boolean [] flags = new boolean[50];
+
+        for (int i = 0; i < 6; ++i) {
+            int val;
+
+            do
+                val = m_random.nextInt(1, 50);
+            while (flags[val]);
+            flags[val] = true;
+        }
+
+        return flags;
+    }
+
+    private int [] getNumbers(boolean [] flags)
+    {
+        int [] numbers = new int[6];
+        int idx = 0;
+
+        for (int i = 1; i < 50; ++i)
+            if (flags[i])
+                numbers[idx++] = i;
+
+        return numbers;
+    }
+
+    public NumericLottery(Random random)
+    {
+        m_random = random;
+    }
+
+    public int [] getNumbers()
+    {
+        return getNumbers(getFlags());
+    }
+
+    public int [][] getNumbers(int count)
+    {
+        int [][] numbers = new int[count][];
+
+        for (int i = 0; i < count; ++i)
+            numbers[i] = getNumbers();
+
+        return numbers;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ExamSimulation sınıfı
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.simulation.exam;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ExamSimulation {
+    private String m_lectureName;
+    private int [][] m_grades;
+    private double [] m_averages;
+    private int [] m_maxGrades;
+    private int [] m_minGrades;
+    private double m_average;
+    private int m_maxGrade;
+    private int m_minGrade;
+
+    private int calculateAndGetSumGrades(int i)
+    {
+        m_maxGrades[i] = m_grades[i][0];
+        m_minGrades[i] = m_grades[i][0];
+        int sumGrades = 0;
+
+        for (int k = 0; k < m_grades[i].length; ++k) {
+            m_maxGrades[i] = Math.max(m_maxGrades[i], m_grades[i][k]);
+            m_minGrades[i] = Math.min(m_minGrades[i], m_grades[i][k]);
+            m_maxGrade = Math.max(m_maxGrades[i], m_maxGrade);
+            m_minGrade = Math.min(m_minGrades[i], m_minGrade);
+            sumGrades += m_grades[i][k];
+        }
+
+        return sumGrades;
+    }
+
+    private void fillGrades()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random r = new Random();
+        System.out.print("Şube sayısını giriniz:");
+        int n = Integer.parseInt(kb.nextLine());
+
+        m_grades = new int[n][];
+        m_averages = new double[n];
+        m_maxGrades = new int[n];
+        m_minGrades = new int[n];
+
+        for (int i = 0; i < m_grades.length; ++i) {
+            System.out.printf("%d.şube öğrenci sayısını giriniz:", i + 1);
+            m_grades[i] = ArrayUtil.generateRandomArray(r, Integer.parseInt(kb.nextLine()), 0, 101);
+        }
+    }
+
+    private void doSimulation()
+    {
+        int totalGrades = 0;
+        int nStudents = 0;
+        m_maxGrade = 0;
+        m_minGrade = 100;
+
+        for (int i = 0; i < m_grades.length; ++i) {
+            nStudents += m_grades[i].length;
+            int sumGrades = calculateAndGetSumGrades(i);
+
+            m_averages[i] = (double) sumGrades / m_grades[i].length;
+            totalGrades += sumGrades;
+        }
+
+        m_average = (double) totalGrades / nStudents;
+    }
+
+    public ExamSimulation(String name)
+    {
+        m_lectureName = name;
+    }
+
+    public String getLectureName()
+    {
+        return m_lectureName;
+    }
+
+    public void setLectureName(String lectureName)
+    {
+        m_lectureName = lectureName;
+    }
+
+    public int getGrade(int i, int k)
+    {
+        return m_grades[i][k];
+    }
+
+    public double getAverage(int i)
+    {
+        return m_averages[i];
+    }
+
+    public double getAverage()
+    {
+        return m_average;
+    }
+
+    public int getMaxGrade(int i)
+    {
+        return m_maxGrades[i];
+    }
+
+    public int getMaxGrade()
+    {
+        return m_maxGrade;
+    }
+
+    public int getMinGrade(int i)
+    {
+        return m_minGrades[i];
+    }
+
+    public int getMinGrade()
+    {
+        return m_minGrade;
+    }
+
+    public void run()
+    {
+        fillGrades();
+        doSimulation();
+    }
+
+    public void printReport()
+    {
+        System.out.println("#################################################################");
+        printGrades();
+        for (int i = 0; i < m_averages.length; ++i)
+            System.out.printf("%d.şube:Ortalama:%f, En yüksek not:%d, En düşük not:%d%n", i + 1, m_averages[i],
+                    m_maxGrades[i], m_minGrades[i]);
+        System.out.printf("Okul Ortalaması:%f%n", m_average);
+        System.out.printf("En yüksek not:%d%n", m_maxGrade);
+        System.out.printf("En düşük not:%d%n", m_minGrade);
+        System.out.println("#################################################################");
+    }
+
+    public void printGrades()
+    {
+        System.out.println("-----------------------------------------------------------------");
+
+        System.out.printf("%s dersi notları:%n", m_lectureName);
+        for (int i = 0; i < m_grades.length; ++i) {
+            System.out.printf("%d.şube:", i + 1);
+            ArrayUtil.print(m_grades[i]);
+        }
+
+        System.out.println("-----------------------------------------------------------------");
+    }
+}
+
+
+/*--------------------------------------------------------
+	FILE NAME	: Complex.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	Complex class that represents a complex number
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math;
+
+public class Complex {
+	private double m_real, m_imag;
+
+	private static Complex add(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 + re2, im1 + im2);
+	}
+
+	private static Complex subtract(double re1, double im1, double re2, double im2)
+	{
+		return add(re1, im1, -re2, -im2);
+	}
+
+	private static Complex multiply(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
+	}
+
+	public Complex()
+	{
+	}
+
+	public Complex(double re)
+	{
+		m_real = re;
+	}
+
+	public Complex(double re, double im)
+	{
+		m_real = re;
+		m_imag = im;
+	}
+
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex add(double val)
+	{
+		return add(m_real, m_imag, val, 0);
+	}
+
+	public Complex add(Complex other)
+	{
+		return add(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex subtract(double val)
+	{
+		return subtract(m_real, m_imag, val, 0);
+	}
+
+	public Complex subtract(Complex other)
+	{
+		return subtract(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex multiply(double val)
+	{
+		return multiply(m_real, m_imag, val, 0);
+	}
+
+	public Complex multiply(Complex other)
+	{
+		return multiply(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public Complex conjugate()
+	{
+		return new Complex(m_real, -m_imag);
+	}
+
+	public Complex negate()
+	{
+		return new Complex(-m_real, -m_imag);
+	}
+
+	public void inc()
+	{
+		++m_real;
+	}
+
+	public void dec()
+	{
+		--m_real;
+	}
+
+	public String toString()
+	{
+		return String.format("%f + %f * i", m_real, m_imag);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: StringUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	Utility class for string operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.string;
+
+import java.util.Random;
+
+public class StringUtil {
+	private static final String LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+	private static final String LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+	private static final String LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+	private static final String LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+	private static final String LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+
+	private StringUtil()
+	{
+	}
+
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int index = -1;
+
+		while ((index = s1.indexOf(s2, index + 1)) != -1)
+			++count;
+
+		return count;
+	}
+
+	public static int countStringIgnoreCase(String s1, String s2)
+	{
+		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_EN);
+	}
+
+	public static String generateRandomTextTR(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_TR);
+	}
+
+	public static String generateRandomText(Random random, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(random.nextInt(len)));
+
+		return sb.toString();
+	}
+
+	public static String [] generateRandomTextsEN(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_EN);
+	}
+
+	public static String [] generateRandomTextsTR(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_TR);
+	}
+
+	public static String [] generateRandomTexts(Random random, int count, int min, int bound, String sourceText)
+	{
+		String [] texts = new String[count];
+
+		for (int i = 0; i < count; ++i)
+			texts[i] = generateRandomText(random, random.nextInt(min, bound), sourceText);
+
+		return texts;
+	}
+
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+
+			char cRight = Character.toLowerCase(s.charAt(right));
+
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+
+			if (cLeft != cRight)
+				return false;
+
+			++left;
+			--right;
+		}
+
+		return true;
+	}
+
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_EN);
+	}
+
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_TR);
+	}
+
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+
+		return true;
+	}
+
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
+	}
+
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+
+	public static String reverse(String s)
+	{
+		return new StringBuilder(s).reverse().toString();
+	}
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

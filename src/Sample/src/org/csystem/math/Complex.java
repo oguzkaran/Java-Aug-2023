@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Complex.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 6th January 2024
+	LAST UPDATE	: 13th January 2024
 	
 	Complex class that represents a complex number
 	
@@ -11,7 +11,7 @@
 package org.csystem.math;
 
 public class Complex {
-	public double real, imag;
+	private double m_real, m_imag;
 	
 	private static Complex add(double re1, double im1, double re2, double im2)
 	{
@@ -34,83 +34,83 @@ public class Complex {
 	
 	public Complex(double re)
 	{
-		real = re;
+		m_real = re;
 	}
 	
 	public Complex(double re, double im)
 	{
-		real = re;
-		imag = im;
+		m_real = re;
+		m_imag = im;
 	}
 	
 	public static Complex add(double val, Complex z)
 	{
-		return add(val, 0, z.real, z.imag);
+		return add(val, 0, z.m_real, z.m_imag);
 	}
 	
 	public Complex add(double val)
 	{
-		return add(real, imag, val, 0);
+		return add(m_real, m_imag, val, 0);
 	}
 	
 	public Complex add(Complex other)
 	{
-		return add(real, imag, other.real, other.imag);
+		return add(m_real, m_imag, other.m_real, other.m_imag);
 	}
 	
 	public static Complex subtract(double val, Complex z)
 	{
-		return subtract(val, 0, z.real, z.imag);
+		return subtract(val, 0, z.m_real, z.m_imag);
 	}
 	
 	public Complex subtract(double val)
 	{
-		return subtract(real, imag, val, 0);
+		return subtract(m_real, m_imag, val, 0);
 	}
 	
 	public Complex subtract(Complex other)
 	{
-		return subtract(real, imag, other.real, other.imag);
+		return subtract(m_real, m_imag, other.m_real, other.m_imag);
 	}
 	
 	public static Complex multiply(double val, Complex z)
 	{
-		return multiply(val, 0, z.real, z.imag);
+		return multiply(val, 0, z.m_real, z.m_imag);
 	}
 	
 	public Complex multiply(double val)
 	{
-		return multiply(real, imag, val, 0);
+		return multiply(m_real, m_imag, val, 0);
 	}
 	
 	public Complex multiply(Complex other)
 	{
-		return multiply(real, imag, other.real, other.imag);
+		return multiply(m_real, m_imag, other.m_real, other.m_imag);
 	}
 	
 	public Complex conjugate()
 	{
-		return new Complex(real, -imag);
+		return new Complex(m_real, -m_imag);
 	}
 	
 	public Complex negate()
 	{
-		return new Complex(-real, -imag);
+		return new Complex(-m_real, -m_imag);
 	}
 	
 	public void inc()
 	{
-		++real;
+		++m_real;
 	}
 	
 	public void dec()
 	{
-		--real;
+		--m_real;
 	}
 
 	public String toString()
 	{
-		return String.format("%f + %f * i", real, imag);
+		return String.format("%f + %f * i", m_real, m_imag);
 	}
 }
 
