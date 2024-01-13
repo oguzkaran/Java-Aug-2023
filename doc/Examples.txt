@@ -21586,6 +21586,344 @@ public class StringUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Sınıf Çalışması: Aşağıda açıklanan IntValue isimli sınıfı yazınız
+	Açıklamalar:
+		- Sınıf int türden bir değeri sarmalayacaktır (wrapping).
+
+		- Sınıf immutable olarak yazılacaktır. Yani sınıf içerisinde tutulan int türden değer client code'lar tarafından
+		değiştirilemeyecektir.
+
+		- Sınıf [-128, 127] aralığındaki değerler için bir ön bellek (cache) tutacaktır. Bu aralıktaki bir değer için
+		ilk sarmalamada nesne yaratılacak ve tekrar aynı değer istendiğinde daha önceden yaratılmış olan nesnenin
+		referansı verilecektir.
+
+		- Sınıf [-128, 127] aralığı dışında kalan değerleri ön bellekte tutmayacaktır.
+
+		- Sınıfa senaryosu doğrulrusunda pek çok eklenti yapılabilir
+
+	Anahtar Notlar: Ön bellek (cache) genel bir kavramdır ve etkinlik açısından tercih edilir. Bu örnekte sınıf nasılsa
+	immutable olduğundan belirli bir aralıktaki değerler için ayrı ayrı nesnelerin yaratılması engellenmiştir. Bu durumda
+	bellek de etkin kullanılmış olur. Daha fazla değerin saklanmaması yine etkinlik açısından düşünülmüştür. Daha fazla
+	değerin ön bellekte tutulması da yine belleğin etkin kullanımı açısından tercih edilmemiştir.
+
+	Anahtar Notlar: Aslında JavaSE'de örnekteki int türden bir değeri immutable olarak sarmalayan ve [-128, 127] araslığındaki
+	değerleri ön bellekte tutan bir sınıf vardır. İleride ele alınacaktır. Burada programlama açısından böyle bir sınıfın
+	nasıl yazılabilediği örneklenmiştir.
+
+	Anahtar Notlar: Bir değerin sarmalanması aslında o değerin bir sınıf içerisinde tutulması anlamında kullanılır. Temel
+	türden bir değerin heap'de tutulmasına yani sarmalanmasına genel olarak "boxing" denilmektedir. Boxing ve unboxing
+	kavramları ileride detaylı olarak ele alınacaktır.
+
+	Anahtar Notlar: Java 8 öncesinde pek çok sınıfta valueOf isimli factory method'lar bulundurulmuştur. Java 8 ile
+	birlikte bu tarz bir factory metot isimlendirmesinde valueOf yerine of ismi tercih edilmiştir. Java 8'den itibaren
+	eklenen sınıflarda bu tarz bir metot of ismiyle bildirilmektedir. Bu bir convention'dır.
+
+	Anahtar Notlar: Yukarıdaki örnekte [-128, 127] aralığında kalan bir değer için nesne ilk kez sarmalandığında yaratılıp
+	aynı değerin tekrar sarmalanması durumunda aynı nesne kullanıldığından kalıp olarak GOF'un flyweight tasarım kalıbı
+	implemente edilmiştir. Kalıbın detayları şu an için önemsizdir.
+
+
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.primitive.wrapper.test;
+
+import org.csystem.primitive.wrapper.IntValue;
+
+public class IntValueOfCacheTest {
+    public static void run()
+    {
+        IntValue iVal1 = IntValue.of(-128);
+        IntValue iVal2 = IntValue.of(-128);
+        IntValue iVal3 = IntValue.of(127);
+        IntValue iVal4 = IntValue.of(127);
+        IntValue iVal5 = IntValue.of(67);
+        IntValue iVal6 = IntValue.of(67);
+        IntValue iVal7 = IntValue.of(128);
+        IntValue iVal8 = IntValue.of(128);
+
+        System.out.println(iVal1 == iVal2 ? "Aynı nesne" : "Farklı nesneler");
+        System.out.println(iVal3 == iVal4 ? "Aynı nesne" : "Farklı nesneler");
+        System.out.println(iVal5 == iVal6 ? "Aynı nesne" : "Farklı nesneler");
+        System.out.println(iVal7 == iVal8 ? "Aynı nesne" : "Farklı nesneler");
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.primitive.wrapper.test;
+
+import org.csystem.primitive.wrapper.IntValue;
+
+public class IntValueAllCacheTest {
+    public static void run()
+    {
+        for (int v = -128; v <= 127; ++v) {
+            IntValue iVal1 = IntValue.of(v);
+            IntValue iVal2 = IntValue.of(v);
+
+            System.out.println(iVal1 == iVal2 ? "Aynı nesne" : "Farklı nesneler");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: IntValue.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	Wrapper class that use cache for values in [-128, 127]
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.primitive.wrapper;
+
+public class IntValue {
+    private static final int CACHE_MIN_VALUE = -128;
+    private static final int CACHE_MAX_VALUE = 127;
+    private static final IntValue [] CACHE = new IntValue[CACHE_MAX_VALUE - CACHE_MIN_VALUE + 1];
+    private final int m_value;
+
+    private IntValue(int value)
+    {
+        m_value = value;
+    }
+
+    public static IntValue of(int value)
+    {
+        if (value < CACHE_MIN_VALUE || value > CACHE_MAX_VALUE)
+            return new IntValue(value);
+
+        if (CACHE[value - CACHE_MIN_VALUE] == null)
+            CACHE[value - CACHE_MIN_VALUE] = new IntValue(value);
+
+        return CACHE[value - CACHE_MIN_VALUE];
+    }
+
+    public int getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bazı sınıfların duruma göre hem mutable hem de immutable versiyonları kütüphanede buılundurulur. Şüphesiz bu durum da
+	yine sınıfın domain'ine göre belirlenir. Böylesi yani hem mutable hem de immutable versiyonu olan sınıfların
+	isimlendirilmesinde genel olarak, immutable olan doğrudan isimlendirilir mutable olan da Mutable ön eki ile isimlendirilir.
+	Örneğin, point sınıfının hem mutable hem de immutable olan versiyonları yazılacaksa immutbale olana Point ismi,
+	mutable olana ise MutablePoint ismi verilir. Şüphesiz bu bir convention'dır. Aşağıdaki Point ve MutablePoint
+	sınıfları ile friendly olarak yazılan utility PointCommon sınıflarını inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	Immutable Point class that represents a 2-dimensional
+	point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class Point {
+	private final double m_x, m_y;
+
+	private Point(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static Point createCartesian(double x, double y)
+	{
+		return new Point(x, y, false);
+	}
+
+	public static Point createPolar(double radius, double theta)
+	{
+		return new Point(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(Point other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: MutablePoint.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	MutablePoint class that represents a 2-dimensional point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class MutablePoint {
+	private double m_x, m_y;
+
+	private MutablePoint(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static MutablePoint createCartesian(double x, double y)
+	{
+		return new MutablePoint(x, y, false);
+	}
+
+	public static MutablePoint createPolar(double radius, double theta)
+	{
+		return new MutablePoint(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public void setX(double x)
+	{
+		m_x = x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+	public void setY(double y)
+	{
+		m_y = y;
+	}
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(MutablePoint other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+
+	public void offset(double dx, double dy)
+	{
+		m_x += dx;
+		m_y += dy;
+	}
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: PointCommon.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 13th January 2024
+
+	Friendly common utility class for Point and MutablePoint
+	classes
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.*;
+
+class PointCommon {
+    private PointCommon()
+    {
+    }
+
+    static double getXBy(boolean polar, double a, double b)
+    {
+        return polar ? a * cos(b) : a;
+    }
+
+    static double getYBy(boolean polar, double a, double b)
+    {
+        return polar ? a * sin(b) : a;
+    }
+
+    static double distance(double x1, double y1, double x2, double y2)
+    {
+        return sqrt(pow(x1- x2, 2) + pow(y1 - y2, 2));
+    }
+
+    static String toString(double x, double y)
+    {
+        return String.format("(%f, %f)", x, y);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki, Font sınıfının setColor ve GameObject sınıfının move metotlarının parametre isimleri bir fikir verse de
+	parametrelerin türleri hangi değerleri alabileceğine yönelik bir fikir vermemektedir. Şüphesiz bu dokümantasyondan
+	anlaşılabilir ancak kod açısından metotlar okunabilir/algılanabilir yazılmamıştır. Ayrıca bu metotlar çağrılırken
+	verilen değerler de client code'ların okunabilirliğini/algılanabilirliğini azaltmaktadır. Yani aşağıdaki sınıflar
+	ve ilgili metotları (setColor ve move) özel bir durum yoksa iyi tasarlanmanmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
