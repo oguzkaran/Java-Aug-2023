@@ -21917,12 +21917,455 @@ class PointCommon {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki, Font sınıfının setColor ve GameObject sınıfının move metotlarının parametre isimleri bir fikir verse de
-	parametrelerin türleri hangi değerleri alabileceğine yönelik bir fikir vermemektedir. Şüphesiz bu dokümantasyondan
+    14.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte Font sınıfının setColor ve GameObject sınıfının move metotlarının parametre isimleri bir fikir
+	verse de parametrelerin türleri hangi değerleri alabileceğine yönelik bir fikir vermemektedir. Şüphesiz bu dokümantasyondan
 	anlaşılabilir ancak kod açısından metotlar okunabilir/algılanabilir yazılmamıştır. Ayrıca bu metotlar çağrılırken
 	verilen değerler de client code'ların okunabilirliğini/algılanabilirliğini azaltmaktadır. Yani aşağıdaki sınıflar
 	ve ilgili metotları (setColor ve move) özel bir durum yoksa iyi tasarlanmanmıştır
 ----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Font f = new Font();
+		GameObject g = new GameObject();
+
+		//...
+
+		f.setColor(0);
+		//...
+		f.setColor(2);
+
+		//...
+		f.setColor(4);
+
+		g.move(0);
+
+		//...
+		g.move(1);
+
+		//...
+
+		g.move(3);
+	}
+}
+
+//Red = 0, Green = 1, Blue = 2, White = 3, Black = 4
+class Font {
+	public void setColor(int color)
+	{
+		//...
+	}
+}
+
+//Right = 0, Top = 1, Left = 2, Bottom = 3
+class GameObject {
+	public void move(int direction)
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örnekte metotların parametre değişkenleri String yapıldığında clien code'ların okunabilirliği/algılanabilirliği
+	artmıştır ancak metotların parametre değişkenleri yine geçilebilecek argümanlarla ilgili fikir vermemektedir. Üstelik
+	yazıları karşılaştırılması int türüne göre daha yavaştır. Ayrıca yazılar argüman olarak geçilirken hata yapma olasılığı da
+	vardır. Şüphesiz bu durum final değişkenler ile engellenebilir ancak diğer durumlar önemlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Font f = new Font();
+		GameObject g = new GameObject();
+
+		//...
+
+		f.setColor("Red");
+		//...
+		f.setColor("Blue");
+
+		//...
+		f.setColor("Black");
+
+		g.move("Right");
+
+		//...
+		g.move("Top");
+
+		//...
+
+		g.move("Bottom");
+	}
+}
+
+class Font {
+	public void setColor(String color)
+	{
+		//...
+	}
+}
+
+class GameObject {
+	public void move(String direction)
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki örneğe aşağıdaki FontColor ve Directionj sınıfları eklenerek istenilen gerçekleştirilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Font f = new Font();
+		GameObject g = new GameObject();
+
+		//...
+
+		f.setColor(FontColor.RED);
+		//...
+		f.setColor(FontColor.BLUE);
+
+		//...
+		f.setColor(FontColor.BLACK);
+
+		g.move(Direction.RIGHT);
+
+		//...
+		g.move(Direction.TOP);
+
+		//...
+
+		g.move(Direction.BOTTOM);
+	}
+}
+
+class FontColor {
+	private FontColor()
+	{}
+
+	public static final FontColor RED = new FontColor();
+	public static final FontColor GREEN = new FontColor();
+	public static final FontColor BLUE = new FontColor();
+	public static final FontColor WHITE = new FontColor();
+	public static final FontColor BLACK = new FontColor();
+}
+
+class Font {
+	public void setColor(FontColor color)
+	{
+		//...
+	}
+}
+
+
+class Direction {
+	private Direction()
+	{
+	}
+
+	public static final Direction RIGHT = new Direction();
+	public static final Direction TOP = new Direction();
+	public static final Direction LEFT = new Direction();
+	public static final Direction BOTTOM = new Direction();
+}
+
+class GameObject {
+	public void move(Direction direction)
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Java 5 ile birlikte yukarıdaki FontColor ve Direction sınıflarındaki veri elemanlarının daha kolay bildirildiği ve
+	daha başka yetenekleri de olan enum sınıflar (enumeration/enum classes) dile eklenmiştir. Detaylar daha sonraki
+	örneklerde ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Font f = new Font();
+		GameObject g = new GameObject();
+
+		//...
+
+		f.setColor(FontColor.RED);
+		//...
+		f.setColor(FontColor.BLUE);
+
+		//...
+		f.setColor(FontColor.BLACK);
+
+		g.move(Direction.RIGHT);
+
+		//...
+		g.move(Direction.TOP);
+
+		//...
+
+		g.move(Direction.BOTTOM);
+	}
+}
+
+enum FontColor {
+	RED, GREEN, BLUE, WHITE, BLACK
+}
+
+class Font {
+	public void setColor(FontColor color)
+	{
+		//...
+	}
+}
+
+
+enum Direction {
+	RIGHT, TOP, LEFT, BOTTOM
+}
+
+class GameObject {
+	public void move(Direction direction)
+	{
+		//...
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	enum sınıfları enum anahtar sözcüğü ile bildirilir. enum sınıfı içerisinde virgül ile ayrılacak şekilde bildirilen
+	isimlere enum sabitleri (enum constants) denir. enum sabitleri public static, final olarak bildirilmiş ve ilgili
+	enum sınıfı türünden referans değişkendir ve bu değişkenler yaratıldığında her biri ilgili enum sınıfı türünden
+	bir nesneyi gösterir duruma gelir. enum sabitleri için public, statici final veya tür bilgisinin yazılması error
+	oluşturur. Son enum sabitinden sonra noktalı virgül konabilir. Bu noktalı virgül eğer enum sınıfına sabit dışında
+	bir eleman eklenecekse zorunludur. Bu durum ileride ele alınacaktır. enum sınıflar kendine has özellikleri olan
+	sınıflardır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+enum DayOfWeek {
+	SUN, MON, TUE, WED, THU, FRI, SAT
+}
+
+enum Month {
+	JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC
+}
+
+enum CardValue {
+	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, KNAVE, QUEEN, KING, ACE
+}
+
+enum FontColor {
+	RED, GREEN, BLUE, WHITE, BLACK
+}
+
+enum Direction {
+	RIGHT, TOP, LEFT, BOTTOM
+}
+
+enum CardType {
+	SPADE, CLUB, HEART, DIAMOND
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir enum sabitinin, enum içerisindeki bildirim sırasına ilişkin ordinal değeri vardır. ordinal değeri enum sınıfının
+	ordinal isimli metodu ile elde edilebilir. ordinal değeri sıfırdan başlar. enum sınıfının static values isimli metodu
+	ile sabitlere ilişkin referansların sırasıyla bulunduğu ilgili enum türünden bir dizi elde edilebilir. values her
+	çağrıldığında yeni bir dizi referansı elde edilir. enum sınıfının toString metodu ilgili referansa ilişkin sabitin
+	yazısal karşılığına geri döner. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		CardValue [] cardValues = CardValue.values();
+		CardType []cardTypes = CardType.values();
+		Random random = new Random();
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Kaç tane kart istiyorsunuz?");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			System.out.println("--------------------------------------");
+			Card c = new Card(cardTypes[random.nextInt(cardTypes.length)], cardValues[random.nextInt(cardValues.length)]);
+
+			System.out.println(c.toString());
+			System.out.printf("Ordinal of card type:%d, Ordinal of card value:%d%n", c.getCardType().ordinal(), c.getCardValue().ordinal());
+			System.out.println("--------------------------------------");
+		}
+	}
+}
+
+
+class Card {
+	private CardValue m_cardValue;
+	private CardType m_cardType;
+
+	public Card(CardType cardType, CardValue cardValue)
+	{
+		m_cardType = cardType;
+		m_cardValue = cardValue;
+	}
+
+	public CardValue getCardValue()
+	{
+		return m_cardValue;
+	}
+
+	public void setCardValue(CardValue cardValue)
+	{
+		m_cardValue = cardValue;
+	}
+
+	public CardType getCardType()
+	{
+		return m_cardType;
+	}
+
+	public void setCardType(CardType cardType)
+	{
+		m_cardType = cardType;
+	}
+
+	public String toString()
+	{
+		return String.format("%s-%s", m_cardType.toString(), m_cardValue.toString());
+	}
+}
+
+enum CardType {
+	SPADE, CLUB, HEART, DIAMOND
+}
+
+
+enum CardValue {
+	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, KNAVE, QUEEN, KING, ACE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		for (Card card : Card.getDeck())
+			System.out.println(card.toString());
+	}
+}
+
+
+class Card {
+	private CardValue m_cardValue;
+	private CardType m_cardType;
+
+	public static Card[] getDeck()
+	{
+		Card [] deck = new Card[52];
+		int i = 0;
+
+		for (CardType cardType : CardType.values())
+			for (CardValue cardValue : CardValue.values())
+				deck[i++] = new Card(cardType, cardValue);
+
+		return deck;
+	}
+
+	public Card(CardType cardType, CardValue cardValue)
+	{
+		m_cardType = cardType;
+		m_cardValue = cardValue;
+	}
+
+	public CardValue getCardValue()
+	{
+		return m_cardValue;
+	}
+
+	public void setCardValue(CardValue cardValue)
+	{
+		m_cardValue = cardValue;
+	}
+
+	public CardType getCardType()
+	{
+		return m_cardType;
+	}
+
+	public void setCardType(CardType cardType)
+	{
+		m_cardType = cardType;
+	}
+
+	public String toString()
+	{
+		return String.format("%s-%s", m_cardType.toString(), m_cardValue.toString());
+	}
+}
+
+enum CardType {
+	SPADE, CLUB, HEART, DIAMOND
+}
+
+
+enum CardValue {
+	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, KNAVE, QUEEN, KING, ACE
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte ordinal değerinin kullanımına ilişkin demo bir senaryo ele alınmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Random random = new Random();
+		Scanner kb = new Scanner(System.in);
+		Month [] months = Month.values();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			Month month1 = months[random.nextInt(months.length)];
+			Month month2 = months[random.nextInt(months.length)];
+			int diff = month1.ordinal() - month2.ordinal();
+
+			if (diff > 0)
+				System.out.printf("%s ile %s arasında %d ay vardır%n", month2.toString(), month1.toString(), diff);
+			else if (diff < 0)
+				System.out.printf("%s ile %s arasında %d ay vardır%n", month1.toString(), month2.toString(), -diff);
+			else
+				System.out.printf("%s ile %s aynı aylardır%n", month1.toString(), month2.toString());
+		}
+	}
+}
+
+
+enum Month {
+	JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC
+}
 
 
 
