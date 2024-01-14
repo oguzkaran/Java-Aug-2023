@@ -22252,7 +22252,6 @@ enum CardType {
 	SPADE, CLUB, HEART, DIAMOND
 }
 
-
 enum CardValue {
 	TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, KNAVE, QUEEN, KING, ACE
 }
@@ -22366,6 +22365,324 @@ class App {
 enum Month {
 	JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+	enum sınıfına sabitler dışında da elemanlar eklenebilir. Bunun için son sabit bildiriminden sonra noktalı virgül
+	konmalıdır. enum sınıfına klasik sınıflarda olduğu gibi veri elemanı, ctor ve metot eklenebilmektedir. enum sınıfına
+	herhangi bir ctor eklenmemişse klasik sınıflarda olduğu gibi default ctor derleyici tarafından içi boş ve otomatik
+	olarak yazılır. Ancak klasik sınıflarda default ctor public yazılırken, enum sınıflarında ister derleyici yazsın
+	ister programcı yazsın bir ctor public olarak yazılamaz. ctor ya private ya da no-modifier olarak yazılabilir. enum
+	sınıflarında ctor için no-modifier private ile aynı anlamdadır. Ancak diğer elemanlar için yin eklasik sınıflardaki
+	erişim belirliyiciler geçerlidir. ctor'un private olması (aslında private'dan da öte) enum sınıfı türünden nesnenin
+	sınıf dışında yaratılamauacağı anlamındadır. enum sınıfı için sınıf içerisinde de aynı enum sınıfı türünden bir nesne
+	yaratılamaz. Yani enum sınıflarının ctor'ları private erişiminde ötesinde bir erişime sahiptir. Bu durumda bir
+	enum sınıfı türünden nesne sayısı sabit sayısı kadardır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte sabitlere ilişkin nesneler default ctor ile yaratılmıştır. Örnekte doWork çağrısında tüm
+	static veri elemanları yaratıldığından 12 tane I am a default ctor yazısı ve sonrasında doWork yazısı görüntülenecektir.
+	Sınıfın static veri elemanlarının, sınıfın ilk kez bir elemanı kullanıldığında hepsinin birden yaratıldığını
+	anımsayınız. Bir enum sabiti () ile bildirildiğinde ilgili nesne default ctor kullanılarak yaratılır, () kullanılmasa da
+	yine default ctor çağrılır.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Month.doWork();
+	}
+}
+
+
+enum Month {
+	JAN(), FEB(), MAR(), APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC;
+	Month()
+	{
+		System.out.println("I am a default ctor");
+	}
+
+	public static void doWork()
+	{
+		System.out.println("doWork");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki örnekte Color enum sınıfına ilişkin her sabite r, g, b değerleri iliştirilmiştir. Artık her Color nesnesinin
+	r, g ve b non-static veri elemanları ilgili değerleri ile yaratılmıştır.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Color [] colors = Color.values();
+		Random random = new Random();
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			Color c = colors[random.nextInt(colors.length)];
+
+			System.out.printf("%s(%d, %d, %d)%n", c.toString(), c.r, c.g, c.b);
+		}
+	}
+}
+
+
+enum Color {
+	RED(255, 0, 0), GREEN(0, 255, 0), BLUE(0, 0, 255), BLACK(0, 0, 0), WHITE(255, 255, 255);
+	public final int r, g, b;
+	Color(int x, int y, int z)
+	{
+		r = x;
+		g = y;
+		b = z;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Month [] months = Month.values();
+		Random random = new Random();
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Input a value:");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			Month m = months[random.nextInt(months.length)];
+			int year = random.nextInt(1900, 2101);
+
+			System.out.printf("Month:%s, Year:%d, Days:%d%n", m.toString(), year, m.getDays(year));
+		}
+	}
+}
+
+enum Month {
+	JAN(31), FEB(28), MAR(31), APR(30), MAY(31), JUN(30), JUL(31), AUG(31), SEP(30), OCT(31), NOV(30), DEC(31);
+	private final int m_days;
+
+	private static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	}
+
+	Month(int days)
+	{
+		m_days = days;
+	}
+
+	public int getDays(int year)
+	{
+		return ordinal() == 1 && isLeapYear(year) ? 29 : m_days;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	enum sınıfının valuOf static metodu parametresi ile aldığı yazıyla aynı isimde enum sabiti varsa o sabite ilişkin
+	referansa geri döner. Aksi durumda exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+
+		System.out.print("Input marital status as SINGLE or MARRIED or DIVORCED or WIDOW:");
+		MaritalStatus maritalStatus = MaritalStatus.valueOf(kb.nextLine());
+
+		System.out.println(maritalStatus.toString());
+	}
+}
+
+enum MaritalStatus {
+	SINGLE, MARRIED, DIVORCED, WIDOW
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	enum referansları == veya != operatörü ile karşılaştırıldığında aslında mantıksal eşitlik karşılaştırması da
+	yapılmış olur. Yani referans karşılaştırması çoğu zaman mantıksal eşitlik karşılaştırması olarak da kullanılabilir.
+	enum sınıfının ayrıca compareTo isimli metodu vardır. compareTo metodu a.compareTo(b) çağrısı için
+		a.ordinal() - b.ordinal()
+	değerine geri döner. Bu durumda bu değer negatif ise a referansına ilişkin sabit, b referansına sabitten önce gelir,
+	pozitif ise a referansına ilişkin sabit, b referansına sabitten sonra gelir, sıfırsa iki referans da aynı nesneyi
+	gösterir durumdadır. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Random random = new Random();
+		Scanner kb = new Scanner(System.in);
+		Month [] months = Month.values();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			Month month1 = months[random.nextInt(months.length)];
+			Month month2 = months[random.nextInt(months.length)];
+			int diff = month1.compareTo(month2);
+
+			if (diff > 0)
+				System.out.printf("%s ile %s arasında %d ay vardır%n", month2.toString(), month1.toString(), diff);
+			else if (diff < 0)
+				System.out.printf("%s ile %s arasında %d ay vardır%n", month1.toString(), month2.toString(), -diff);
+			else
+				System.out.printf("%s ile %s aynı aylardır%n", month1.toString(), month2.toString());
+		}
+	}
+}
+
+
+enum Month {
+	JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	enum sınıfı switch ile kullanılabilmektedir. Bu durumda case bölümlerinin enum sabitlerinden biri olması gerekir.
+	bu sabitler enum sınıf isminin kullanılmasına gerek yoktur. Bu anlamda aslında bir enum sabiti aynı zamamda bir
+	constant expression'dır. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+enum FontColor {
+	RED, GREEN, BLUE, WHITE, BLACK
+}
+
+class Font {
+	public void setColor(FontColor color)
+	{
+		switch (color) {
+			case RED -> System.out.println("Kırmızı");
+			case GREEN -> System.out.println("Yeşil");
+			case BLUE -> System.out.println("Mavi");
+			case WHITE -> System.out.println("Beyaz");
+			case BLACK -> System.out.println("Siyah");
+			default -> System.out.println("Geçrsiz renk...");
+		}
+
+		//...
+	}
+}
+
+
+enum Direction {
+	RIGHT, TOP, LEFT, BOTTOM
+}
+
+class GameObject {
+	public void move(Direction direction)
+	{
+		switch (direction) {
+			case RIGHT -> System.out.println("Sağa dön");
+			case TOP -> System.out.println("Yukarı çık");
+			case LEFT -> System.out.println("Sola dön");
+			case BOTTOM ->  System.out.println("Aşağı in");
+			default -> System.out.println("Geçersiz yön!...");
+		}
+	}
+
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Singleton sınıfın eager implementasyonu
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Singleton s1 = Singleton.INSTANCE;
+		Singleton s2 = Singleton.INSTANCE;
+
+		System.out.println(s1 == s2 ? "Aynı nesne" : "Farklı nesneler");
+	}
+}
+
+class Singleton {
+	public static final Singleton INSTANCE = new Singleton();
+	private int m_value;
+
+	private Singleton()
+	{
+	}
+
+	public int getValue()
+	{
+		return m_value;
+	}
+
+	public void setValue(int value)
+	{
+		m_value = value;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Singleton sınıfın eager implementasyonu enum sınıf ile çok daha basit ve etkin olarak yapılabilir. Lazy implementasyon
+	söz konusu olmadıktan sonra Java'da en iyi Singleton implementasyonu budur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Singleton s1 = Singleton.INSTANCE;
+		Singleton s2 = Singleton.INSTANCE;
+
+		System.out.println(s1 == s2 ? "Aynı nesne" : "Farklı nesneler");
+	}
+}
+
+enum Singleton {
+	INSTANCE;
+	private int m_value;
+
+	public int getValue()
+	{
+		return m_value;
+	}
+
+	public void setValue(int value)
+	{
+		m_value = value;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Dikkat edilirse enum sabitleri ve dolayısıyla gösterdikleri nesneler yaratıldıktan sonra programın
+    sonuna kadar yaşarlar. Bu durum nadir de olsa önemli bazı uygulamalarda bellek açısından dezavantaj oluşturabilir.
+    Örneğin bir çok güçlü olmayan (limited) bir Android cihazın bellek kapasitesi kullanımına göre kısıtlı olabilir ve
+    yaratılan nesnelerin uzun süre yaşamaması gerekir. Böylesi nadir ama önemli durumlarda enum sınıf kullanmak yerine
+    int türden değerler kullanmak uygun olacaktır. Bu durumda performans açısından okunabilirlikten/algılanabilirkten
+    vazgeçilmiş olur
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 
