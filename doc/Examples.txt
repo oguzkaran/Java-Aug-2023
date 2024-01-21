@@ -23263,6 +23263,151 @@ class Driver {
 	//...
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    21.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	A sınıfından B sınıfı türetilmiş olsun. Bu durumda A'ya B'nin taban sınıfı (base class), B'ye ise A'nın türemiş sınıfı (derived class)
+	denir. Java'da base class yerine "super class", derived class yerine ise "sub class" terimleri daha çok kullanılmaktadır.
+	Ayrıca NYPT'de base class yerine parent class, derived class yerine child class terimleri de kullanılmaktadır. Bir
+	dizi türetme durumunda yani örneğin A sınıfından B sınıfı, B sınıfından da C sınıfı türetilmiş olsun. Burada A sınıfı,
+	B'nin super class'ı ya da direct super class'ıdır. A sınıfı C'nin indirect super class'ıdır. Bu anlamda super class
+	dendiğinde direct super class anlaşılır. Bu durumda C'nin taban sınıf (super class) yani doğrudan taban sınıfı
+	B'dir.  Şu cümle teknik olarak doğru değildir: "A, C'nin taban sınıfıdır". Cümlenin teknik olarak doğrusu şu şekilde
+	yazılabilir: A, C'nin dolaylı taban sınıfıdır.
+
+	Türetme işlemi ile bir sınıfın kodlarına dokunmadan sınıf genişletilebilir. Yani türemiş sınıf aslında taban sınıfın
+	özelliklerini de içerecek şekilde yeni bir tür olarak bildirilmiş olur. Örneğin daha önce yazdığımız Circle sınıfı
+	bir çemberi (ve daireyi) temsil eden bir sınıftır. Ancak bu sınıf analitik düzlemde bir çemberi temsil etmediği
+	için merkez koordinatı yoktur. Analitik çemder de aslında çember olduğundan (is a) yani çember olma özelliklerini
+	taşıdığından Circle sınıfından türetilebilir. Bu durumda Circle sınıfına ilişkin işlemler tekrar yazılmak ya da
+	kopyalanmak zorunda kalmaz. Bu durumda aslında ortak özellikler taban sınıfta toplanabilmektedir. Türetme OCP'nin
+	en net karşılığını vermektedir. Bu ilkenin tipik mottosu "open for extension, closed for modification"'dır. Bu durumda
+	taban sınıfa dokunmadan onu genişletmek türetme ilişkisinin zaten hedefidir.
+
+	Bu anlamda türetme ilişkisinde mantıksal olarak yukarıya doğru (türemiş sınıftan taban sınıfa doğru) bir genelleşme
+	(generalization), mantıksal olarak aşağıya doğru (taban sınıftan türemiş sınıfa doğru) ise bir özelleşme (specialization)
+	söz konusudur.
+
+	Java'da bir sınıfın birden fazla taban sınıfı (doğrudan taban sınıfı) olamaz. Bu anlamda Java'da multiple inheritance
+	yoktur. Programlamada tam anlamkıyla çoklu türetme ile çözülen bir problem yoktur. Kısmi olarak gerektiren durumlarda
+	Java'da interface'ler ile gerçekleştirilebilmektedir. Interface'ler ileride detaylı olarak ele alınacaktır. Yani Java'da
+	çoklu türetmenin olmaması bir eksiklik değildir. Örneğin Araç sınıfından Deniz Aracı, Hava Aracı ve Kara Aracı sınıfları
+	türetilebilir. Deniz Uçağı bu hiyerarşide hem deniz aracı hem de hava aracı mıdır? Aslında deniz uçağı hava aracıdır
+	ancak deniz aracı olma özelliklerinin tümünü gerçeklemez. Yani örneğin gemi gibi bir deniz aracı değildir. Deniz
+	aracı olma davranışlarının bir kısmını yapabilir (yüzebilme). Bu anlamda aslında deniz uçağı deniz aracı olma
+	özelliklerinin bir kısmını içerdiği için deniz aracı olarak ele alınmaz. Detaylar inteface'ler konsunda daha iyi
+	anlaşılacaktır.
+
+	Bir sınıf kendisinden doğrudan ya da dolaylı olarak türetilemez.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Türetme işlemi Java'da extends anahtar sözcüğü ile yapılır. Türetme işleminde taban sınıfın elemanları türemiş
+	sınıfa aktarılmış olur. Örneğin taban sınıfta olan bir metot türemiş sınıfa da aktarılır. Benzer şekilde veri
+	elemanları da taban sınıftan türemiş sınıfa aktarılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		C y = new C();
+
+		x.foo();
+		x.bar();
+		y.foo();
+		y.bar();
+		y.tar();
+
+		x.a = 10;
+		x.b = 20;
+		y.a = 23;
+		y.b = 34;
+		y.c = 45;
+	}
+}
+
+class C extends B {
+	public int c;
+	public void tar()
+	{
+		System.out.println("C.tar");
+	}
+	//...
+}
+
+class B extends A {
+	public int b;
+	public void bar()
+	{
+		System.out.println("B.bar");
+	}
+	//...
+}
+
+class A {
+	public int a;
+	public void foo()
+	{
+		System.out.println("A.foo");
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Türetme ilişkisinde nesnesel bir kapsama söz konusudur. Bu ilişkide türemiş sınıf nesnesi içerisinde taban sınıf
+	kadarlık bir bölüm de bulunur. Bu anlamda bakıldığında türemiş sınıfa eklenmiş non-static veri elemanları aslında
+	taban sınıf nesnesini genişletmiş olur. Bu durumda türemiş sınıf nesnenin bellekte kapladığı alan en az taban sınıf
+	nesnesinin uzunluğu + türemiş sınıfa eklenen non-static veri elemanlarının toplam uzunluğu kadardır. Aslında türemiş
+	sınıfa eklenen veri elemanı ile nesne genişlemiş (extend) olur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		C y = new C();
+
+		x.a = 10;
+		x.b = 20;
+		y.a = 23;
+		y.b = 34;
+		y.c = 45;
+
+		//...
+	}
+}
+
+class C extends B {
+	public int c;
+	public void tar()
+	{
+		System.out.println("C.tar");
+	}
+	//...
+}
+
+class B extends A {
+	public int b;
+	public void bar()
+	{
+		System.out.println("B.bar");
+	}
+	//...
+}
+
+class A {
+	public int a;
+	public void foo()
+	{
+		System.out.println("A.foo");
+	}
+	//...
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

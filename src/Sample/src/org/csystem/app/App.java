@@ -1,127 +1,51 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki demo örnekte Taxi ile Client ve Driver arasındaki ilişkileri inceleyiniz
+	Türetme ilişkisinde nesnesel bir kapsama söz konusudur. Bu ilişkide türemiş sınıf nesnesi içerisinde taban sınıf
+	kadarlık bir bölüm de bulunur. Bu anlamda bakıldığında türemiş sınıfa eklenmiş non-static veri elemanları aslında
+	taban sınıf nesnesini genişletmiş olur. Bu durumda türemiş sınıf nesnenin bellekte kapladığı alan en az taban sınıf
+	nesnesinin uzunluğu + türemiş sınıfa eklenen non-static veri elemanlarının toplam uzunluğu kadardır. Aslında türemiş
+	sınıfa eklenen veri elemanı ile nesne genişlemiş (extend) olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class App {
 	public static void main(String[] args)
 	{
-		Driver driver = new Driver("Ali Serçe", 100);
-		Taxi taxi = new Taxi(driver/*...*/);
+		B x = new B();
+		C y = new C();
 
-		Client client1 = new Client("secati", "Secati Şahin");
-
-		taxi.take(client1);
-
-		//...
-
-		Client client2 = new Client("selami", "Selami Veli");
-
-		taxi.take(client2);
+		x.a = 10;
+		x.b = 20;
+		y.a = 23;
+		y.b = 34;
+		y.c = 45;
 
 		//...
 	}
 }
 
-class Taxi {
-	private Driver m_driver;
-	//...
-
-	public Taxi(Driver driver)
+class C extends B {
+	public int c;
+	public void tar()
 	{
-		//...
-		m_driver = driver;
-	}
-
-	public void take(Client client)
-	{
-		System.out.printf("Driver:%s%n", m_driver.toString());
-		//...
-
-		System.out.println("take!...");
-
-		System.out.printf("Client:%s%n", client.getUsername());
-	}
-
-	//...
-}
-
-class Client {
-	private String m_username;
-	private String m_name;
-	//...
-
-
-	public Client(String username, String name)
-	{
-		m_username = username;
-		m_name = name;
-	}
-
-	public String getUsername()
-	{
-		return m_username;
-	}
-
-	public void setUsername(String username)
-	{
-		m_username = username;
-	}
-
-	public String getName()
-	{
-		return m_name;
-	}
-
-	public void setName(String name)
-	{
-		m_name = name;
-	}
-
-	public String toString()
-	{
-		return String.format("Username:%s", m_username);
+		System.out.println("C.tar");
 	}
 	//...
 }
 
-class Driver {
-	private String m_name;
-	private int m_rating;
-
-	//...
-
-	public Driver(String name, int rating)
+class B extends A {
+	public int b;
+	public void bar()
 	{
-		m_name = name;
-		m_rating = rating;
+		System.out.println("B.bar");
 	}
-
-	public String getName()
-	{
-		return m_name;
-	}
-
-	public void setName(String name)
-	{
-		m_name = name;
-	}
-
-	public int getRating()
-	{
-		return m_rating;
-	}
-
-	public void setRating(int rating)
-	{
-		m_rating = rating;
-	}
-
-	public String toString()
-	{
-		return String.format("Name:%s, Rating:%d", m_name, m_rating);
-	}
-
 	//...
 }
 
+class A {
+	public int a;
+	public void foo()
+	{
+		System.out.println("A.foo");
+	}
+	//...
+}
