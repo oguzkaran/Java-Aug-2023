@@ -1,9 +1,6 @@
 /*----------------------------------------------------------------------------------------------------------------------
-	Türetme ilişkisinde nesnesel bir kapsama söz konusudur. Bu ilişkide türemiş sınıf nesnesi içerisinde taban sınıf
-	kadarlık bir bölüm de bulunur. Bu anlamda bakıldığında türemiş sınıfa eklenmiş non-static veri elemanları aslında
-	taban sınıf nesnesini genişletmiş olur. Bu durumda türemiş sınıf nesnenin bellekte kapladığı alan en az taban sınıf
-	nesnesinin uzunluğu + türemiş sınıfa eklenen non-static veri elemanlarının toplam uzunluğu kadardır. Aslında türemiş
-	sınıfa eklenen veri elemanı ile nesne genişlemiş (extend) olur
+	Anımsanacağı gibi nitelikli ve niteliksiz isim arama genel kurallarında bir isim sınıf içerisinde aranıyorsa ve
+	bulunamadıysa taban sınıfa, yoksa onun taban sınıfına ... bakılır. Hiç birinde yoksa bu adımda bulunamamış olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -13,13 +10,17 @@ class App {
 		B x = new B();
 		C y = new C();
 
+		x.foo();
+		x.bar();
+		y.foo();
+		y.bar();
+		y.tar();
+
 		x.a = 10;
 		x.b = 20;
 		y.a = 23;
 		y.b = 34;
 		y.c = 45;
-
-		//...
 	}
 }
 

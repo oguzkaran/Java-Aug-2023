@@ -23408,6 +23408,393 @@ class A {
 	//...
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi bir nesnenin yaratılmasının tamamlanması için en sıon noktada ilgili ctor'unun da çağrılması
+	gerekir. Bu durumda türemiş sınıf nesnesi yaratıldığında içerisindeki taban sınıf nesnesinin da yaratılması yani
+	taban sınıf nesnesi için de ilgili ctor'un çağrılması gerekir. Türemiş sınıf ctor'undan önce, türemiş sınıfın ctor'unda
+	herhangi bir belirtme yapılmamışsa, taban sınıfın default ctor'u çağrılır. Yani aslında derleyici türemiş sınıfın
+	ctor'unun başına gizlice taban sınıfın ctor çağrısı kodunu yerleştirir. Belirtmenin nasıl yapıldığı ileride ele
+	alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		System.out.println("-------------------------------------");
+		B y = new B(23);
+		System.out.println("-------------------------------------");
+		C z = new C();
+		System.out.println("-------------------------------------");
+		C t = new C(20);
+		//...
+	}
+}
+
+class C extends B {
+	public C()
+	{
+		System.out.println("I am a default ctor of C");
+	}
+
+	public C(int a)
+	{
+		System.out.println("I am a ctor of C with parameter type: int");
+	}
+}
+
+class B extends A {
+	public B()
+	{
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+		System.out.println("I am a ctor of B with parameter type: int");
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type: int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Peki, taban sınıfın default ctor'u yoksa ya da var ama erişilemiyorsa ya da türemiş sınıfı yazan programcı taban
+	sınıfın default ctor'u yerine istediği bir ctor'unu çağırmak isterse ne yapması gerekir? Bu durumda "super ctor sentaksı"
+	kullanılır. super ctor sentaksı super anahtar sözcüğü ile birlikte metot çağırma operatörü kullanılarak ilgili argümanlar
+	geçilerek ctor'un ilk deyimi olacak şekilde yerleştirilir. super ctor sentaksında hangi ctor'un çağrılacağı method
+	overload resolution kurallarına göre belirlenir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		System.out.println("-------------------------------------");
+		B y = new B(23);
+		System.out.println("-------------------------------------");
+		C z = new C();
+		System.out.println("-------------------------------------");
+		C t = new C(20);
+		//...
+	}
+}
+
+class C extends B {
+	public C()
+	{
+		System.out.println("I am a default ctor of C");
+	}
+
+	public C(int a)
+	{
+		super(a);
+		System.out.println("I am a ctor of C with parameter type: int");
+	}
+}
+
+class B extends A {
+	public B()
+	{
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+		super(a);
+		System.out.println("I am a ctor of B with parameter type: int");
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type: int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bu durumda bir ctor'un başında super() (dikkat argümen geçmeden) şeklinde yazılması ile hiç super ctor sentaksı
+	kullanılmaması tamamen aynı anlamdadır. Yani derleyici adeta gizlice bu kodu ekler
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		System.out.println("-------------------------------------");
+		B y = new B(23);
+		System.out.println("-------------------------------------");
+		C z = new C();
+		System.out.println("-------------------------------------");
+		C t = new C(20);
+		//...
+	}
+}
+
+class C extends B {
+	public C()
+	{
+		super();
+		System.out.println("I am a default ctor of C");
+	}
+
+	public C(int a)
+	{
+		super(a);
+		System.out.println("I am a ctor of C with parameter type: int");
+	}
+}
+
+class B extends A {
+	public B()
+	{
+		super();
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+		super(a);
+		System.out.println("I am a ctor of B with parameter type: int");
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type: int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	super ctor sentaksına ilişkin deyimin ctor'un ilk deyimi olması gerekir. Aksi durumda error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B extends A {
+	public B()
+	{
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+		System.out.println("I am a ctor of B with parameter type: int");
+		super(a); //error
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type: int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	super ctor sentaksı adından da anlaşılacağı gibi yalnızca ctor içerisinde kullanılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B extends A {
+	public B()
+	{
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+	    super(a);
+		System.out.println("I am a ctor of B with parameter type: int");
+	}
+
+	public void foo(int a)
+    {
+        super(a); //error
+    }
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type: int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir sınıf extends anahtar sözcüğü hiç bir sınıftan türetilmese de java.lang paketi içerisinde bulunan Objecy isimli
+	sınıftan türetilmiş olur. Bu durumda Object sınıfı her sınıfın doğrudan ya da dolaylı taban sınıfıdır. Böyle bir
+	tasarımın yani Object sınıfının anlamı ileride ele alınacaktır. Object sınıfı extends ile yazılabilir, yazılmasa da
+	aynı anlamda olduğundan yazmamayı tercih edeceğiz. Bu durumda Java'da taban sınıfı olmayan tek sınıf Object sınıfıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A extends Object{
+	//...
+}
+
+class B {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Anımsanacağı gibi nitelikli ve niteliksiz isim arama genel kurallarında bir isim sınıf içerisinde aranıyorsa ve
+	bulunamadıysa taban sınıfa, yoksa onun taban sınıfına ... bakılır. Hiç birinde yoksa bu adımda bulunamamış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B();
+		C y = new C();
+
+		x.foo();
+		x.bar();
+		y.foo();
+		y.bar();
+		y.tar();
+
+		x.a = 10;
+		x.b = 20;
+		y.a = 23;
+		y.b = 34;
+		y.c = 45;
+	}
+}
+
+class C extends B {
+	public int c;
+	public void tar()
+	{
+		System.out.println("C.tar");
+	}
+	//...
+}
+
+class B extends A {
+	public int b;
+	public void bar()
+	{
+		System.out.println("B.bar");
+	}
+	//...
+}
+
+class A {
+	public int a;
+	public void foo()
+	{
+		System.out.println("A.foo");
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi sınıfın protected bölümü firendly sınıflar için public, farklı paketteki sınıflar için türetme
+    söz konusu değilse private anlamındadır. Ancak türetme söz konusu ise protected bölüme erişim aşağıdaki gibi yine
+    yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package mest;
+
+import test.A;
+
+public class B extends A {
+    public void bar()
+    {
+        A a = new A(); //error
+
+        a.a = 10; //error
+        a.foo(); //error
+    }
+}
+
+package test;
+
+public class A {
+    protected int a;
+
+    protected A()
+    {
+
+    }
+
+    protected void foo()
+    {
+
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir sınıf farklı paketteki bir sınıftan türetilmişse, sınıfın mantıksal olarak kendisine ait olan protected bölüme
+    erişebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package mest;
+
+import test.A;
+
+public class B extends A {
+    public B(int a)
+    {
+
+    }
+
+    public void bar()
+    {
+        a = 20;
+        foo();
+    }
+}
+
+package test;
+
+public class A {
+    protected int a;
+
+    protected A()
+    {
+
+    }
+
+    protected void foo()
+    {
+
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
