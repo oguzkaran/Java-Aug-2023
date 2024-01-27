@@ -25,7 +25,7 @@ class PointCommon {
 
     static double getYBy(boolean polar, double a, double b)
     {
-        return polar ? a * sin(b) : a;
+        return polar ? a * sin(b) : b;
     }
 
     static double distance(double x1, double y1, double x2, double y2)

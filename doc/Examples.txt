@@ -21902,7 +21902,7 @@ class PointCommon {
 
     static double getYBy(boolean polar, double a, double b)
     {
-        return polar ? a * sin(b) : a;
+        return polar ? a * sin(b) : b;
     }
 
     static double distance(double x1, double y1, double x2, double y2)
@@ -23795,7 +23795,227 @@ public class A {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    27.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir sınıfın ctor'undan başka bir ctor'unun çağrılabilmesi için this ctor sentaksı kullanılır. this ctor sentaksı
+	sentaks olarak super ctor sentaksına benzer. this ctor sentaksı da ctor'un ilk deyimi olmalıdır. this ctor sentaksı
+	yalnızca ctor içerisinde kullanılabilir. Bu sentaksda da hangi ctor'un çağrılacağı overload resolution kurallarına
+	göre belirlenir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
 
+class App {
+	public static void main(String[] args)
+	{
+		new A();
+		System.out.println("---------------------------------------------");
+		new A(10);
+		System.out.println("---------------------------------------------");
+		new A(10.);
+		System.out.println("---------------------------------------------");
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		this();
+		System.out.println("I am a ctor of A with parameter type int");
+	}
+
+	public A(double a)
+	{
+		this((int)a);
+		System.out.println("I am a ctor of A with parameter type double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	this ctor sentaksında döngüsel durum geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A {
+	public A() //error
+	{
+		this(0);
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a) //error
+	{
+		this();
+		System.out.println("I am a ctor of A with parameter type int");
+	}
+
+	public A(double a) //error
+	{
+		this(a);
+		System.out.println("I am a ctor of A with parameter type double");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	this ctor sentaksı ve super ctor sentaksı aynı ctor'da kullanılamaz. Her ikisinin de ctor'un ilk deyimi olması
+	gerektiğinden errotr oluşur. Aslında böylesi bir ihtiyacın iyi bir tasarımda olmaması gerekir. Programcı böyle bir
+	işlem gerektiğinde tasarımına ve koduna bakmalı ve uygun şekilde yazmalıdır. Kısacası böyle bir duruma ihtiyaç
+	olmamalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B extends A {
+	public B()
+	{
+		System.out.println("I am a default ctor of B");
+	}
+
+	public B(int a)
+	{
+		this();
+		super(a); //error
+
+		System.out.println("I am a ctor of B with parameter type int");
+	}
+}
+
+class A {
+	public A()
+	{
+		System.out.println("I am a default ctor of A");
+	}
+
+	public A(int a)
+	{
+		System.out.println("I am a ctor of A with parameter type int");
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    AnalyticalCircle sınıfı
+    Bir sınıf, private olarak referansını tuttuğu bir sınıfın metodunu aynı isimde ve genel olarak aynı yapıda public
+    bölümde bildirdiğinde, bildirilen metoda delagate/pass through/forwarding method denir. AnalyticalCircle sınıfında
+    getX, getY, setX, setY ve offset metotları delagate metotlardır
+----------------------------------------------------------------------------------------------------------------------*/
+package com.baturhansahin.math.test;
+
+import com.baturhansahin.math.AnalyticalCircle;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class AnalyticalCircleCtorTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            double radius = random.nextDouble(-10, 11);
+            double x = random.nextDouble(-1000, 1000);
+            double y = random.nextDouble(-1000, 1000);
+
+            System.out.println("--------------------------------------------------");
+            System.out.printf("Generated radius:%f, (%f, %f)%n", radius, x, y);
+            AnalyticalCircle c = new AnalyticalCircle(radius, x, y);
+            System.out.printf("(%f, %f),%s%n", c.getX(), c.getY(), c.toString());
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package com.baturhansahin.math.test;
+
+import com.baturhansahin.math.AnalyticalCircle;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class AnalyticalCircleSetterTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        AnalyticalCircle c = new AnalyticalCircle();
+
+        System.out.printf("(%f, %f),%s%n", c.getX(), c.getY(), c.toString());
+        for (int i = 0; i < count; ++i) {
+            double radius = random.nextDouble(-10, 11);
+            double x = random.nextDouble(-1000, 1000);
+            double y = random.nextDouble(-1000, 1000);
+
+            System.out.println("--------------------------------------------------");
+            System.out.printf("Generated radius:%f, (%f, %f)%n", radius, x, y);
+            c.setRadius(radius);
+            c.setCenter(x, y);
+            System.out.printf("(%f, %f),%s%n", c.getX(), c.getY(), c.toString());
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package com.baturhansahin.math.test;
+
+import com.baturhansahin.math.AnalyticalCircle;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class AnalyticalCircleOffsetTest {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        Random random = new Random();
+
+        System.out.print("Bir sayı giriniz:");
+        int count = kb.nextInt();
+
+        for (int i = 0; i < count; ++i) {
+            double radius = random.nextDouble(-10, 11);
+            double x = random.nextDouble(-1000, 1000);
+            double y = random.nextDouble(-1000, 1000);
+            double dx = random.nextDouble(-100, 100);
+            double dy = random.nextDouble(-100, 100);
+
+            System.out.println("--------------------------------------------------");
+            System.out.printf("Generated radius:%f, (%f, %f), dx = %f, dy = %f%n", radius, x, y, dx, dy);
+            AnalyticalCircle c = new AnalyticalCircle(radius, x, y);
+
+            System.out.printf("(%f, %f),%s%n", c.getX(), c.getY(), c.toString());
+            c.offset(dx, dy);
+            System.out.printf("(%f, %f),%s%n", c.getX(), c.getY(), c.toString());
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
 
 /*----------------------------------------------------------------------------------------------------------------------
 
