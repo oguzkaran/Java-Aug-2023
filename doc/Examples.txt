@@ -24017,6 +24017,473 @@ public class AnalyticalCircleOffsetTest {
     }
 }
 
+package com.baturhansahin.math.test;
+
+import com.baturhansahin.math.AnalyticalCircle;
+
+public class AnalyticalCircleIsTangentTest {
+    public static void run()
+    {
+        AnalyticalCircle ac1 = new AnalyticalCircle(3, 200, 100);
+        AnalyticalCircle ac2 = new AnalyticalCircle(2, 196, 103);
+
+        System.out.println(ac1.centerDistance(ac2));
+
+        System.out.println(ac1.isTangent(ac2) ? "Teğet" : "Teğet değil");
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: AnalyticalCircle.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 27th January 2024
+
+	AnalyticalCircle class that represents a circle
+	in cartesian plane
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package com.baturhansahin.math;
+
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.MutablePoint;
+
+public class AnalyticalCircle extends Circle {
+    private static final double DELTA = 0.00000000001;
+    private final MutablePoint m_center;
+
+    public AnalyticalCircle()
+    {
+        this(0);
+    }
+
+    public AnalyticalCircle(double radius)
+    {
+        this(radius, 0, 0);
+    }
+
+    public AnalyticalCircle(double x, double y)
+    {
+        this(0, x, y);
+    }
+
+    public AnalyticalCircle(double radius, double x, double y)
+    {
+        super(radius);
+        m_center = MutablePoint.createCartesian(x, y);
+    }
+
+    public double getX()
+    {
+        return m_center.getX();
+    }
+
+    public void setX(double x)
+    {
+        m_center.setX(x);
+    }
+
+    public double getY()
+    {
+        return m_center.getY();
+    }
+
+    public void setY(double y)
+    {
+        m_center.setY(y);
+    }
+
+    public void setCenter(double x, double y)
+    {
+        setX(x);
+        setY(y);
+    }
+
+    public void offset(double dxy)
+    {
+        offset(dxy, dxy);
+    }
+
+    public void offset(double dx, double dy)
+    {
+        m_center.offset(dx, dy);
+    }
+
+    public double centerDistance(AnalyticalCircle other)
+    {
+        return m_center.distance(other.m_center);
+    }
+
+    public boolean isTangent(AnalyticalCircle other)
+    {
+        return Math.abs(centerDistance(other) - getRadius() - other.getRadius()) < DELTA;
+    }
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aralarında türetme ilişkisi olmayan iki sınıf türünden referans birbirine explicit olarak bile dönüştürülemez
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		B b;
+
+		b = (B)a; //error
+	}
+}
+
+class A {
+	//...
+}
+
+class B {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Türemiş sınıf türünden bir referans taban sınıf türünden bir referansa doğrudan (implicit) atanabilir. Bu kavrama
+	"upcasting" denir. Upcasting işleminde taban sınıf referansına, türemiş sınıf nesnesine ait olan taban sınıf nesnesinin
+	adresi atanır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		B x = new B(10, 20);
+		A y;
+
+		y = x; //upcasting
+
+		System.out.printf("x.a = %d, x.b = %d%n", x.a, x.b);
+		System.out.printf("y.a = %d%n", y.a);
+
+		++y.a;
+
+		System.out.printf("x.a = %d, x.b = %d%n", x.a, x.b);
+		System.out.printf("y.a = %d%n", y.a);
+	}
+}
+
+class A {
+	public int a;
+	public A(int x)
+	{
+		a = x;
+	}
+	//...
+}
+
+class B extends A {
+	public int b;
+	public B(int x, int y)
+	{
+		super(x);
+		b = y;
+	}
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte Sample sınıfının doWork metodu A sınıfından doğrudan ya da dolaylı olarak türetilmiş bir sınıf
+	türünden referans ile çağrılabilir. Bu anlamda doWork metodu türden bağımsız (type independent) olarak yani yalnızca
+	A türüne bağımlı olarak yazılmıştır. doWork metodunun A hiyerarşisine ilişkin diğer türlere derleme aşamasında
+	bağımlılığı yoktur. Bu durumda hiyerarşiye yeni bir tür eklendiğinde doWork metodunun kodlarında değişiklik yapılması
+	gerekmez.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		Sample s = new Sample();
+		A a = new A();
+		B b = new B();
+		C c = new C();
+		D d = new D();
+		E e = new E();
+		F f = new F();
+
+		s.doWork(a);
+		s.doWork(b);
+		s.doWork(c);
+		s.doWork(d);
+		s.doWork(e);
+		s.doWork(f);
+	}
+}
+
+class Sample {
+	//...
+	public void doWork(A x)
+	{
+		//...
+		System.out.println(x.a);
+	}
+}
+
+class F extends D {
+	//...
+}
+
+class E extends C {
+	//...
+}
+
+class D extends A {
+	//...
+}
+
+class C extends B {
+	//...
+}
+
+class B extends A {
+	//...
+}
+
+class A {
+	public int a;
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıda yazılan demo örnekteki türden bağımsızlığa dikkat ediniz. A hiyerarşisine yeni bir tür eklendiğinde, yeni
+	türün sisteme dahil olması için hangi kodlarda değişiklik yapılmalıdır?
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		Sample s = new Sample();
+		AFactory factory = new AFactory();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+
+		for (int i = 0; i < count; ++i) {
+			A a = factory.create();
+
+			s.doWork(a);
+			//....
+		}
+	}
+}
+
+class Sample {
+	//...
+	public void doWork(A x)
+	{
+		//...
+		System.out.println(x.a);
+	}
+}
+
+class AFactory {
+	private final Random m_random = new Random();
+
+	public A create()
+	{
+		return switch (m_random.nextInt(6)) {
+			case 0 -> new B();
+			case 1 -> new C();
+			case 2 -> new D();
+			case 3 -> new E();
+			case 4 -> new F();
+			default -> new A();
+		};
+	}
+}
+
+class F extends D {
+	//...
+}
+
+class E extends C {
+	//...
+}
+
+class D extends A {
+	//...
+}
+
+class C extends B {
+	//...
+}
+
+class B extends A {
+	//...
+}
+
+
+class A {
+	public int a;
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Bir referansın iki tane türü vardır: static, dynamic.
+	static type: Referansın bildirildiği türdür. Derleme zamanına ilişkindir. Değişmez. Referansın türü dendiğinde
+	static tür anlaşılır
+
+	dynamic type: Referansın gösterdiği adresteki nesnenin gerçek türüdür. Çalışma zamanına ilişkindir. Değişebilir.
+
+	Anahtar Notlar: Bir referansın dinamik türününün fully qualified bir biçimde yazı olarak (String) elde edilebimesi
+	için aşağıdaki kalıp kullanılabilir:
+		<referans>.getClass().getName();
+	Kalıbın detayının şu aşamada önemi yoktur.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		AFactory factory = new AFactory();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		A x;
+
+		for (int i = 0; i < count; ++i) {
+			x = factory.create();
+
+			System.out.printf("Dynamic Type:%s%n", x.getClass().getName());
+			//....
+		}
+	}
+}
+
+class AFactory {
+	private final Random m_random = new Random();
+
+	public A create()
+	{
+		return switch (m_random.nextInt(6)) {
+			case 0 -> new B();
+			case 1 -> new C();
+			case 2 -> new D();
+			case 3 -> new E();
+			case 4 -> new F();
+			default -> new A();
+		};
+	}
+}
+
+class F extends D {
+	//...
+}
+
+class E extends C {
+	//...
+}
+
+class D extends A {
+	//...
+}
+
+class C extends B {
+	//...
+}
+
+class B extends A {
+	//...
+}
+
+
+class A {
+	//...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Object sınıfı doğrudan ya da dolaylı olarak her sınıfın taban sınıfı olduğuna göre her türden referans Object türden
+	bir referansa doğrudan atanabilir. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		ObjectFactory factory = new ObjectFactory();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		Object x;
+
+		for (int i = 0; i < count; ++i) {
+			x = factory.create();
+
+			System.out.printf("Dynamic Type:%s%n", x.getClass().getName());
+			//....
+		}
+	}
+}
+
+class ObjectFactory {
+	private final Random m_random = new Random();
+
+	public Object create()
+	{
+		return switch (m_random.nextInt(6)) {
+			case 0 -> new B();
+			case 1 -> new C();
+			case 2 -> new D();
+			case 3 -> new E();
+			case 4 -> new F();
+			default -> new A();
+		};
+	}
+}
+
+class F extends D {
+	//...
+}
+
+class E extends C {
+	//...
+}
+
+class D extends A {
+	//...
+}
+
+class C extends B {
+	//...
+}
+
+class B extends A {
+	//...
+}
+
+
+class A {
+	//...
+}
+
+
+
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/

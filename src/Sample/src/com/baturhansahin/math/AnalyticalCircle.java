@@ -15,7 +15,7 @@ import org.csystem.math.geometry.Circle;
 import org.csystem.math.geometry.MutablePoint;
 
 public class AnalyticalCircle extends Circle {
-    private static final double DELTA = 0.00001;
+    private static final double DELTA = 0.00000000001;
     private final MutablePoint m_center;
 
     public AnalyticalCircle()
