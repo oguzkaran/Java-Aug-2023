@@ -24482,14 +24482,402 @@ class A {
 	//...
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    28.01.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Taban sınıf türünden bir referans türemiş sınıf türünden bir referansa implicit olarak dönüşemez ancak explicit olarak
+	dönüşebilir. Bu kavrama downcasting denir. Aslında tür dönüştürme operatörü derleme işlemini geçmek içindir. Çalışma
+	zamanında kaynak referansın dinamik türünün tür dönüştürme operatörüne yazılan türü kapsayıp kapsamamasına bakılır.
+	Buradaki kapsama nesnesel kapsamadır. Eğer kapsıyorsa haklı dönüşümdür akış devam eder, kapsamıyorsa haksız dönüşümdür
+	ve exception oluşur. Aşağıdaki demo örnekte B, C ve E dışındaki dinamik türler için haksız dönüşümden dolayı exception
+	oluşur. Örneği çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
 
+import java.util.Random;
+import java.util.Scanner;
+
+class App {
+	public static void main(String[] args)
+	{
+		Scanner kb = new Scanner(System.in);
+		ObjectFactory factory = new ObjectFactory();
+
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		A x;
+		B y;
+
+		for (int i = 0; i < count; ++i) {
+			x = factory.create();
+
+			System.out.printf("Dynamic Type:%s%n", x.getClass().getName());
+
+			y = (B)x;
+			//...
+		}
+	}
+}
+
+class ObjectFactory {
+	private final Random m_random = new Random();
+
+	public A create()
+	{
+		return switch (m_random.nextInt(6)) {
+			case 0 -> new B();
+			case 1 -> new C();
+			case 2 -> new D();
+			case 3 -> new E();
+			case 4 -> new F();
+			default -> new A();
+		};
+	}
+}
+
+class F extends D {
+	//...
+}
+
+class E extends C {
+	//...
+}
+
+class D extends A {
+	//...
+}
+
+class C extends B {
+	//...
+}
+
+class B extends A {
+	//...
+}
+
+
+class A {
+	//...
+}
 
 /*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte çalışma zamanında tür tespiti yapılıp ilgili türe göre downcasting yapılarak işlem yapılmaktadır.
+    Burada artık haksız dönüşüm olmaz ancak programcı tür isimlerini hatalı olarak yazdığında ilgili tür tespit edilemeyebilir.
+    Ayrıca yazı karşılaştırma görece yavaş bir işlemdir. Örneği çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.generator;
 
+import org.csystem.math.Complex;
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+import org.csystem.primitive.wrapper.IntValue;
+
+import java.util.Scanner;
+
+public class DemoObjectArrayGeneratorApp {
+    private static void doForObjects(Object [] objects)
+    {
+        for (Object object : objects) {
+            System.out.println("-----------------------------------------------------------------------------");
+            String typeStr = object.getClass().getName();
+
+            System.out.printf("Type:%s%n", typeStr);
+
+            if (typeStr.equals("org.csystem.primitive.wrapper.IntValue")) {
+                IntValue iVal = (IntValue)object;
+                int val = iVal.getValue();
+
+                System.out.printf("%d * %d = %d%n", val, val, val * val);
+            }
+            else if (typeStr.equals("java.lang.String")) {
+                String str = (String)object;
+
+                System.out.printf("%s, %s%n", str, str.toUpperCase());
+            }
+            else if (typeStr.equals("org.csystem.math.geometry.Point")) {
+                Point p = (Point)object;
+
+                System.out.printf("{x: %f, y: %f}%n", p.getX(), p.getY());
+            }
+            else if (typeStr.equals("org.csystem.math.geometry.Circle")) {
+                Circle c = (Circle)object;
+
+                System.out.printf("{Radius:%f, Area:%f, Circumference:%f}%n", c.getRadius(), c.getArea(), c.getCircumference());
+            }
+            else if (typeStr.equals("org.csystem.math.Complex")) {
+                Complex z = (Complex)object;
+
+                System.out.printf("Conjugate:%s%n", z.conjugate().toString());
+            }
+
+            System.out.println("-----------------------------------------------------------------------------");
+        }
+    }
+
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        ObjectArrayGenerator generator = new ObjectArrayGenerator();
+
+        System.out.print("Input count:");
+        int count = kb.nextInt();
+
+        doForObjects(generator.createObjects(count));
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Çalışma zamanında tür tespiti için instanceof operatörü kullanılabilir. Bu operatör iki operandlı, araek durumunda
+    özel amaçlı bir operatördür. Operatörün birinci operandı bir referans olmalıdır, ikinci operandı ise bir referans
+    türü olmalıdır. Operatör birinci operandına ilişkin referansın dinamik türü ikinci operandına ilişkin türü kapsıyorsa
+    true, kapsamıyorsa false değerini üretir. Bu operatör downcasting işlemlerinde kullanılabilir. Yukarıdaki demo
+    örnek aşağıdaki gibi instanceof operatörüyle yazılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.generator;
+
+import org.csystem.math.Complex;
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+import org.csystem.primitive.wrapper.IntValue;
+
+import java.util.Scanner;
+
+public class DemoObjectArrayGeneratorApp {
+    private static void doForObjects(Object [] objects)
+    {
+        for (Object object : objects) {
+            System.out.println("-----------------------------------------------------------------------------");
+            String typeStr = object.getClass().getName();
+
+            System.out.printf("Type:%s%n", typeStr);
+
+            if (object instanceof IntValue) {
+                IntValue iVal = (IntValue)object;
+                int val = iVal.getValue();
+
+                System.out.printf("%d * %d = %d%n", val, val, val * val);
+            }
+            else if (object instanceof String) {
+                String str = (String)object;
+
+                System.out.printf("%s, %s%n", str, str.toUpperCase());
+            }
+            else if (object instanceof Point) {
+                Point p = (Point)object;
+
+                System.out.printf("{x: %f, y: %f}%n", p.getX(), p.getY());
+            }
+            else if (object instanceof Circle) {
+                Circle c = (Circle)object;
+
+                System.out.printf("{Radius:%f, Area:%f, Circumference:%f}%n", c.getRadius(), c.getArea(), c.getCircumference());
+            }
+            else if (object instanceof Complex) {
+                Complex z = (Complex)object;
+
+                System.out.printf("Conjugate:%s%n", z.conjugate().toString());
+            }
+
+            System.out.println("-----------------------------------------------------------------------------");
+        }
+    }
+
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        ObjectArrayGenerator generator = new ObjectArrayGenerator();
+
+        System.out.print("Input count:");
+        int count = kb.nextInt();
+
+        doForObjects(generator.createObjects(count));
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Java 14 ile birlikte "instanceof pattern" kavramı dile eklenek instanceof operatörü ve downcasting kullanımı
+    basitleştirilmiştir. instanceof pattern ile downcasting işlemine ilişkin kodu derleyici üretir. Yukarıdaki
+    demo örnek aşağıdaki gibi instanceof operatörüyle yazılabilir
 ----------------------------------------------------------------------------------------------------------------------*/
 
-/*----------------------------------------------------------------------------------------------------------------------
+package org.csystem.app.generator;
 
+import org.csystem.math.Complex;
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+import org.csystem.primitive.wrapper.IntValue;
+
+import java.util.Scanner;
+
+public class DemoObjectArrayGeneratorApp {
+    private static void doForObjects(Object [] objects)
+    {
+        for (Object object : objects) {
+            System.out.println("-----------------------------------------------------------------------------");
+            String typeStr = object.getClass().getName();
+
+            System.out.printf("Type:%s%n", typeStr);
+
+            if (object instanceof IntValue iVal) {
+                int val = iVal.getValue();
+
+                System.out.printf("%d * %d = %d%n", val, val, val * val);
+            }
+            else if (object instanceof String str)
+                System.out.printf("%s, %s%n", str, str.toUpperCase());
+            else if (object instanceof Point p)
+                System.out.printf("{x: %f, y: %f}%n", p.getX(), p.getY());
+            else if (object instanceof Circle c)
+                System.out.printf("{Radius:%f, Area:%f, Circumference:%f}%n", c.getRadius(), c.getArea(), c.getCircumference());
+            else if (object instanceof Complex z)
+                System.out.printf("Conjugate:%s%n", z.conjugate().toString());
+
+            System.out.println("-----------------------------------------------------------------------------");
+        }
+    }
+
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        ObjectArrayGenerator generator = new ObjectArrayGenerator();
+
+        System.out.print("Input count:");
+        int count = kb.nextInt();
+
+        doForObjects(generator.createObjects(count));
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Java 17 ile birlikte switch pattern dile eklenmiştir. Aslında Java 17 ile birlikte preview olarak dile eklenmiştir.
+    Daha sonraki sürümler için doğrudan kullanılabilir hale gelmiştir. switch pattern ile bir referansın ilgili türü
+    kapsayıp kapsamadığı kontrol edilebilir. switch expression bu işlemi instanceof operatörü ile aynı şekilde yapar. Bu
+    durumda switch expression'ın default case kısmı olmak zorundadır. Yukarıdaki demo örnek aşağıdaki gibi instanceof
+    operatörüyle yazılabilir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.generator;
+
+import org.csystem.math.Complex;
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+import org.csystem.primitive.wrapper.IntValue;
+
+import java.util.Scanner;
+
+public class DemoObjectArrayGeneratorApp {
+    private static void doForObjects(Object [] objects)
+    {
+        for (Object object : objects) {
+            System.out.println("-----------------------------------------------------------------------------");
+            String typeStr = object.getClass().getName();
+
+            System.out.printf("Type:%s%n", typeStr);
+
+            switch (object) {
+                case IntValue iVal -> {
+                    int val = iVal.getValue();
+
+                    System.out.printf("%d * %d = %d%n", val, val, val * val);
+                }
+                case String str -> System.out.printf("%s, %s%n", str, str.toUpperCase());
+                case Point p -> System.out.printf("{x: %f, y: %f}%n", p.getX(), p.getY());
+                case Circle c -> System.out.printf("{Radius:%f, Area:%f, Circumference:%f}%n", c.getRadius(), c.getArea(), c.getCircumference());
+                case Complex z -> System.out.printf("Conjugate:%s%n", z.conjugate().toString());
+                default -> {}
+            }
+
+            System.out.println("-----------------------------------------------------------------------------");
+        }
+    }
+
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        ObjectArrayGenerator generator = new ObjectArrayGenerator();
+
+        System.out.print("Input count:");
+        int count = kb.nextInt();
+
+        doForObjects(generator.createObjects(count));
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.app.generator;
+
+import org.csystem.math.Complex;
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+import org.csystem.primitive.wrapper.IntValue;
+import org.csystem.util.string.StringUtil;
+
+import java.util.Random;
+
+public class ObjectArrayGenerator {
+    private final Random m_random = new Random();
+
+    //String, IntValue, Point, Circle, Complex
+    private Object createObject()
+    {
+        return switch (m_random.nextInt(5)) {
+            case 0 -> StringUtil.generateRandomTextTR(m_random, m_random.nextInt(5, 11));
+            case 1 -> IntValue.of(m_random.nextInt(-128, 127));
+            case 2 -> Point.createCartesian(m_random.nextDouble(-100, 100), m_random.nextDouble(-100, 100));
+            case 3 -> new Circle(m_random.nextDouble(-10, 10));
+            default -> new Complex(m_random.nextDouble(-10, 10), m_random.nextDouble(-10, 10));
+        };
+    }
+
+    public Object [] createObjects(int count)
+    {
+        Object[] objects = new Object[count];
+
+        while (count-- > 0)
+            objects[count] = createObject();
+
+        return objects;
+    }
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Sarmalayan Sınıflar (Wrapper Classes): JavaSE'de her temel türe karşılık bir sınıf bulundurulmuştur. Bu sınıflara
+    "wrapper/platform classes" denilmektedir. Bu sınıfların sarmalama dışında ilgili temel türe ilişkin pek çok yararlı
+    elemanı bulunur. Sarmalayan sınıflar ve ilişkin oldukları türler şu şekildedir:
+
+    Temel Tür           Sarmalayan sınıf
+    short                   Short
+    int                     Integer
+    long                    Long
+    byte                    Byte
+    float                   Float
+    double                  Double
+    char                    Character
+    boolean                 Boolean
+
+    
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
