@@ -3,7 +3,6 @@ package org.csystem.app.generator;
 import org.csystem.math.Complex;
 import org.csystem.math.geometry.Circle;
 import org.csystem.math.geometry.Point;
-import org.csystem.primitive.wrapper.IntValue;
 
 import java.util.Scanner;
 
@@ -17,8 +16,8 @@ public class DemoObjectArrayGeneratorApp {
             System.out.printf("Type:%s%n", typeStr);
 
             switch (object) {
-                case IntValue iVal -> {
-                    int val = iVal.getValue();
+                case Integer iVal -> {
+                    int val = iVal;
 
                     System.out.printf("%d * %d = %d%n", val, val, val * val);
                 }
@@ -26,6 +25,8 @@ public class DemoObjectArrayGeneratorApp {
                 case Point p -> System.out.printf("{x: %f, y: %f}%n", p.getX(), p.getY());
                 case Circle c -> System.out.printf("{Radius:%f, Area:%f, Circumference:%f}%n", c.getRadius(), c.getArea(), c.getCircumference());
                 case Complex z -> System.out.printf("Conjugate:%s%n", z.conjugate().toString());
+                case Boolean b -> System.out.println(b ? "Married" : "Single");
+                case Character c -> System.out.printf("ch = %c%n", c);
                 default -> {}
             }
 
