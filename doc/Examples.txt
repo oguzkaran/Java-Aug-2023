@@ -174,7 +174,7 @@
 	6. Komut yorumlayıcı programda aşağıdaki biçimde byte code çalıştırılır:
 		java csd.App
 
-	Anahtar Notlar: Yukarıdaki maddelerdek,i bazı zorunluluklar ilerideki konularda anlaşılacaktır
+	Anahtar Notlar: Yukarıdaki maddelerdeki bazı zorunluluklar ilerideki konularda anlaşılacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 package csd;
 
@@ -25220,7 +25220,6 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------
     Aşağıdaki demo örnekte auto boxng ve auto unboxing kullanılarak kod daha yalınlaştırılmıştır
 ----------------------------------------------------------------------------------------------------------------------*/
-
 package org.csystem.app.generator;
 
 import org.csystem.math.Complex;
