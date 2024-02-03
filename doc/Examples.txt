@@ -25141,16 +25141,16 @@ public class ObjectArrayGenerator {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Java 5 ile birlikte "auto boxing" ve "auto unboxing" kavramları da dile eklenmiştir. Bu anlamda temel türden bir değer
+	Java 5 ile birlikte "auto boxing" ve "auto unboxing" kavramları da dile eklenmiştir. Bu anlamda temel türden bir ifade
 	ilişkin olduğu sarmaklayan sınıf referansına veya Object referansına doğrudan atanabilir. Bu durumda derleyici valueOf
-	metodunu çağıran yaklaşık kodu üretir. Buna auto boxing denir. Benzer şekilde tilgili sarmalayan sınıf türünden bir
+	metodunu çağıran yaklaşık kodu üretir. Buna "auto boxing" denir. Benzer şekilde ilgili sarmalayan sınıf türünden bir
 	referans doğrudan ilişkin olduğu türden bir değişkene atanabilir. Bu durumda derleyici xxxValue metodunu çağıran
-	yaklaşık kodu üretir. Buna da auto unboxing denir. Eğer Object referansından ilgili türe dönüşüm yapılacaksa doğrudan
-	tür dönüştürme operatörü kullanılabilir. Bu durumda derleyici ilgili sarmalayan sınıf türüne downcasting yapılıp,
-	xxxValue metodunu çağıran yaklaşık kodu üretir
+	yaklaşık kodu üretir. Buna da "auto unboxing" denir. Eğer Object referansından ilgili türe dönüşüm yapılacaksa tür
+	dönüştürme operatörü kullanılır. Bu durumda derleyici, ilgili sarmalayan sınıf türüne downcasting yapılıp, xxxValue
+	metodunu çağıran yaklaşık kodu üretir
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örneği inceleyiniz
+	Aşağıdaki demo örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -25168,7 +25168,7 @@ class App {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örneği inceleyiniz
+	Aşağıdaki demo örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -25186,7 +25186,7 @@ class App {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örneği inceleyiniz
+	Aşağıdaki demo örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -25194,8 +25194,6 @@ class App {
 	public static void main(String[] args)
 	{
 		Integer iVal = 127; // auto boxing: Integer.valueOf(127)
-
-
 		int val = iVal; // auto unboxing: iVal.intValue()
 
 		System.out.println(val);
@@ -25203,22 +25201,24 @@ class App {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Aşağıdaki örneği inceleyiniz
+	Aşağıdaki demo örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class App {
-	public static void main(String[] args)
-	{
-		Object iVal = 127; // auto boxing: Integer.valueOf(127)
-		int val = (int)iVal; // auto unboxing: ((Integer)iVal).intValue()
+    public static void main(String[] args)
+    {
+        Object iVal = 127; // auto boxing: Integer.valueOf(127)
+        Object dVal = 3.4; // auto boxing: Double.valueOf(3.4)
+        int a = (int)iVal; // auto unboxing: ((Integer)iVal).intValue()
+        double b = (double)dVal; // auto unboxing: ((Double)dVal).doubleValue()
 
-		System.out.println(val);
-	}
+        System.out.printf("a = %d, b = %f%n", a, b);
+    }
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki demo örnekte auto boxng ve auto unboxing kullanılarak kod daha yalınlaştırılmıştır
+    Aşağıdaki demo örnekte auto boxing ve auto unboxing kullanılarak kod daha yalınlaştırılmıştır
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app.generator;
 
@@ -25310,7 +25310,145 @@ public class ObjectArrayGenerator {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    03.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Aşağıdaki demo örnekte tür dönüştürme operatörüne yazılan tür long olduğundan derleyici yaklaşık olarak, Long sınıfına
+	downcast yapılan kodu üretir. Bu da, örnekteki o referansının dinamik türü Integer olduğundan haksız dönüşümdür ve
+	dolayısıyla exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Object o = 123;
+        long a;
+
+        System.out.println(o.getClass().getName());
+        a = (long)o; //((Long)o).longValue()
+
+        System.out.printf("a = %d%n", a);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Yukarıdaki demo örnek aşağıdaki gbi yazılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Object o = 123;
+        long a;
+
+        System.out.println(o.getClass().getName());
+        a = (int)o; //((Integer)o).intValue()
+
+        System.out.printf("a = %d%n", a);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte tür dönüştürme operatörünün sağdan sola ilişkili (right associative) olması özelliği kullanılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Object o = 123;
+        short a;
+
+        System.out.println(o.getClass().getName());
+        a = (short)(int)o; //(short)((Integer)o).intValue();
+
+        System.out.printf("a = %d%n", a);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Number sınıfının xxxValue metotları sarmalayan sınıflar için temel türler arasındaki tür dönüştürme kurallarına
+    göre işlem yaparlar. Örneğin Long türden bir referans ile intValue metodu çağrıldığında long türünden int türüne
+    yapılan explicit conversion kuralları geçerli olur. Yani sarmalanan long türden değerin yüksek anlamlı 4 byte'ı
+    atılarak elde edilen 4 byte'lık değere geri dönülür. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Long lVal = 5_000_000_000L;
+        long val = 5_000_000_000L;
+        int a = lVal.intValue();
+        int b = (int)val;
+
+        System.out.printf("a = %d, b = %d%n", a, b);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Garbage Collector: Programlamada heap'de tahsis edilen nesnelere genel olarak dinamik ömürlü nesneler denir. Bu
+    anlamda heap'den yapılan tahsisatlara ise "dynamic memory allocation" denilmektedir. Stack'de tahsis edilen değişkenlere
+    ise otomatik ömürlü değişkenler denir ve tahsis edilen alanlar otomatik olarak yaratılır ve yok edilir. Dinamik olarak
+    yaratılan alanlar ise kullanımı bittikten sonra artık başka nesneler için de tahsis adilebilsin diye yok edilir. Bu
+    yok etme işlemine "free" ya da "delete" etme işlemi denir. Heap'de tahsis edilen alanlar heap algoritması gereği
+    stack gibi otomatik olarak yok edilmez. Bunu bazı programlama dillerinde ve ortamlarında programcı yapmak zorundadır.
+    Java'da ise bu işlem "garbage collector (GC)" ayrı bir akış tarafından yapılır. Şüphesiz Java programıcısı açısından da
+    bir otomatik yok etme söz konusudur ancak bu stack'teki gibi doğal olarak yapılmaz. Öyleyse GC için şu sorular
+    sorulmalıdır:
+    1. GC yok edilmesi gereken bir alanı nasıl anlayacaktır?
+    2. Programcı dinamik olarak tahsis edilen bir alanı kendisi yok edebilir mi?
+    3. Bir nesne yok edilebilir duruma geldiğinde GC hemen devreye girip bu alanı yok eder mi?
+
+    Cevap 1: Bir nesneyi gösteren hiç bir referans kalmazsa bu durumda nesne "eligible/garbage collected" duruma gelir.
+    Bir nesneyi gösteren referansların takip edilmesine yönelik pek çok algoritma kullanılmaktadır. Örneğin referans
+    sayma (reference counting) algoritması her nesne için ayrı bir referans sayacı tutularak yapılır. Bu durumda nesnenin
+    adresi bir referansa atandığında sayaç 1 artılır, nesne bir referanstan kopartıldığında sayaç 1 azaltılır. Bu durumda
+    sayaç sıfıra düştüğünde artık hiç bir referans nesneyi göstermiyordur. Bu durumda artık nesne eligible duruma gelmiş
+    olur.
+
+    Cevap 2: Hayır. Programcı herhangi bir anda dinamik olarak tahsis edilmiş bir alanı yok edemez. Programcı akış içerisinde
+    nesneyi eligible duruma getirir.
+
+    Cevap 3: GC'nin ne zaman devreye gireceği yazanlara bırakılmıştır (implementation defined). Bu durumda bir nesne
+    eligible olur olmaz GC'nin devreye gireceği garanti olmadığından nesnenin eligible olur olmaz yok edileceği de
+    garanti değildir. Bu anlamda GC'nin etkinliğine güvenilir.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte reference counting yöntemi kullanıldığı varsayımıyla referansların takibi gösterilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample(); //rc1:1
+
+        Mample.foo(s); //rc1:2 -> 3
+        //rc1:1
+        s = new Sample(); //rc1:0 (eligible), rc2:1
+    }
+}
+
+
+class Mample {
+    public static void foo(Sample s)
+    {
+        Sample k;
+
+        k = s;
+
+        //...
+    }
+}
+class Sample {
+    //...
+}
 
 /*----------------------------------------------------------------------------------------------------------------------
 
