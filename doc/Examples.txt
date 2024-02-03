@@ -12879,8 +12879,8 @@ class Point {
 	- Hangi ctor'un çağrılacağı ne operatöründe geçilen argümanlara göre method overload resolution kurallarına göre
 	belirlenir. 
 	
-	- Ctor non-static bir metottur. Bu anlamda sınıfın non-static elemanlarına (tabii ki static elemanları da)
-	doğrudan erişilebilir.
+	- Ctor non-static bir metottur. Bu anlamda sınıfın non-static elemanlarına (tabii ki static elemanları da) doğrudan
+	erişilebilir.
 	
 	- Ctor'dan önce non-static olan ve final olmayan veri elemanlarına default değerler verilir.
 	
@@ -25449,6 +25449,276 @@ class Mample {
 class Sample {
     //...
 }
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Programcı isterse GC'nin devreye girmesini sağlayabilir. Bunu yapmanın birden fazla yöntemi olsa da tipik olarak
+    System sınıfının gc metodu çağrılabilir. Ancak burada GC'nin programcı tarafından devreye sokulması çoğu zaman
+    gerekmez. Bu anlamda GC'nin etkinliğine güvenilir. GC'nin sürekli ya da gereksiz yere devreye sokulması da performansı
+    olumsuz etkileyebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample(); //rc1:1
+
+        Mample.foo(s); //rc1:2 -> 3
+        //rc1:1
+        s = new Sample(); //rc1:0 (eligible), rc2:1
+
+        System.gc();
+    }
+}
+
+class Mample {
+    public static void foo(Sample s)
+    {
+        Sample k;
+
+        k = s;
+
+        //...
+    }
+}
+class Sample {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi "null address" belleğin kullanılmayan adresidir. null adress Java'da null sabiti ile temsil edilir.
+    null adresin kullanımına yönelik tipik durumlar şunlardır:
+    - Kontrol amaçlı kullanılabilir. Örneğin bir referansın null olması durumuna göre işlem yapılabilir.
+
+    - Bir metodun geri dönüş değeri bir referans ise ve metot akışına göre bir nesnenin referansına dönülemiyorsa
+    null adrese geri dönülebilir. Örneğin, bir takım bilgilere göre arama işlemi yapan bir metot bilgilere ilişkin
+    nesne bulunamıyorsa null değerine geri dönebilir.
+
+    - Bir referansa derleyici açısında değer atanması gerekiyorsa ancak bir nesnenin adresi atanamıyorsa, null adres
+    atanabilir. Bir sonraki demo örneği inceleyiniz
+
+    Bu kullanımlar dışında da kullanım söz konusu olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte * ile belirtilen noktada s'ye null değeri atanmazsa, ** ile belirtilen noktada error oluşur.
+    Çünkü içerisine değer atanmayan bir değişkenin kullanımı error oluşturur. Derleyici de örnekteki switch deyiminde
+    case bölümlerinden herhangi biri değeri yakalamazsa s'ye değer atanamaz düşüncesiyle error verecektir. Derleyici
+    ilgili algoritmayı takip edip zaten her durumda bir case bölümünün yakalayacağını anlamaya çalışmaz. Bu durumda
+    s referansına null değeri atanarak programcı bu hatadan kurtulmuş olur. Şüphesiz demo örneğimiz farklı yöntemlerle de
+    yapılabilir. Burada null referansın kullanımına odaklanınız
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+    public static void main(String[] args)
+    {
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("Bir sayı giriniz:");
+        int value = kb.nextInt();
+
+        if (value < 3 || value > 5) {
+            System.out.println("Geçersiz değer girdiniz!...");
+            System.exit(1);
+        }
+
+        Sample s = null; //*
+
+        switch (value) {
+            case 3 -> s = new Sample(10);
+            case 4 -> s = new Sample(20);
+            case 5 -> s = new Sample(30);
+        }
+
+        System.out.println(s.getX()); //**
+    }
+}
+
+class Sample {
+    private int m_x;
+
+    public Sample(int x)
+    {
+        m_x = x;
+    }
+
+    public int getX()
+    {
+        return m_x;
+    }
+
+    public void setX(int x)
+    {
+        m_x = x;
+    }
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağı seviyede non-static metot kavramı yoktur. Tüm metotlar adeta static metotmuş gibi (aslında global fonksiyonlar
+    olarak) ele alınır. Bu durumda non-static bir metodun aşağı seviyede ele alınabilmesi için o metodu çağıran referansın
+    adresi türünden bir parametre değişkenine daha sahip olması gerekir. Bu durumda aslında aşağı seviyede non-static
+    bir metodun ait olduğu sınıf türünden +1 tane referans parametresi vardır. Bu durumda non-static bir metot çağrısı da
+    aşağı seviyede, metodun çağrılmasında kullanılan referansın, metodun aşağı seviyedeki karşılığına argüman olarak
+    geçilmesi yoluyla yapılır. Anımsanacağı gibi ctor'da aslında non-static bir metottur. Aşağı seviyede ctor kavramı da
+    olmadığından aslında ctor'da bir metot olarak ele alınır. Genel olara bu metodun ismi "init"'dir. Bu metoda da aslında
+    aşağı seviyede +1 tane parametre geçilir. Aşağıdaki demo örnekte getX ve setX metotlarının aşağı seviyedeki yaklaşık
+    karşılıkları yazılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample(10);
+
+        System.out.printf("Value:%d%n", s.getX());
+
+        //Yukarıdaki getX çağrısının aşağı seviyedeki yaklaşık karşılığı
+        System.out.printf("Value:%d%n", Sample.getX(s));
+
+        s.setX(20);
+
+        //Yukarıdaki setX çağrısının aşağı seviyedeki yaklaşık karşılığı
+        Sample.setX(s, 20);
+    }
+}
+
+class Sample {
+    private int m_x;
+
+    public Sample(int x)
+    {
+        m_x = x;
+    }
+
+    public int getX()
+    {
+        return m_x;
+    }
+
+    //getX non-static metodunun aşağı seviyedeki yaklaşık karşılığı
+    public static int getX(Sample self)
+    {
+        return self.m_x;
+    }
+
+    public void setX(int x)
+    {
+        m_x = x;
+    }
+
+    //setX non-static metodunun aşağı seviyedeki yaklaşık karşılığı
+    public static void setX(Sample self, int x)
+    {
+        self.m_x = x;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Non-static metoda gizlice geçirilen bu adrese metot içerisinde this anahtar sözcüğü ile erişilebilir. this, ilgili
+    sınıf türünden bir referanstır ve metodun çağrılmasında kullanılan referansın gösterdiği nesnenin adresini temsil
+    eder. Bu anlamda non-static bir metoda this geçirilir diyebiliriz. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample(10);
+
+        System.out.printf("Value:%d%n", s.getX());
+        s.setX(20);
+    }
+}
+
+class Sample {
+    private int m_x;
+
+    public Sample(int x)
+    {
+        this.setX(x);
+    }
+
+    public int getX()
+    {
+        return this.m_x;
+    }
+
+    public void setX(int x)
+    {
+        this.m_x = x;
+    }
+}
+/*----------------------------------------------------------------------------------------------------------------------
+    static metotlara this geçirilmez. Yani static bir metot içerisinde this referansı kullanılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+    private static int ms_x;
+    public static void foo(int x)
+    {
+        this.ms_x = x; //error
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    this aslında bir sabittir. Yani this referansı atama operatörünün solunda olamaz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+    private int m_x;
+
+    public Sample(int x)
+    {
+        this.setX(x);
+    }
+
+    public int getX()
+    {
+        return this.m_x;
+    }
+
+    public void setX(int x)
+    {
+        this = new Sample(10); //error
+        this.m_x = x;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    this referansının kullanılması gerektiği durumlar olabilir. Örneğin sınıfın non-static veri elemanı ile aynı isimde
+    bir parametre değişkenine sahip bir non-static metodu içerisinde ilgili veri elemanına erişimek için qualified
+    olarak this referansı kullanılması gerekir. Aksi durumda yani unqualified kullanımda isim arama genel kurallarına
+    göre parametre değişkeni kullanılmış olur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+    private int x;
+
+    public Sample(int x)
+    {
+        this.x = x;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Biz genel olarak okunabilirliği etkilemediği sürece zorunlu durumlar dışında this kullanmamayı
+    tercih edeceğiz
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 

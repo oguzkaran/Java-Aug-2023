@@ -1,30 +1,14 @@
 /*----------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki demo örnekte reference counting yöntemi kullanıldığı varsayımıyla referansların takibi gösterilmiştir
+    this referansının kullanılması gerektiği durumlar olabilir. Örneğin sınıfın non-static veri elemanı ile aynı isimde
+    bir parametre değişkenine sahip bir non-static metodu içerisinde ilgili veri elemanına erişimek için qualified
+    olarak this referansı kullanılması gerekir. Aksi durumda yani unqualified kullanımda isim arama genel kurallarına
+    göre parametre değişkeni kullanılmış olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class App {
     public static void main(String[] args)
     {
-        Sample s = new Sample(); //rc1:1
 
-        Mample.foo(s); //rc1:2 -> 3
-        //rc1:1
-        s = new Sample(); //rc1:0 (eligible), rc2:1
     }
-}
-
-
-class Mample {
-    public static void foo(Sample s)
-    {
-        Sample k;
-
-        k = s;
-
-        //...
-    }
-}
-class Sample {
-    //...
 }
