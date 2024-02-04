@@ -26888,17 +26888,275 @@ class A {
     O(n ^ k)	-> k-sal karmaşıklık (k sabit): İçiçe k tane döngü var
 
     - Polinomsal olmayan (non-polynomial ya da kısaca NP) karmaşıklar
-    O(k ^ n)	-> Üstel karmaşıklık (k sabit). Örneğin n elemanlı bir kümenin alt kümelerinin bulunması
+    O(k ^ n)	-> Üstel karmaşıklık (k sabit). Örneğin n elemanlı bir kümenin tüm alt kümelerini dolaşan bir algoritma
     O(n!)		-> Faktoriyel karmaşıklık. Örneğin, gezgin satıcı problemi
 
     Anahtar Notlar: NP algoritmlara ilişkin kesin çözümler günümüzdeki bilgisayarlarla bile ya çok uzun zamanda
     yapılabilmekte ya da yapılamamaktadır. Bu sebeple bu problemlerin çözümleri sezgisel (heuristic) olarak yani
-    en yakın çözüm olacak şekilde tasarlanır. Halen bu tip problemlerin en yakın çözümleri üzerinde çalışılmaktadır
+    en yakın çözüm olacak şekilde tasarlanır. Halen bu tip problemlerin çözümleri üzerinde çalışılmaktadır.
 
     Bir algoritma çoğu zaman herhangi bir karmaşlıktayken, bazı zamanlar (bu az olmalıdır) üst bir karmaşıklıkta çalışıyorsa,
     bu tarz karmaşıklıklara "amortized (time) complexity" ya da "amortized time cost" denir. Örneğin bir algoritma çoğu
     zaman O(1), bazı zamanlarda O(n) karmaşıklıkta çalışıyor ise "constant amortized (time) complexity/cost" denir.
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi bir dizinin uzunluğu değiştirilemez. Bir diziyi büyütmek için yeni bir dizi yaratılmalı, eski
+    dizideki elemanlar yeni diziye kopyalanmaı ve eski diziyi gösteren referans yeni diziyi gösterir duruma getirilmelidir.
+    Burada diziye eklenmesi gereken eleman sayısı kadar ekleme yapılması durumunda her eklemede karmaşıklık O(N) olacaktır.
+    Bu durumda dizinin elemanına erişmin O(1) karmaşıklıkta olması avantajı ortadan kalkacaktır. Böylesi durumlarda
+    sabit zaman karmaşıklığından daha fazla yararlanabilmek için dizi eklenecek sayısından biraz daha fazla büyütülür. Bu
+    tarz bir büyütme işlemiyle birlikte bu diziye eleman eklenmsi çoğu zaman O(1), büyütüleceği zaman O(n) karmaşıklıkta
+    olur. Bu karmaşıklığa "amortized constant time complexity/cost" denir. Diziyi gerektiğinde büyüten veri yapılarına
+    (yani kabaca bir dizi içerisinde istenildiği kadar eleman tutulmasını sağlayan veri yapılarına) "dynamic array" veya
+    "resizeable array" denilmektedir. JavaSE'de veri yapılarına genel olarak "collections" denilmektedir ve hazır olarak
+    bulundurulan pek çok collection sınıf vardır. Burada dinamik büyüyen dizi veri yapısını temsil eden ArrayList ve
+    belirli ölçüde Vector sınıflarını ele alacağız. Diğer collection sınıflar "Java ile Uygulama Geliştirme 1" kursunda
+    incelenecektir. Dinamik büyüyen dizi veri yapıları büyütme işlemini eklenen eleman sayısından genel olarak fazla
+    yaptıklarından iki önemli kavram söz konusudur: capacity, size. capacity dizinin gerçek uzunluğudur, size ise o dizi
+    ele tutulan (eklenen) eleman sayısıdır. capacity değeri en az size kadar olur. size'dan küçük olamaz. ArrayList
+    sınıfında capacity değerinin büyütme politikasının (growth policy) nasıl olduğu belirtilmemiştir. Ancak capacity
+    değeri kullandığı belirtilmiştir. ArrayList sınıfının içsel olarak tuttuğu dizinin uzunluğu yani capacity değerini
+    veren bir metodu yoktur. Yani programcı o anki capacity değerinin kaç olduğu bilgisini elde edemez. Capacity değeri
+    gerektiren örneklerimizde ArrayList sınıfına çok benzeyen Vector sınıfını kullanacağız. Vector sınıfının o anki capacity
+    değerini döndüren capacity isimli metodu bulunmaktadır. Vector sınıfı büyük ölçüde ArrayList ile benzer metotlara
+    sahiptir ancak şüphesiz kendine özgü metotları da vardır. Vector sınıfı gerekmedikçe kullanılması önerilmeyen yerine
+    ArrayList kullanılması önerilen dinamik büyüyen bir dizi sınıfıdır. Gerekmedikçe kullanılmamasının gerekçeleri şu
+    an için önemsizdir. Biz de burada capacity değeri gerektiği yerlerde Vector sınıfını kullanacağız.
+
+    Anahtar Notlar: ArrayList/Vector sınıfları aslında generic sınıflardır. Java'da generic sınıflar generic değilmiş gibi
+    de kullanılabilmektedir. Bu durum aslında tavsiye edilmese de konu anlatımı açısından generic değilmiş gibi kullanacağız.
+    Generic sınıflar konusunda ayrıca detaylar ele alınacaktır. Generic sınıflar, generic değilmiş gibi kullanıldığında
+    static kod analizi araçları genel olarak uyarı mesajları verirler. Buradaki örneklerde bu uyarı dikkate alınmayacaktır.
+
+    ArrayList/Vector sınıfları içsel olarak Object türden dizi tutarlar
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList/Vector sınıfının default ctor'u ile capacity değerini 10 olan bir nesne yaratılır. ArrayList/Vector sınıfının
+    tek parametreli add metodu sona ekleme (append) yapar. Vector sınıfının capacity metodu ile o anki capacity değeri
+    elde edilebilir. ArrayList/Vector sınıfının size metodu ile tutulan eleman sayısı elde edilebilir. ArrayList/Vector
+    sınıfının get metodu ile belirli bir indeksteki eleman elde edilebilir. get metoduna verilen indeks numarası [0, size)
+    aralığında olmalıdır. Aksi durumda exception oluşur. aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.Random;
+import java.util.Vector;
+
+class App {
+    public static void main(String[] args)
+    {
+        Vector vec = new Vector();
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            vec.add(StringUtil.generateRandomTextTR(random, n));
+            Console.writeLine("Size:%d, Capacity:%d", vec.size(), vec.capacity());
+        }
+
+        int size = vec.size();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < size; ++i) {
+            String s = (String)vec.get(i);
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList/Vector sınıfının initialCapacity parametreli ctor'u ile başlangıç capacity değeri belirlenebilir. initialCapacity
+    değeri negatif olarak verilirse exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.Random;
+import java.util.Vector;
+
+class App {
+    public static void main(String[] args)
+    {
+        Vector vec = new Vector(Console.readInt("Capacity değerini giriniz:"));
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            vec.add(StringUtil.generateRandomTextTR(random, n));
+            Console.writeLine("Size:%d, Capacity:%d", vec.size(), vec.capacity());
+        }
+
+        int size = vec.size();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < size; ++i) {
+            String s = (String)vec.get(i);
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfı for-each döngü deyimi ile dolaşılabilir (iterable)
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList texts = new ArrayList(Console.readInt("Capacity değerini giriniz:"));
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            texts.add(StringUtil.generateRandomTextTR(random, n));
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : texts) {
+            String s = (String)o;
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfının iki parametreli add metodu aldığı indekse ekleme yapar (insert). Bu metot O(n) karmaşıklıktadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList texts = new ArrayList();
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            String text = StringUtil.generateRandomTextTR(random, n);
+
+            Console.writeLine(text);
+
+            texts.add(0, text);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : texts) {
+            String s = (String)o;
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfının set metodu ilgili indeksteki elemanı değiştirmek kullanılır. Bu metot O(1) karamaşıklıktadır.
+    Indek olarak [0, size) aralığı dışında bir değer verildiğinde exception oluşur. Metot değiştirme yapmadan önce tutulan
+    elemana ilişkin referansa gerid döner
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList texts = new ArrayList();
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            String text = StringUtil.generateRandomTextTR(random, n);
+
+            Console.writeLine(text);
+
+            texts.add(text);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : texts) {
+            String s = (String)o;
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+
+        String oldText = (String)texts.set(2, "ankara");
+
+
+        Console.writeLine("Old text:%s", oldText);
+
+        sb = new StringBuilder();
+
+        for (Object o : texts) {
+            String s = (String)o;
+
+            sb.append(s).append(" ");
+        }
+
+        Console.writeLine(sb.toString());
+    }
+}
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 

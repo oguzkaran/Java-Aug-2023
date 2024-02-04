@@ -21,21 +21,25 @@ public final class Console {
 
     public static int readInt(String prompt)
     {
+        write(prompt);
         return Integer.parseInt(KB.nextLine());
     }
 
     public static long readLong(String prompt)
     {
+        write(prompt);
         return Long.parseLong(KB.nextLine());
     }
 
     public static double readDouble(String prompt)
     {
+        write(prompt);
         return Double.parseDouble(KB.nextLine());
     }
 
     public static String readString(String prompt)
     {
+        write(prompt);
         return KB.nextLine();
     }
 
