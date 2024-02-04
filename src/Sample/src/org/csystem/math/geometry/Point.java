@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Point.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 13th January 2024
+	LAST UPDATE	: 4th February 2024
 	
 	Immutable Point class that represents a 2-dimensional
 	point
@@ -11,7 +11,7 @@
 ---------------------------------------------------------*/
 package org.csystem.math.geometry;
 
-public class Point {
+public final class Point {
 	private final double m_x, m_y;
 
 	private Point(double a, double b, boolean polar)

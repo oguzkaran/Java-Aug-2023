@@ -1,8 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------------
-    this referansının kullanılması gerektiği durumlar olabilir. Örneğin sınıfın non-static veri elemanı ile aynı isimde
-    bir parametre değişkenine sahip bir non-static metodu içerisinde ilgili veri elemanına erişimek için qualified
-    olarak this referansı kullanılması gerekir. Aksi durumda yani unqualified kullanımda isim arama genel kurallarına
-    göre parametre değişkeni kullanılmış olur
+    n / 2 -> n / 4 -> n / 8 -> n / 16 ... -> n / 2 ^ k
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -12,3 +9,4 @@ class App {
 
     }
 }
+

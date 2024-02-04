@@ -25692,10 +25692,15 @@ class Sample {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Biz genel olarak okunabilirliği etkilemediği sürece zorunlu durumlar dışında this kullanmamayı
+    tercih edeceğiz
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
     this referansının kullanılması gerektiği durumlar olabilir. Örneğin sınıfın non-static veri elemanı ile aynı isimde
-    bir parametre değişkenine sahip bir non-static metodu içerisinde ilgili veri elemanına erişimek için qualified
-    olarak this referansı kullanılması gerekir. Aksi durumda yani unqualified kullanımda isim arama genel kurallarına
-    göre parametre değişkeni kullanılmış olur
+    bir parametre değişkenine sahip bir non-static metodu içerisinde ilgili veri elemanına erişmek için qualified olarak
+    this referansı kullanılması gerekir. Aksi durumda yani unqualified kullanımda isim arama genel kurallarına göre
+    parametre değişkeni kullanılmış olur
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -25713,11 +25718,1186 @@ class Sample {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    04.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bazı sınıfların metotlarının peşpeşe çağrılması çoğu zaman gerekli olabilir. Bu durumda programcının ilgili metotları
+    bir zincir biçiminde çağırabilmesi için metotların çağıran referansa geri dönmesi gerekir. Örneğin StringBuilder
+    sınıfının pek çok metodu bu şekilde çağrılabilmektedir. Bu durumda bu tarz metotların this referansına geri dönmesi
+    gerekir. Bu tarz çağrıların yapılabildiği kalıba "fluent pattern" denilmektedir.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Scanner;
+
+class App {
+    public static void main(String[] args)
+    {
+        Scanner kb = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
+
+        System.out.print("Bir yazıyı giriniz:");
+        String s = kb.nextLine();
+
+        System.out.print("Bir Sayı giriniz:");
+        int count = Integer.parseInt(kb.nextLine());
+
+        for (int i = 0; i < count; ++i)
+            sb.append('[').append(s).append(']');
+
+        System.out.printf("Yazı:%s%n", sb.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Java'da bir sınıf default olarak türetmeye açıktır. Sınıfın türetmeye kapatılması için final olarak bildirilmesi
+    gerekir. final olarak bildirilen bir sınıftan türetme yapmak error oluşturur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B extends A { //error
+
+}
+
+final class A {
+    //...
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Anahtar Notlar: Biz genel olarak okunabilirliği etkilemediği sürece zorunlu durumlar dışında this kullanmamayı
-    tercih edeceğiz
+    Her zaman olmasa da bazı durumlarda immutable sınıflar türetmeye kapatılabilir. Aslında bu durumun immutable olmakla
+    her zaman doğrudan ilişkisi yoktur. Örneğin String sınıfı final olarak bildirilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class StringEx extends String { //error
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anımsanacağı gibi utility sınıfların ctor'ları bir convention olarak private yapılır. Zaten utility sınıfların
+    non-static elemanları (member) olmaz. Bu durumda bu tarz sınıfların final yapılması da bir convention'dır. Örneğin
+    Arrays, Math gibi sınıflar final olarak bildirilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Arrays;
+
+class A extends Arrays { //error
+    //...
+}
+
+class B extends Math { //error
+    //...
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: StringUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Utility class for string operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.string;
+
+import java.util.Random;
+
+public final class StringUtil {
+	private static final String LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+	private static final String LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+	private static final String LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+	private static final String LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+	private static final String LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+
+	private StringUtil()
+	{
+	}
+
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int index = -1;
+
+		while ((index = s1.indexOf(s2, index + 1)) != -1)
+			++count;
+
+		return count;
+	}
+
+	public static int countStringIgnoreCase(String s1, String s2)
+	{
+		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_EN);
+	}
+
+	public static String generateRandomTextTR(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_TR);
+	}
+
+	public static String generateRandomText(Random random, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(random.nextInt(len)));
+
+		return sb.toString();
+	}
+
+	public static String [] generateRandomTextsEN(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_EN);
+	}
+
+	public static String [] generateRandomTextsTR(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_TR);
+	}
+
+	public static String [] generateRandomTexts(Random random, int count, int min, int bound, String sourceText)
+	{
+		String [] texts = new String[count];
+
+		for (int i = 0; i < count; ++i)
+			texts[i] = generateRandomText(random, random.nextInt(min, bound), sourceText);
+
+		return texts;
+	}
+
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+
+			char cRight = Character.toLowerCase(s.charAt(right));
+
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+
+			if (cLeft != cRight)
+				return false;
+
+			++left;
+			--right;
+		}
+
+		return true;
+	}
+
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_EN);
+	}
+
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_TR);
+	}
+
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+
+		return true;
+	}
+
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
+	}
+
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+
+	public static String reverse(String s)
+	{
+		return new StringBuilder(s).reverse().toString();
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: NumberUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Utility class for numeric operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.numeric;
+
+public final class NumberUtil {
+	private NumberUtil()
+	{
+	}
+
+	public static int [] digits(long val)
+	{
+		int [] result = new int[digitsCount(val)];
+		val = Math.abs(val);
+
+		for (int i = result.length - 1; i >= 0; result[i--] = (int)(val % 10), val /= 10)
+			;
+
+		return result;
+	}
+
+	public static int digitsCount(long val)
+	{
+		return val == 0 ? 1 : (int)Math.log10(Math.abs(val)) + 1;
+	}
+
+	public static int digitsCount(int val)
+	{
+		return digitsCount((long)val);
+	}
+
+	public static int digitsSum(int val)
+	{
+		int total = 0;
+
+		while (val != 0) {
+			total += val % 10;
+			val /= 10;
+		}
+
+		return Math.abs(total);
+	}
+
+	public static int factorial(int n)
+	{
+		int result = 1;
+
+		for (int i = 2; i <= n; ++i)
+			result *= i;
+
+		return result;
+	}
+
+	public static int getDigitsPowSum(int val)
+	{
+		int n = digitsCount(val);
+		int result = 0;
+
+		while (val != 0) {
+			result += Math.pow(val % 10, n);
+			val /= 10;
+		}
+
+		return result;
+	}
+
+	public static boolean isArmstrong(int val)
+	{
+		return val >= 0 && getDigitsPowSum(val) == val;
+	}
+
+	public static boolean isPrime(long val)
+	{
+		if (val <= 1)
+			return false;
+
+		if (val % 2 == 0)
+			return val == 2;
+
+		if (val % 3 == 0)
+			return val == 3;
+
+		if (val % 5 == 0)
+			return val == 5;
+
+		if (val % 7 == 0)
+			return val == 7;
+
+		for (long i = 11; i * i <= val; i += 2)
+			if (val % i == 0)
+				return false;
+
+		return true;
+	}
+
+
+	public static int mid(int a, int b, int c)
+	{
+		if (a <= b && b <= c || c <= b && b <= a)
+			return b;
+
+		if (b <= a && a <= c || c <= a && a <= b)
+			return a;
+
+		return c;
+	}
+
+	public static long nextClosestPrime(long val)
+	{
+		while (!isPrime(++val))
+			;
+
+		return val;
+	}
+
+	public static int nextFibonacciNumber(int val)
+	{
+		if (val < 0)
+			return 0;
+
+		int prev1 = 1, prev2 = 0;
+
+		while (true) {
+			int next = prev1 + prev2;
+
+			if (next > val)
+				return next;
+
+			prev2 = prev1;
+			prev1 = next;
+		}
+	}
+
+	public static int nthFibonacciNumber(int n)
+	{
+		if (n <= 2)
+			return n - 1;
+
+		int prev1 = 1, prev2 = 0, val = prev1 + prev2;
+
+		for (int i = 3; i < n; ++i) {
+			prev2 = prev1;
+			prev1 = val;
+			val = prev1 + prev2;
+		}
+
+		return val;
+	}
+
+
+	public static long nthPrime(int n)
+	{
+		long val = 2;
+		int count = 0;
+
+		while (true) {
+			if (isPrime(val))
+				++count;
+
+			if (count == n)
+				return val;
+
+			++val;
+		}
+	}
+
+
+	public static long previousClosestPrime(long val)
+	{
+		while (!isPrime(--val))
+			;
+
+		return val;
+	}
+
+
+	public static int reversed(int val)
+	{
+		int result = 0;
+
+		while (val != 0) {
+			result = result * 10 + val % 10;
+			val /= 10;
+		}
+
+		return result;
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: MatrixUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Utility class for matrix operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.matrix;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.Random;
+
+public final class MatrixUtil {
+    private MatrixUtil()
+    {
+    }
+
+    public static int [][] add(int [][] a, int [][] b)
+    {
+        int row = a.length;
+        int col = a[0].length;
+        int [][] total = new int[row][col];
+
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
+                total[i][j] = a[i][j] + b[i][j];
+
+        return total;
+    }
+
+    public static void addBy(int [][] a, int val)
+    {
+        ArrayUtil.addBy(a, val);
+    }
+
+    public static int [][] subtract(int [][] a, int [][] b)
+    {
+        int row = a.length;
+        int col = a[0].length;
+        int [][] total = new int[row][col];
+
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
+                total[i][j] = a[i][j] - b[i][j];
+
+        return total;
+    }
+
+    public static void subtractBy(int [][] a, int val)
+    {
+        ArrayUtil.subtractBy(a, val);
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        ArrayUtil.multiplyBy(a, val);
+    }
+
+    public static int [][] generateRandomMatrix(Random random, int row, int col, int origin, int bound)
+    {
+        int [][] a = new int[row][col];
+
+        ArrayUtil.fillRandomArray(random, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [][] generateRandomSquareMatrix(Random random, int n, int origin, int bound)
+    {
+        return generateRandomMatrix(random, n, n, origin, bound);
+    }
+
+    public static boolean isMatrix(int [][] a)
+    {
+        for (int i = 1; i < a.length; ++i)
+            if (a[0].length != a[i].length)
+                return false;
+
+        return true;
+    }
+
+    public static boolean isSquareMatrix(int [][] a)
+    {
+        return isMatrix(a) && a.length == a[0].length;
+    }
+
+    public static int sumDiagonal(int [][] a)
+    {
+        int total = 0;
+
+        for (int i = 0; i < a.length; ++i)
+            total += a[i][i];
+
+        return total;
+    }
+
+    public static int [][] transpose(int [][] a)
+    {
+        int [][] t = new int[a[0].length][a.length];
+
+        for (int i = 0; i < a.length; ++i)
+            for (int j = 0; j < a[i].length; ++j)
+                t[j][i] = a[i][j];
+
+        return t;
+    }
+
+    //...
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: ArrayUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Utility class for array operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.array;
+
+import java.util.Random;
+
+public final class ArrayUtil {
+    private ArrayUtil()
+    {}
+
+    private static void bubbleSortAscending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k + 1] < a[k])
+                    swap(a, k, k + 1);
+    }
+
+    private static void bubbleSortDescending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k] < a[k + 1])
+                    swap(a, k, k + 1);
+    }
+
+    private static void selectionSortAscending(int [] a)
+    {
+        int min, minIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            min = a[i];
+            minIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (a[k] < min) {
+                    min = a[k];
+                    minIndex = k;
+                }
+
+            a[minIndex] = a[i];
+            a[i] = min;
+        }
+    }
+
+    private static void selectionSortDescending(int [] a)
+    {
+        int max, maxIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            max = a[i];
+            maxIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (max < a[k]) {
+                    max = a[k];
+                    maxIndex = k;
+                }
+
+            a[maxIndex] = a[i];
+            a[i] = max;
+        }
+    }
+
+    public static void addBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] += val;
+    }
+
+    public static void bubbleSort(int [] a)
+    {
+        bubbleSort(a, false);
+    }
+
+    public static void bubbleSort(int [] a, boolean desc)
+    {
+        if (desc)
+            bubbleSortDescending(a);
+        else
+            bubbleSortAscending(a);
+    }
+
+    public static void fillRandomArray(Random random, int [] a, int origin, int bound)
+    {
+        fillRandomArray(random, a, a.length, origin, bound);
+    }
+
+    public static void fillRandomArray(Random random, int [] a, int count, int origin, int bound)
+    {
+        for (int i = 0; i < count; ++i)
+            a[i] = random.nextInt(origin, bound);
+    }
+
+    public static void fillRandomArray(Random random, int [][] a, int origin, int bound)
+    {
+        for (int [] array : a)
+            fillRandomArray(random, array, origin, bound);
+    }
+
+    public static int [] generateRandomArray(Random random, int count, int origin, int bound)
+    {
+        int [] a = new int[count];
+
+        fillRandomArray(random, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [] generateRandomArray(int count, int origin, int bound)
+    {
+        return generateRandomArray(new Random(), count, origin, bound);
+    }
+
+    public static int [] histogramData(int [] a, int n)
+    {
+        int [] result = new int[n + 1];
+
+        for (int val : a)
+            ++result[val];
+
+        return result;
+    }
+
+    public static boolean isEmpty(int [] a)
+    {
+        return a.length == 0;
+    }
+
+    public static int max(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.max(val, result);
+
+        return result;
+    }
+
+    public static int min(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.min(val, result);
+
+        return result;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] *= val;
+    }
+
+    public static int partition(int [] a, int threshold)
+    {
+        int partitionIndex = 0;
+
+        while (partitionIndex != a.length && a[partitionIndex] < threshold)
+            ++partitionIndex;
+
+        if (partitionIndex == a.length)
+            return partitionIndex;
+
+        for (int i = partitionIndex + 1; i < a.length; ++i)
+            if (a[i] < threshold)
+                swap(a, i, partitionIndex++);
+
+        return partitionIndex;
+    }
+
+    public static void print(int [] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [] a)
+    {
+        print(n, a, a.length);
+    }
+
+    public static void print(int [] a, int count)
+    {
+        print(1, a, count);
+    }
+
+    public static void print(int n, int [] a, int count)
+    {
+        print(n, a, count, " ", "\n");
+    }
+
+    public static void print(int [] a, int count, String sep, String end)
+    {
+        print(1, a, count, sep, end);
+    }
+
+    public static void print(int n, int [] a, int count, String sep, String end)
+    {
+        String fmt = String.format("%%0%dd%%s", n);
+
+        for (int i = 0; i < count; ++i)
+            System.out.printf(fmt, a[i], sep);
+
+        System.out.print(end);
+    }
+
+    public static void print(int [][] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [][] a)
+    {
+        for (int [] array : a)
+            print(n, array);
+    }
+
+    public static void reverse(int [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static void reverse(char [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static int [] reversed(int [] a)
+    {
+        int [] result = new int[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static char [] reversed(char [] a)
+    {
+        char [] result = new char[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static void selectionSort(int [] a)
+    {
+        selectionSort(a, false);
+    }
+
+    public static void selectionSort(int [] a, boolean desc)
+    {
+        if (desc)
+            selectionSortDescending(a);
+        else
+            selectionSortAscending(a);
+    }
+
+    public static void subtractBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] -= val;
+    }
+
+    public static int sum(int [] a)
+    {
+        int total = 0;
+
+        for (int val : a)
+            total += val;
+
+        return total;
+    }
+
+    public static void swap(int [] a, int i, int k)
+    {
+        int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Tüm ctor'ları private olarak bir sınıftan türetme yapılması zaten sentaks olarak hata olacağından bu tarz sınıfların
+    final yapılması uygundur. Zaten utility sınıflarında ctor'ları private yapıldığından yine final yapılması uygundur.
+----------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Immutable Point class that represents a 2-dimensional
+	point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public final class Point {
+	private final double m_x, m_y;
+
+	private Point(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static Point createCartesian(double x, double y)
+	{
+		return new Point(x, y, false);
+	}
+
+	public static Point createPolar(double radius, double theta)
+	{
+		return new Point(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(Point other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: MutablePoint.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	MutablePoint class that represents a 2-dimensional point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public final class MutablePoint {
+	private double m_x, m_y;
+
+	private MutablePoint(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static MutablePoint createCartesian(double x, double y)
+	{
+		return new MutablePoint(x, y, false);
+	}
+
+	public static MutablePoint createPolar(double radius, double theta)
+	{
+		return new MutablePoint(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public void setX(double x)
+	{
+		m_x = x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+	public void setY(double y)
+	{
+		m_y = y;
+	}
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(MutablePoint other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+
+	public void offset(double dx, double dy)
+	{
+		m_x += dx;
+		m_y += dy;
+	}
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: IntValue.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 4th February 2024
+
+	Wrapper class that use cache for values in [-128, 127]
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.primitive.wrapper;
+
+public final class IntValue {
+    private static final int CACHE_MIN_VALUE = -128;
+    private static final int CACHE_MAX_VALUE = 127;
+    private static final IntValue [] CACHE = new IntValue[CACHE_MAX_VALUE - CACHE_MIN_VALUE + 1];
+    private final int m_value;
+
+    private IntValue(int value)
+    {
+        m_value = value;
+    }
+
+    public static final IntValue ZERO = of(0);
+    public static final IntValue ONE = of(1);
+
+    public static IntValue of(int value)
+    {
+        if (value < CACHE_MIN_VALUE || value > CACHE_MAX_VALUE)
+            return new IntValue(value);
+
+        if (CACHE[value - CACHE_MIN_VALUE] == null)
+            CACHE[value - CACHE_MIN_VALUE] = new IntValue(value);
+
+        return CACHE[value - CACHE_MIN_VALUE];
+    }
+
+    public int getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Soru: final anahtar sözcüğü olmasaydı bir sınıfı türetmeye nasıl kapatırdınız? Implemente ederek gösteriniz?
+    Cevap: Sınıfın ctor'u private yapılabilir. Bu durumda ilgili sınıf türünden nesne de yaratılamaz duruma gelir. Nesne
+    yaratılmasını sağlamak için bir factory yazılabilir
+
+    Şüphesiz final anahtar sözcüğü varken böylesi bir tasarıma pratikte gerek yoktur. Puzzle olarak sorulmuştur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        A x = A.create();
+    }
+}
+
+class B extends A { //error
+
+}
+
+class A {
+    private A()
+    {}
+
+    public static A create()
+    {
+        return new A();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Algoritma Kavramı ve Algoritma Analizi:
+    Algoritma bir problemin çözümüne ulaştıran doğru adımlara denir. Algoritmaların anlatımında belli bir formal yöntem
+    yoktur. Genel olarak sahte kodlar (pseudo codes) kullanılarak açıklanır. Algoritmalar, açıklama bakımından genel olarak
+    dilden bağımsızdır. Ancak ince noktalara gelindiğinde algoritmalar da dile bağımlı hale gelir. Örneğin, bir dilde
+    belli bir işi daha kolay yapan deyimler bulunabilir. Bu durumda algoritma o deyimlerle implemente edilir.
+
+    Bir algoritmanın işleyişinin masaya yatırılmasına "algoritma analizi (analysis of algorithm)" denir. Bu analiz
+    genel olarak Matematiksel yöntemler kullanılarak yapılır. İki algoritmanın karşılaştırılabilmesi için kullanılan ölçüye
+    "algoritmanın karmaşıklığı (complexity of algorithm)" denir. Algoritmanın karmaşıklığı için temel iki ölçüt kullanılır:
+    Hız (speed), kaynak kullanımı (resource usage). Burada baskın ölçüt hızdır. Yani daha çok algoritmalar hızlarına
+    göre karşılaştırılır. Ancak bazı durumlarda kaynak kullanımı da gözönüne alınır. Bu durumlar hıza göre az da olsa
+    önemli durumlardır. Her iki ölçütün de en iyi olduğu durum çoğu zaman mümkün olmaz.
+
+    Örneğin aşağıdaki gibi yazılmış, en büyük sayıyı bulma algoritması için:
+    int [] a = {...};
+
+    int max = a[0];
+
+    n = a.length;
+
+    for (int i = 1; i < n ++i)
+        if (max < a[i])
+            max = a[i];
+
+    Burada toplam işlemin sayısı max = a[i] işlemine bağlıdır. Bu algoritma için dizinin elemanları bilinmeden bu işlemin
+    ne kadar yapıldığı anlaşılamaz. İşte algoritma analizinde işlemlerin sayısı hesaplanırken üç durum dikkate alınır:
+
+    1. Ortalama durum (average case condition)
+    2. En kötü durum (worst case condition)
+    3. En iyi durum (best case condition)
+
+    En kötü durum olabileceklerinin en kötüsüdür. Yukarıdaki örnekte en kötü durumda max = a[i] işlemi "n - 1" kez
+    yapılır. Ortalama durum tüm olasılıkların ortalamasını temsil eder. Buna göre yukarıdaki örnekte max = a[i] işlemi
+    "(n - 1) / 2" kez yapılır. En iyi durum olabileceklerin en iyisini temsil eder. Yani max = a[i] işlemi hiç yapılmaz.
+    Algoritma analizinde en iyi durumun çok yararı yoktur. Çünkü aşırı iyimserlik programlamada çok değerli değildir. En
+    kötü durum senaryosu önemlidir. Bazı algoritmalar için en kötü duruma hazırlıklı olmak gerekebilir. En önemli durum
+    ortalama durumdur. Ortalama durum algoritmanın karakterini en iyi belirten durumdur. Genel olarak algoritma analizi
+    ortalama durum ve en kötü durum için yapılır
+
+    Algoritmalarda işlem sayısına ilişkin analizler çok da kolay değildir. Özellikle ortalama durumu hesaplamak bazen çok
+    karmaşık olabilmektedir. Algoritmaları pratik bakımdan karşılaştırmak için asimtotik notasyonlardan yararlanılır. Bu
+    notasyonlardan en çok kullanılanı "Big O"'dur. Bu notasyonda belli karakterdeki algoritmalar aynı kategoride kabul
+    edilir. Eğer bir algoritma birden fazla kategoriye sahipse en kötü duruma ilişkin kategori gerçek kategoridir.
+
+    Anahtar Notlar: Bir program ömrünü genel olarak döngülerde geçirir. Dolayısıyla algoritmanın karşılaştırılmasında
+    genel olarak döngüler kullanılır.
+
+    Anahtar Notlar: Asimtotik gösterilişte iki algoritma aynı kategoride olsa da tam anlamıyla aynı sayıda işlem yapılmıyor
+    olabilir. Örneğin bir dizinin en büyük elemanını bulma algoritması ile dizinin elemanlarının toplamını bulma algoritmalarının
+    her ikisi de tek bir döngü içerdiği için aynı kategoridedir. Şüphesiz her ikisinin işlem sayısı aynı değildir. Yine
+    örneğin bir algoritma içiçe iki döngü içerip, devamında tekil n tane döngü içeriyorsa, bu algoritma yalnızca içiçe
+    iki döngü içeren algoritma ile aynı kategoridedir anca işlem sayısı aynı değildir
+
+    Algorimanın karmaşıklığının Big O notasyonu ile iyiden kötüye doğru kategorileri şunlardır:
+    - Polinomsal (polynomial) karmaşıklar
+    O(1)		-> Sabit karmaşıklık: Döngü yok. Bir üçgenin alanının bulunması, Dizinin bir elemanına erişim.
+
+    O(logn)		-> logaritmik karmaşıklık (2 tabanında): Tek bir döngü var, her adımda dönme sayısı yarı yarıya azalıyor.
+    Örneğin binary search
+
+    O(n)		-> doğrusal karmaşıklık: Tek döngü. Örnğin bir dizinin elemanları toplamının bulunması, bir dizinin en büyük
+    elemanının bulunması
+
+    O(n * logn)	-> nlogn karmaşıklık (2 tabanında): İçiçe iki döngü var birisinde her adımda dönme sayısı yarı yarıya düşüyor.
+    Örneğin, quick sort
+
+    O(n ^ 2)	-> Karesel karmaşıklık: İçiçe iki döngü var. Örneğin, bir matrisin elemanları toplamının bulunması, bubble
+    sort ve selection sort algoritmaları, iki matrisin toplanması
+
+    O(n ^ 3)	-> Küpsel karmaşıklık: İçiçe üç döngü var. Örneğin, matris çarpımı, bir dikdörtgen prizmanın tüm noktalarının
+    dolaşılması.
+
+    ...
+
+    O(n ^ k)	-> k-sal karmaşıklık (k sabit): İçiçe k tane döngü var
+
+    - Polinomsal olmayan (non-polynomial ya da kısaca NP) karmaşıklar
+    O(k ^ n)	-> Üstel karmaşıklık (k sabit). Örneğin n elemanlı bir kümenin alt kümelerinin bulunması
+    O(n!)		-> Faktoriyel karmaşıklık. Örneğin, gezgin satıcı problemi
+
+    Anahtar Notlar: NP algoritmlara ilişkin kesin çözümler günümüzdeki bilgisayarlarla bile ya çok uzun zamanda
+    yapılabilmekte ya da yapılamamaktadır. Bu sebeple bu problemlerin çözümleri sezgisel (heuristic) olarak yani
+    en yakın çözüm olacak şekilde tasarlanır. Halen bu tip problemlerin en yakın çözümleri üzerinde çalışılmaktadır
+
+    Bir algoritma çoğu zaman herhangi bir karmaşlıktayken, bazı zamanlar (bu az olmalıdır) üst bir karmaşıklıkta çalışıyorsa,
+    bu tarz karmaşıklıklara "amortized (time) complexity" ya da "amortized time cost" denir. Örneğin bir algoritma çoğu
+    zaman O(1), bazı zamanlarda O(n) karmaşıklıkta çalışıyor ise "constant amortized (time) complexity/cost" denir.
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------

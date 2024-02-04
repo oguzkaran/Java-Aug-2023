@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: MatrixUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 7th January 2024
+	LAST UPDATE	: 4th February 2024
 
 	Utility class for matrix operations
 
@@ -14,7 +14,7 @@ import org.csystem.util.array.ArrayUtil;
 
 import java.util.Random;
 
-public class MatrixUtil {
+public final class MatrixUtil {
     private MatrixUtil()
     {
     }

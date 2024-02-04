@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: IntValue.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 13th January 2024
+	LAST UPDATE	: 4th February 2024
 
 	Wrapper class that use cache for values in [-128, 127]
 
@@ -10,7 +10,7 @@
 ---------------------------------------------------------*/
 package org.csystem.primitive.wrapper;
 
-public class IntValue {
+public final class IntValue {
     private static final int CACHE_MIN_VALUE = -128;
     private static final int CACHE_MAX_VALUE = 127;
     private static final IntValue [] CACHE = new IntValue[CACHE_MAX_VALUE - CACHE_MIN_VALUE + 1];

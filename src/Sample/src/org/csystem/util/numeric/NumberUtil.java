@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: NumberUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 7th January 2024
+	LAST UPDATE	: 4th February 2024
 	
 	Utility class for numeric operations
 	
@@ -10,7 +10,7 @@
 ---------------------------------------------------------*/
 package org.csystem.util.numeric;
 
-public class NumberUtil {
+public final class NumberUtil {
 	private NumberUtil()
 	{
 	}

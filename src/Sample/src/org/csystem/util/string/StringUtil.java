@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 13th January 2024
+	LAST UPDATE	: 4th February 2024
 	
 	Utility class for string operations
 	
@@ -12,7 +12,7 @@ package org.csystem.util.string;
 
 import java.util.Random;
 
-public class StringUtil {
+public final class StringUtil {
 	private static final String LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
 	private static final String LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
 	private static final String LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
