@@ -1,9 +1,11 @@
 ﻿/*----------------------------------------------------------------------------------------------------------------------
-										Java ile Nesne Yönelimli Programlama
+    Java ile Nesne Yönelimli Programlama
 
-											   Eğitmen: Oğuz KARAN
+    Çalışma Soruları ve Çözümleri
 
-										C ve Sistem Programcıları Derneği
+    Eğitmen: Oğuz KARAN
+
+    C ve Sistem Programcıları Derneği
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
 	Homework-001-1.sorunun bir çözümü
@@ -601,6 +603,1498 @@ class NumberUtil {
 			result *= i;
 		
 		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-002-5. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)
+	{
+		PrintGoldbachApp.run();
+	}
+}
+
+class PrintGoldbachApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("2'den büyük bir çift sayı giriniz:");
+			int val = Integer.parseInt(kb.nextLine());
+			
+			if (val == 0)
+				break;
+			
+			if (val <= 3 || val % 2 != 0) {
+				System.out.println("2'den büyük bir çift sayı girmelisiniz!...");
+				continue;
+			}
+			
+			NumberUtil.printGoldbach(val);
+		}
+	}
+}
+
+class NumberUtil {
+	public static void printGoldbach(int val)
+	{
+		for (int a = val - 1; a >= 2; --a) {
+			int b = val - a;
+			
+			if (isPrime(a) && isPrime(b) && a >= b)
+				System.out.printf("%d + %d = %d%n", a, b, a + b);
+		}
+	}
+	
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;
+		
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-1. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		SatisfyConditionsApp.run();
+	}
+}
+
+class SatisfyConditionsApp {
+	public static boolean isCondition1Satisfied(int a, int b, int c)
+	{
+		return 100 * c + 10 * b + a > 100 * a + 10 * b + c;
+	}
+	
+	public static boolean isCondition2Satisfied(int a, int b, int c)
+	{
+		return NumberUtil.isPrime(100 * a + 10 * b + c);
+	}
+	
+	public static boolean isCondition3Satisfied(int a, int b, int c)
+	{
+		return NumberUtil.isPrime(100 * c + 10 * b + a);
+	}
+	
+	
+	public static boolean isCondition4Satisfied(int a, int b)
+	{
+		return NumberUtil.isPrime(10 * a + b);
+	}
+	
+	public static boolean isCondition5Satisfied(int b, int c)
+	{
+		return NumberUtil.isPrime(10 * b + c);
+	}
+	
+	public static boolean isCondition6Satisfied(int c, int b)
+	{
+		return NumberUtil.isPrime(10 * c + b);
+	}
+	
+	public static boolean isCondition7Satisfied(int b, int a)
+	{
+		return NumberUtil.isPrime(10 * b + a);
+	}
+	
+	public static boolean isAllSatisfied(int val)
+	{
+		int a = val / 100;
+		int b = val / 10 % 10;
+		int c = val % 10;
+		
+		return isCondition1Satisfied(a, b, c) && isCondition2Satisfied(a, b, c) 
+				&& isCondition3Satisfied(a, b, c) && isCondition4Satisfied(a, b)
+				&& isCondition5Satisfied(b, c) && isCondition6Satisfied(c, b)
+				&& isCondition7Satisfied(b, a);
+	}
+	
+	public static void run()
+	{
+		for (int val = 100; val <= 999; ++val)
+			if (isAllSatisfied(val))
+				System.out.printf("%d ", val);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;	
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-2. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsPrimeXTest.run();
+	}
+}
+
+class IsPrimeXTest {
+
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		long n = kb.nextLong();
+		
+		for (long i = 0; i <= n; ++i)
+			if (NumberUtil.isPrimeX(i))
+				System.out.println(i);
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrimeX(long a)
+	{
+		long sum = a;
+		boolean result;
+		
+		while ((result = isPrime(sum)) && sum > 9)
+			sum = sumDigits(sum);
+		
+		return result;
+	}
+	
+	public static int sumDigits(long a)
+	{
+		int sum = 0;
+		
+		while (a != 0) {
+			sum += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(sum);
+	}
+	
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-2. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsPrimeXTest.run();
+	}
+}
+
+class IsPrimeXTest {
+
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		long n = kb.nextLong();
+		
+		for (long i = 0; i <= n; ++i)
+			if (NumberUtil.isPrimeX(i))
+				System.out.println(i);
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static boolean isPrimeX(long a)
+	{
+		boolean result;
+		
+		for (long sum = a; (result = isPrime(sum)) && sum > 9; sum = sumDigits(sum))
+			;
+		
+		return result;
+	}
+	
+	public static int sumDigits(long a)
+	{
+		int sum = 0;
+		
+		while (a != 0) {
+			sum += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(sum);
+	}
+	
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-3. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		CalculateDigitalRootTest.run();
+	}
+}
+
+class CalculateDigitalRootTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i <= n; ++i)
+			System.out.printf("%d sayısının basamaksal kökü: %d%n", i, NumberUtil.calculateDigitalRoot(i));
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static int calculateDigitalRoot(int a)
+	{
+		int root = Math.abs(a);
+		
+		while ((root = sumDigits(root)) > 9)
+			;
+		
+		return root;
+	}
+	
+	public static int sumDigits(long a)
+	{
+		int sum = 0;
+		
+		while (a != 0) {
+			sum += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(sum);
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-3. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		CalculateDigitalRootTest.run();
+	}
+}
+
+class CalculateDigitalRootTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		for (int i = 0; i <= n; ++i)
+			System.out.printf("%d sayısının basamaksal kökü: %d%n", i, NumberUtil.calculateDigitalRoot(i));
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static int calculateDigitalRoot(int a)
+	{
+		int root = Math.abs(a);
+		
+		while (root > 9)
+			root = sumDigits(root);
+		
+		return root;
+	}
+	
+	public static int sumDigits(long a)
+	{
+		int sum = 0;
+		
+		while (a != 0) {
+			sum += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(sum);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-4. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsFactorianTest.run();
+	}
+}
+
+class IsFactorianTest {
+	public static void run()
+	{
+		for (int i = 1; i <= 100_000; ++i)
+			if (NumberUtil.isFactorian(i))
+				System.out.printf("%d ", i);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isFactorian(int n)
+	{
+		return n > 0 && sumFactorialDigits(n) == n;
+	}
+	
+	public static int sumFactorialDigits(int n)
+	{
+		int sum = 0;
+		
+		while (n != 0) {
+			sum += factorial(n % 10);
+			n /= 10;
+		}
+		
+		return sum;
+	}
+	
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-5. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsSuperPrimeTest.run();
+	}
+}
+
+class IsSuperPrimeTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			long val = Long.parseLong(kb.nextLine());
+			
+			if (val == 0)
+				break;
+			
+			if (!NumberUtil.isPrime(val))
+				continue;
+			
+			if (NumberUtil.isSuperPrime(val))
+				System.out.printf("%d sayısı süper asaldır%n", val);
+			else
+				System.out.printf("%d sayısı süper asal değildir%n", val);
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static boolean isSuperPrime(long a)
+	{
+		return isPrime(a) && isPrime(indexOfPrime(a));
+	}
+	
+	public static int indexOfPrime(long a)
+	{
+		int i = 1;
+		long val = 2;
+		
+		for (;;) {
+			if (val == a)
+				return i;
+			
+			if (isPrime(val))
+				++i;
+			
+			++val;
+		}
+	}
+	
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-6. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsHardyRamanujanApp.run();
+	}
+}
+
+class IsHardyRamanujanApp {
+	public static void run()
+	{
+		for (int n = 1; n < 100_000; ++n)
+			if (NumberUtil.isHardyRamanujan(n))
+				System.out.printf("%d ", n);
+		
+		System.out.println();
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static boolean isHardyRamanujan(int n)
+	{
+		return n > 0 && getHardyRamanujanCount(n) == 2;
+	}
+	
+	public static int getHardyRamanujanCount(int n)
+	{
+		int count = 0;
+		
+		EXIT_LOOP:
+		for (int a = 1; a * a * a < n; ++a)
+			for (int b = a + 1; a * a * a + b * b * b <= n; ++b)
+				if (a * a * a + b * b * b == n) {
+					if (++count == 2)
+						break EXIT_LOOP;
+					++a;
+				}
+		
+		return count;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-7. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		IsDecimalHarshadTest.run();
+	}
+}
+
+class IsDecimalHarshadTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		System.out.print("Bir sayı giriniz:");
+		int n = kb.nextInt();
+		
+		while (n-- > 0)
+			if (NumberUtil.isDecimalHarshad(n + 1))
+				System.out.println(n + 1);	
+	}
+}
+
+class NumberUtil {
+	public static boolean isDecimalHarshad(int val)
+	{
+		return val > 0 && val % sumDigits(val) == 0; 
+	}
+	
+	public static int sumDigits(long a)
+	{
+		int sum = 0;
+		
+		while (a != 0) {
+			sum += a % 10;
+			a /= 10;
+		}
+		
+		return Math.abs(sum);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-8. sorunun bir çözmü
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		PrintCollatzTest.run();
+	}
+}
+
+class PrintCollatzTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n == 0)
+				break;
+			
+			System.out.println("-----------------");
+			NumberUtil.printCollatz(n);
+			System.out.println("-----------------");
+		}
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static void printCollatz(int n)
+	{
+		if (n <= 0) {
+			System.out.println("Geçersiz sayı!...");
+			return;
+		}
+		
+		System.out.println(n);
+		
+		while (n != 1) {
+			if (n % 2 == 0)
+				n /= 2;
+			else
+				n = 3 * n + 1;
+			
+			System.out.println(n);
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-003-8.sorunun bir çözmü
+	(Not: Çözümde koşul operatörü kullanılmıştır) 
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{	
+		PrintCollatzTest.run();
+	}
+}
+
+class PrintCollatzTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int n = Integer.parseInt(kb.nextLine());
+			
+			if (n == 0)
+				break;
+			
+			System.out.println("-----------------");
+			NumberUtil.printCollatz(n);
+			System.out.println("-----------------");
+		}
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static void printCollatz(int n)
+	{
+		if (n <= 0) {
+			System.out.println("Geçersiz sayı!...");
+			return;
+		}
+		
+		System.out.println(n);
+		
+		while (n != 1)
+			System.out.println(n = (n % 2 == 0) ? (n / 2) : (3 * n + 1));
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-004.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)	
+	(Açıklama: Soruda birden fazla Scanner nesnesi yaratılmaması için bazı işlemler metot yazmadan yapılmıştır. Sorunun 
+	verildiği tarihte referans parametreli metotlar henüz gösterilmediği için aşağıdaki gibi yapılmıştır  
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		CalculateSumCountMinMaxAvgApp.run();			
+	}
+}
+
+class CalculateSumCountMinMaxAvgApp {
+	public static void printReport(int count, int sum, int min, int max)
+	{
+		System.out.printf("Toplam %d değer girildi%n", count);
+		System.out.printf("Max = %d%n", max);
+		System.out.printf("Min = %d%n", min);
+		System.out.printf("Ortalama = %f%n", (double)sum / count);
+	}
+	
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		int count = 0;
+		int sum = 0;
+		int min = 100;
+		int max = 0;
+		
+		for (;;) {
+			int val;
+			
+			for (;;) {
+				System.out.print("Bir tamsayı giriniz:");
+				val = Integer.parseInt(kb.nextLine());
+				
+				if (0 <= val && val <= 100)
+					break;
+				
+				System.out.println("Geçersiz değer girdiniz!...Yeni bir değer giriniz:");
+			}
+			
+			++count;
+			sum += val;
+			min = Math.min(min, val);
+			max = Math.max(max, val);
+			
+			System.out.println("Yeni bir değer girmek istiyor musunuz? [Evet için 1(bir) Hayır için 0(sıfır) değerlerinden birini giriniz]");
+			
+			int option;
+			
+			do 
+				option = Integer.parseInt(kb.nextLine());
+			while (option != 0 && option != 1);
+			
+			if (option == 0)
+				break;
+		}
+		printReport(count, sum, min, max);
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-005-1.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		System.out.println(Util.e());			
+	}
+}
+
+class Util {
+	public static double e()
+	{
+		double result = 2;
+		
+		for (int i = 2; i < 10; ++i)
+			result += 1. / NumberUtil.factorial(i);
+		
+		return result;
+	}
+}
+
+class NumberUtil {
+	public static int factorial(int n)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= n; ++i)
+			result *= i;
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-005-2.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
+	
+	(Açıklama: Bu çözüm çok büyük sayılar için özellikle metodun long parametreli overlod'u için performansı olumsuz
+	etkiler. Bunun yerine bir sonraki çözüm tercih edilebilir)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		SumFactorsTest.run();			
+	}
+}
+
+class SumFactorsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			int val = Integer.parseInt(kb.nextLine());
+			
+			if (val == 0)
+				break;
+			
+			System.out.printf("%d sayısının kendisi hariç çarpanları toplamı:%d%n", val, NumberUtil.sumFactors(val));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static int sumFactors(int val)
+	{
+		int result = 1;
+		
+		for (int i = 2; i <= val / 2; ++i)
+			result += val % i == 0 ? i : 0;
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-005-2.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		SumFactorsTest.run();			
+	}
+}
+
+class SumFactorsTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		
+		for (;;) {
+			System.out.print("Bir sayı giriniz:");
+			long val = Long.parseLong(kb.nextLine());
+			
+			if (val == 0)
+				break;
+			
+			System.out.printf("%d sayısının kendisi hariç çarpanları toplamı:%d%n", val, NumberUtil.sumFactors(val));
+		}
+		
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class NumberUtil {
+	public static long sumFactors(long val)
+	{
+		long result = 1;
+		
+		for (long i = 2; i * i <= val; ++i)
+			if (val % i == 0)
+				result += (i == val / i) ? i : (i + val / i); 
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-005-3.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		AreFriendsTest.run();		
+	}
+}
+class AreFriendsTest {
+	public static void run()
+	{
+		AreFriends3DigitsTest.run();
+		AreFriends4DigitsTest.run();
+	}
+}
+
+class AreFriends3DigitsTest {
+	public static void run()
+	{
+		System.out.println("Üç basamaklı arkadaş sayılar");
+		for (int a = 100; a <= 999; ++a)
+			for (int b = a + 1; b <= 999; ++b)
+				if (NumberUtil.areFriends(a, b))
+					System.out.printf("(%d, %d)%n", a, b);
+	}
+}
+
+
+class AreFriends4DigitsTest {
+	public static void run()
+	{
+		System.out.println("Dört basamaklı arkadaş sayılar");
+		for (int a = 1000; a <= 9999; ++a)
+			for (int b = a + 1; b <= 9999; ++b)
+				if (NumberUtil.areFriends(a, b))
+					System.out.printf("(%d, %d)%n", a, b);
+	}
+}
+class NumberUtil {
+	public static boolean areFriends(int a, int b)
+	{
+		return sumFactors(a) == b && sumFactors(b) == a;
+	}
+	
+	public static long sumFactors(long val)
+	{
+		long result = 1;
+		
+		for (long i = 2; i * i <= val; ++i)
+			if (val % i == 0)
+				result += (i == val / i) ? i : (i + val / i); 
+		
+		return result;
+	}
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-005-4.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{		
+		IsPerfectTest.run();		
+	}
+}
+class IsPerfectTest {
+	public static void run()
+	{
+		for (int val = 1000; val <= 9999; ++val)
+			if (NumberUtil.isPerfect(val))
+				System.out.printf("%d ", val);
+		
+		System.out.println();
+	}
+}
+
+class NumberUtil {
+	public static boolean isPerfect(int val)
+	{
+		return sumFactors(val) == val;
+	}
+	
+	public static long sumFactors(long val)
+	{
+		long result = 1;
+		
+		for (long i = 2; i * i <= val; ++i)
+			if (val % i == 0)
+				result += (i == val / i) ? i : (i + val / i); 
+		
+		return result;
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-006.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{			
+		CrapsSimulationApp.run();
+	}
+}
+
+class CrapsSimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		for (;;) {
+			System.out.print("Kaç kaz oynatmak istersiniz?");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			System.out.println("------------------------------------------------");
+			CrapsSimulation simulation = new CrapsSimulation(r);
+			
+			simulation.run(count);
+			System.out.printf("Kazanma Olasılığı:%f%n", simulation.p);
+			System.out.println("------------------------------------------------");
+		}
+	}
+}
+
+class CrapsSimulation {
+	public double p;
+	public java.util.Random random;
+	
+	public CrapsSimulation()
+	{
+		random = new java.util.Random();
+	}
+	
+	public CrapsSimulation(java.util.Random r)
+	{
+		random = r;
+	}
+	
+	public void run(int count)
+	{
+		int winCount = 0;
+		
+		for (int i = 0; i < count; ++i) {
+			Craps craps = new Craps(random);
+			
+			craps.play();
+			
+			if (craps.win)
+				++winCount;
+		}
+		
+		p = (double)winCount / count;
+	}
+}
+
+class Craps {
+	public boolean win;
+	public java.util.Random random;
+	
+	public int rollDice()
+	{
+		return random.nextInt(1, 7) + random.nextInt(1, 7);
+	}
+	
+	public void rollDiceForIndeterminate(int result)
+	{
+		int total;
+		
+		while ((total = rollDice()) != result && total != 7)
+			;
+		
+		win = total == result;
+	}
+	
+	public Craps()
+	{
+		random = new java.util.Random();
+	}
+	
+	public Craps(java.util.Random r)
+	{
+		random = r;
+	}
+	
+	public void play()
+	{	
+		int total = rollDice();
+		
+		switch (total) {
+		case 7, 11 -> win = true;
+		case 2, 3, 12 -> win = false;
+		default -> rollDiceForIndeterminate(total);
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-007-1.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{			
+		LotteriesSimulationApp.run();
+	}
+}
+
+class LotteriesSimulationApp {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		for (;;) {
+			System.out.print("Kaç kaz oynatmak istersiniz?");
+			int count = Integer.parseInt(kb.nextLine());
+			
+			if (count <= 0)
+				break;
+			
+			System.out.println("------------------------------------------------");
+			LotteriesSimulation simulation = new LotteriesSimulation(r);
+			
+			simulation.run(count);
+			System.out.printf("1.oyun için kazanma olasılığı:%f%n", simulation.p1);
+			System.out.printf("2.oyun için kazanma olasılığı:%f%n", simulation.p2);
+			System.out.printf("3.oyun için kazanma olasılığı:%f%n", simulation.p3);
+			System.out.println("------------------------------------------------");
+		}
+	}
+}
+
+class LotteriesSimulation {
+	public double p1, p2, p3;
+	public java.util.Random random;
+	
+	public LotteriesSimulation()
+	{
+		random = new java.util.Random();
+	}
+	
+	public LotteriesSimulation(java.util.Random r)
+	{
+		random = r;
+	}
+	
+	public void run(int count)
+	{
+		int winCount1 = 0, winCount2 = 0, winCount3 = 0;
+		
+		for (int i = 0; i < count; ++i) {
+			Lottery1 lottery1 = new Lottery1(random, new ThreeBalls(random, 1, 99));
+			Lottery2 lottery2 = new Lottery2(random, new ThreeBalls(random, 1, 99));
+			Lottery3 lottery3 = new Lottery3(random, new ThreeBalls(random, 1, 99));
+			
+			lottery1.play();
+			lottery2.play();
+			lottery3.play();
+			
+			if (lottery1.win)
+				++winCount1;
+			
+			if (lottery2.win)
+				++winCount2;
+			
+			if (lottery3.win)
+				++winCount3;
+		}
+		
+		p1 = (double)winCount1 / count;
+		p2 = (double)winCount2 / count;
+		p3 = (double)winCount3 / count;
+	}
+}
+
+
+class Lottery1 {
+	public boolean win;
+	public java.util.Random random;
+	public ThreeBalls threeBalls;
+
+	public Lottery1(java.util.Random r, ThreeBalls balls)
+	{
+		random = r;
+		threeBalls = balls;
+		threeBalls.pull();
+	}
+	
+	public void play()
+	{
+		win = threeBalls.first + threeBalls.second + threeBalls.third > 150;
+	}
+}
+
+class Lottery2 {
+	public boolean win;
+	public java.util.Random random;
+	public ThreeBalls threeBalls;
+
+	public Lottery2(java.util.Random r, ThreeBalls balls)
+	{
+		random = r;
+		threeBalls = balls;
+		threeBalls.pull();
+	}
+	
+	public void play()
+	{
+		win = NumberUtil.isPrime(threeBalls.first + threeBalls.second + threeBalls.third);
+	}
+}
+
+
+class Lottery3 {
+	public boolean win;
+	public java.util.Random random;
+	public ThreeBalls threeBalls;
+
+	public Lottery3(java.util.Random r, ThreeBalls balls)
+	{
+		random = r;
+		threeBalls = balls;
+		threeBalls.pull();
+	}
+	
+	public void play()
+	{
+		int min = Math.min(Math.min(threeBalls.first, threeBalls.second), threeBalls.third);
+		int max = Math.max(Math.max(threeBalls.first, threeBalls.second), threeBalls.third);
+		int mid = threeBalls.first + threeBalls.second + threeBalls.third - max - min;
+		
+		win = max - min > mid;
+	}
+}
+
+class ThreeBalls {
+	public int minVal;
+	public int maxVal;
+	public int first, second, third;
+	public java.util.Random random;
+	
+	public int getFirst()
+	{
+		return random.nextInt(minVal, maxVal + 1);
+	}
+	
+	public int getSecond()
+	{
+		int second;
+		
+		while ((second = random.nextInt(minVal, maxVal + 1)) == first)
+			;
+		
+		return second;
+	}
+	
+	public int getThird()
+	{
+		int third;
+		
+		while ((third = random.nextInt(minVal, maxVal + 1)) == first || third == second)
+			;
+		
+		return third;
+	}
+	
+	public ThreeBalls()
+	{
+		maxVal = 99;
+		random = new java.util.Random();
+	}
+	
+	public ThreeBalls(java.util.Random r, int min, int max)
+	{
+		minVal = min;
+		maxVal = max;
+		random = r;
+	}
+	
+	public void pull()
+	{
+		first = getFirst();
+		second = getSecond();
+		third = getThird();
+	}	
+}
+
+class NumberUtil {	
+	public static boolean isPrime(long a)
+	{
+		if (a <= 1)
+			return false;
+		
+		if (a % 2 == 0)
+			return a == 2;
+		
+		if (a % 3 == 0)
+			return a == 3;
+		
+		if (a % 5 == 0)
+			return a == 5;
+		
+		if (a % 7 == 0)
+			return a == 7;
+		
+		for (long i = 11; i * i <= a; i += 2)
+			if (a % i == 0)
+				return false;
+		
+		return true;	
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-007-2.sorunun bir çözmü	
+	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+	public static void main(String [] args)	
+	{			
+		 PrintRandomDateTest.run();
+	}
+}
+
+class PrintRandomDateTest {
+	public static void run()
+	{
+		java.util.Scanner kb = new java.util.Scanner(System.in);
+		java.util.Random r = new java.util.Random();
+		
+		System.out.print("Bir sayı giriniz:");
+		int count = kb.nextInt();
+		
+		while (count-- > 0)
+			DateUtil.printRandomDate(r);
+		
+		System.out.println("Tekrar yapıyor musunuz?");	
+	}
+}
+
+class DateUtil {
+	public static void printRandomDate()
+	{
+		printRandomDate(new java.util.Random());
+	}
+	
+	public static void printRandomDate(java.util.Random r)
+	{
+		int year = r.nextInt(1900, 2101);
+		int month = r.nextInt(1, 13);
+		int day = r.nextInt(1, getDays(month, year) + 1);
+		
+		printDate(day, month, year);
+	}
+	
+	public static void printDate(int day, int month, int year)
+	{
+		System.out.print(day);
+		printDaySuffix(day);
+		System.out.print(' ');
+		printMonth(month);
+		System.out.print(' ');
+		System.out.println(year);
+	}
+
+	
+	public static void printDaySuffix(int day)
+	{
+		System.out.print(
+				switch (day) {
+					case 1, 21, 31 -> "st";
+					case 2, 22 -> "nd";
+					case 3, 23 -> "rd";
+					default -> "th";
+		});
+	}
+	
+	public static void printMonth(int month)
+	{
+		System.out.print(
+				switch (month) {
+					case 1 -> "Jan";
+					case 2 -> "Feb";
+					case 3 -> "Mar";
+					case 4 -> "Apr";
+					case 5 -> "May";
+					case 6 -> "Jun";
+					case 7 -> "Jul";
+					case 8 -> "Aug";
+					case 9 -> "Sep";
+					case 10 -> "Oct";
+					case 11 -> "Nov";
+					default -> "Dec";			
+		});
+	}
+	
+	public static int getDays(int month, int year)
+	{
+		return switch (month) {
+		case 4, 6, 9, 11 -> 30;
+		case 2 -> isLeapYear(year) ? 29 : 28;
+		default -> 31;
+		};
+	}
+	
+	public static boolean isLeapYear(int year)
+	{
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
 	}
 }
 
