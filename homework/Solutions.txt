@@ -607,7 +607,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-002-5. sorunun bir çözmü
+	Homework-002-5. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -679,7 +679,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-1. sorunun bir çözmü
+	Homework-003-1. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -778,7 +778,7 @@ class NumberUtil {
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-2. sorunun bir çözmü
+	Homework-003-2. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -857,7 +857,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-2. sorunun bir çözmü
+	Homework-003-2. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -935,7 +935,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-3. sorunun bir çözmü
+	Homework-003-3. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -988,7 +988,7 @@ class NumberUtil {
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-3. sorunun bir çözmü
+	Homework-003-3. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1040,7 +1040,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-4. sorunun bir çözmü
+	Homework-003-4. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1093,7 +1093,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-5. sorunun bir çözmü
+	Homework-003-5. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1178,7 +1178,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-6. sorunun bir çözmü
+	Homework-003-6. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1227,7 +1227,7 @@ class NumberUtil {
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-7. sorunun bir çözmü
+	Homework-003-7. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1273,7 +1273,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-8. sorunun bir çözmü
+	Homework-003-8. sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1327,7 +1327,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-003-8.sorunun bir çözmü
+	Homework-003-8.sorunun bir çözümü
 	(Not: Çözümde koşul operatörü kullanılmıştır) 
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1375,7 +1375,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-004.sorunun bir çözmü	
+	Homework-004.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)	
 	(Açıklama: Soruda birden fazla Scanner nesnesi yaratılmaması için bazı işlemler metot yazmadan yapılmıştır. Sorunun 
 	verildiği tarihte referans parametreli metotlar henüz gösterilmediği için aşağıdaki gibi yapılmıştır  
@@ -1441,7 +1441,7 @@ class CalculateSumCountMinMaxAvgApp {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-005-1.sorunun bir çözmü	
+	Homework-005-1.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1478,7 +1478,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-005-2.sorunun bir çözmü	
+	Homework-005-2.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
 	
 	(Açıklama: Bu çözüm çok büyük sayılar için özellikle metodun long parametreli overlod'u için performansı olumsuz
@@ -1525,7 +1525,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-005-2.sorunun bir çözmü	
+	Homework-005-2.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1570,7 +1570,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-005-3.sorunun bir çözmü	
+	Homework-005-3.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1631,7 +1631,7 @@ class NumberUtil {
 
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-005-4.sorunun bir çözmü	
+	Homework-005-4.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1672,7 +1672,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-006.sorunun bir çözmü	
+	Homework-006.sorunun bir çözümü	
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1780,7 +1780,7 @@ class Craps {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-007-1.sorunun bir çözmü	
+	Homework-007-1.sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -1999,7 +1999,7 @@ class NumberUtil {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Homework-007-2.sorunun bir çözmü	
+	Homework-007-2.sorunun bir çözümü
 	(Not: Çözüm çalışma sorusunun verildiği tarihe kadar işlenmiş olan konulara göre yazılmıştır)  
 -----------------------------------------------------------------------------------------------------------------------*/
 package csd;
@@ -2097,6 +2097,7 @@ class DateUtil {
 		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
 	}
 }
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

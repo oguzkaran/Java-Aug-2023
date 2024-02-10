@@ -17,8 +17,8 @@ public class ExamSimulation {
 
     private int calculateAndGetSumGrades(int i)
     {
-        m_maxGrades[i] = m_grades[i][0];
-        m_minGrades[i] = m_grades[i][0];
+        m_maxGrades[i] = 0;
+        m_minGrades[i] = 100;
         int sumGrades = 0;
 
         for (int k = 0; k < m_grades[i].length; ++k) {

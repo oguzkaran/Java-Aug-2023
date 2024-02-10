@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Console.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 10th February 2024
 
 	Utility class for console operations
 
@@ -51,6 +51,11 @@ public final class Console {
     public static void write(Object o)
     {
         write("%s", o);
+    }
+
+    public static void writeLine()
+    {
+        System.out.println();
     }
 
     public static void writeLine(String fmt, Object...params)

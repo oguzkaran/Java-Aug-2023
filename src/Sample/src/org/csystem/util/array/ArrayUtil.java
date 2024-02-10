@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: ArrayUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 10th February 2024
 
 	Utility class for array operations
 
@@ -10,6 +10,7 @@
 ---------------------------------------------------------*/
 package org.csystem.util.array;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public final class ArrayUtil {
@@ -134,6 +135,21 @@ public final class ArrayUtil {
     public static boolean isEmpty(int [] a)
     {
         return a.length == 0;
+    }
+
+    public static String join(ArrayList list, char separator)
+    {
+        return join(list, String.valueOf(separator));
+    }
+
+    public static String join(ArrayList list, String separator)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : list)
+            sb.append((String)o).append(separator);
+
+        return sb.substring(0, sb.length() - separator.length());
     }
 
     public static int max(int [] a)

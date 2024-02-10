@@ -19393,8 +19393,8 @@ public class ExamSimulation {
 
     public int calculateAndGetSumGrades(int i)
     {
-        maxGrades[i] = grades[i][0];
-        minGrades[i] = grades[i][0];
+        maxGrades[i] = 0;
+        minGrades[i] = 100;
         int sumGrades = 0;
 
         for (int k = 0; k < grades[i].length; ++k) {
@@ -20354,8 +20354,8 @@ public class ExamSimulation {
 
     private int calculateAndGetSumGrades(int i)
     {
-        m_maxGrades[i] = m_grades[i][0];
-        m_minGrades[i] = m_grades[i][0];
+        m_maxGrades[i] = 0;
+        m_minGrades[i] = 100;
         int sumGrades = 0;
 
         for (int k = 0; k < m_grades[i].length; ++k) {
@@ -21166,8 +21166,8 @@ public class ExamSimulation {
 
     private int calculateAndGetSumGrades(int i)
     {
-        m_maxGrades[i] = m_grades[i][0];
-        m_minGrades[i] = m_grades[i][0];
+        m_maxGrades[i] = 0;
+        m_minGrades[i] = 100;
         int sumGrades = 0;
 
         for (int k = 0; k < m_grades[i].length; ++k) {
@@ -27100,7 +27100,7 @@ class App {
 /*----------------------------------------------------------------------------------------------------------------------
     ArrayList sınıfının set metodu ilgili indeksteki elemanı değiştirmek kullanılır. Bu metot O(1) karamaşıklıktadır.
     Indek olarak [0, size) aralığı dışında bir değer verildiğinde exception oluşur. Metot değiştirme yapmadan önce tutulan
-    elemana ilişkin referansa gerid döner
+    elemana ilişkin referansa geri döner
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -27156,8 +27156,227 @@ class App {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    10.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfının int parametreli remove metodu parametresi ile aldığı index numarasındaki elemanı siler ve silinmiş
+    olan elemana ilişkin referansa geri döner. Bu metot O(n) karmaşıklıktadır. index numarası [0, size) aralığı dışında
+    verildiğinde exception oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList numbers = new ArrayList();
+        int val;
+
+        while ((val = Console.readInt("Bir sayı giriniz:")) != 0)
+            numbers.add(val);
+
+        for (Object o : numbers) {
+            int a = (int)o;
+
+            Console.write("%d ", a);
+        }
+
+        Console.writeLine();
+
+        int oldVal = (int)numbers.remove(2);
+
+        Console.writeLine("Old value:%d", oldVal);
+
+        for (Object o : numbers) {
+            int a = (int)o;
+
+            Console.write("%d ", a);
+        }
+
+        Console.writeLine();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfının toString metodu elemanlara ilişkin değerlerden oluşan yazıyı liste formatındea geri dönmektedir.
+    Elemanlara ilişkin değerlerin yazı karşılıklarının nasıl elde edildiği ileride ele alınacaktır. Liste biçimi [ ile
+    ] arasında değerlerin virgül ile ayrılmış halidir. Eğer ArrayList boş ile liste de boş olarak elde edilecektir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList numbers = new ArrayList();
+        int val;
+
+        while ((val = Console.readInt("Bir sayı giriniz:")) != 0)
+            numbers.add(val);
+
+        Console.writeLine(numbers.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfının isEmpty metodu ile dizinin boş olup olmadığı test edilebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList numbers = new ArrayList();
+        int val;
+
+        while ((val = Console.readInt("Bir sayı giriniz:")) != 0)
+            numbers.add(val);
+
+        Console.writeLine(numbers.isEmpty() ? "Hiç değer girilmedi" : numbers.toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList/Vector sınıfının ensureCapacity metodu ile capacity değeri büyütülebilir. ensureCapacity metodunun
+    parametresi olan minCapacity değerine göre büyütme işlemi aşağıdaki gibi yapılır (adımları else if biçiminde değerlendiriniz):
+    1. miCapacity değeri varolan capacity değerinden küçükse herhangi bir değişiklik yapılmaz
+    2. minCapacity değeri, capacity değeri artması gerektiğinde artırılacak değerden küçükse artırılması gereken değere
+    çekilir
+    3. minCapacity değeri artması gereken değerden büyükse artık o değere çekilir
+
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.Vector;
+
+class App {
+    public static void main(String[] args)
+    {
+        Vector numbers = new Vector();
+
+        Console.writeLine("Capacity:%d", numbers.capacity());
+
+        numbers.ensureCapacity(5);
+        Console.writeLine("Capacity:%d", numbers.capacity());
+
+        numbers.ensureCapacity(15);
+        Console.writeLine("Capacity:%d", numbers.capacity());
+
+        numbers.ensureCapacity(45);
+        Console.writeLine("Capacity:%d", numbers.capacity());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   ArrayList sınıfının trimToSize metodu capacity değerini size değerine çeker. Bu metot O(n) karmaşıklıktadır. Bu metot
+   çağrıldıktan sonra ekleme yapılması şüphesiz O(n) karmaşıklıktadır. Bu durumda bu metodun dikkatli kullanılması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.Vector;
+
+class App {
+    public static void main(String[] args)
+    {
+        Vector numbers = new Vector();
+        int val;
+
+        while ((val = Console.readInt("Bir sayı giriniz:")) != 0)
+            numbers.add(val);
+
+        Console.writeLine("Size:%d, Capacity:%d", numbers.size(), numbers.capacity());
+        numbers.trimToSize();
+        Console.writeLine("Size:%d, Capacity:%d", numbers.size(), numbers.capacity());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   ArrayList sınıfının clear metodu diziyi boşaltır. Bu metot da O(n) karmaşıklıktadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList numbers = new ArrayList();
+        int val;
+
+        while ((val = Console.readInt("Bir sayı giriniz:")) != 0)
+            numbers.add(val);
+
+        Console.writeLine("Size:%d",  numbers.size());
+
+        numbers.clear();
+        Console.writeLine("Size:%d",  numbers.size());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: ArrayList/Vector sınıfının silme yapan metotları (remove, clear vb) capacity değerini değiştirmez.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Sınıf Çalışması: Klavyeden quit girilene kadar alınan yazıları bir ArrayList'e ekleyiniz. Bu işlemden sonra yazıların
+   arasında - karakteri olacak şekilde birleştirilmiş yeni bir yazı elde ediniz
+----------------------------------------------------------------------------------------------------------------------*/
+
+package org.csystem.app.string;
+
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+
+public class JoinWithHyphenApp {
+    public static void run()
+    {
+        ArrayList texts = new ArrayList();
+        String text;
+
+        while (!(text = Console.readString("Input text:")).equals("quit"))
+            texts.add(text);
+
+        Console.writeLine(texts.toString());
+        String str = ArrayUtil.join(texts, '-');
+        Console.writeLine(str);
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: StringBuilder sınıfı da aslında bir dinamik büyüyen dizi veri yapısıdır. StringBuilder'da her ekleme
+    işleminde içsel olarak tuttuğu diziyi büyütür. Büyütme işlemini yine amortize edilmiş sabit zamanlı karmaşıklıkta
+    yapar dolayısıyla StringBuilder sınıfı da capacity kullanır
+----------------------------------------------------------------------------------------------------------------------*/
 
 
+/*----------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
