@@ -27372,6 +27372,335 @@ public class JoinWithHyphenApp {
     işleminde içsel olarak tuttuğu diziyi büyütür. Büyütme işlemini yine amortize edilmiş sabit zamanlı karmaşıklıkta
     yapar dolayısıyla StringBuilder sınıfı da capacity kullanır
 ----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+   Polymorphism: Biyolojiden programlamaya aktarılmıştır. Biyoloji'de polymorphism, "farklı doku ya da organların evrim
+   süreci içerisinde temel işlevi aynı kalacak şekilde o işlevi yerine getirme biçiminin değişebilmesi" şeklinde
+   tanımlanabilir. Yani bir canlı için görme işlevinin yapılış şekli, o canlıdan türemiş olan bir canlıda değişiklik
+   gösterebilir. Ancak temel hedef görmektir.
+
+   Polymorphism özellikle NYPT'de iki biçimde düşünülür: runtime polymorphism (RTP), compile time polymorphism (CTP)
+   Bu bölümde RTP ele alınacaktır. CTP generics konusunda ele alınacaktır. Polymorphism dendiğinde ilk akla RTP gelir.
+
+   RTP ile ilgili pek çok tanım ve betimleme yapılabilse de şu 3 tanıma indirgenebilir:
+   1. Biyolojik Tanım: Taban sınıfının bir fonksiyonun türemiş sınıfta yeniden gerçekleştirilmesidir.
+   2. Yazılım Mühendisliği Tanımı: Türden bağımsız kod yazmaktır.
+   3. Aşağı Seviyeli Tanım: Önceden yazılmış kodların sonradan yazılmış kodları çağırabilmesidir.
+
+   Anahtar Notlar: Özellikle RTP destekleyen bir programlama dili NYPT destekleyen bir dil olur. Nesnenin var olduğu
+   ancak RTP'nin olmadığı dillere genel olarak "Nesne tabanlı (object based)" diller denilmektedir. Bu anlamda RTP
+   aslında dile NYPT özelliğini katmış olur.
+
+   Anahtar Notlar: Polymorphism SOLID ilkelerinden, L yani "Liskov Substitution Principle"'ın en iyi uygulanışıdır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Java'da RTP "sanal metotlar (virtual methods)" kullanılarak gerçekleştirilir. Non-static bir metot, final olarak
+   bildirilmemişse veya abstract olarak bildirilmişse sanaldır. Bazı dillerde non-static olan, final olmayan ve abstract
+   olmayan bir metot default olarak sanal olmaz. İlgili metodun sanal olması için ayrı bir şekilde bildirilmesi gerekir.
+   Bu kavrama "virtual dispatching" denir. Bu durumda Java'da virtual dispatching yoktur.
+
+   Sanal bir metodun aynı imza ve aynı geri dönüş değeri ile birlikte (erişim belirleyici kısmını ileride ele alacağız)
+   türemiş sınıfta yazılmasına "override" denir. Sanal bir metodun türemiş sınıfta override etme zorunluluğu yoktur.
+
+   Derleyici sanal bir metot çağrısı gördüğünde şu şekilde bir kod üretir: "Çalışma zamanında ilgili referansın dinamik
+   türüne bak, dinamik türe ilişkin sınıfta ilgili sanal metot override edilmişse onu çağır, edilmemişse taban sınıfına
+   bak orada override edilmişse onu çağır, edilmemişse taban sınıfına bak onu çağır ...".
+
+   Bazen override edilmiş bir metot içerisinde taban sınıfın metodun da işinin yapılması gerekebilir. Bu duruma genel
+   olarak "augmentation" denilmektedir. Bu işlem tipik olarak super referansı ile ilgili metot çağrılarak yapılır. super
+   referansı türemiş sınıf nesnesinin taban sınıf kısmının adresidir. super referansı kullanıldığı sınıfın taban sınıfı
+   türündendir.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örnekte dikkat edilirse RTP'ye ilişkin 3 tanım da gerçeklenmiş olur:
+   - foo metodu türemiş sınıflarda override edilmiştir (Biyolojik tanım).
+   - Util sınıfının doWork metodu ve main metodu A hiyerarşisi açısından türden bağımsız yazılmıştır (Yazılım mühendididliği tanımı).
+   - A hiyerarşisine yeni bir tür eklense bile doWork metodu bu türleri de kullanabilir durumdadır (aşağı seviyeli tanım).
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.thread.ThreadUtil;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        Factory factory = new Factory();
+
+        while (true) {
+            A x = factory.create();
+
+            Util.doWork(x);
+            ThreadUtil.sleep(1000);
+        }
+    }
+}
+
+class Util {
+    public static void doWork(A a)
+    {
+        Console.writeLine("---------------------------------------------------------------");
+
+        Console.writeLine("Dynamic type:%s", a.getClass().getName());
+        a.foo();
+        Console.writeLine("---------------------------------------------------------------");
+    }
+}
+
+class Factory {
+    private final Random m_random = new Random();
+
+    public A create()
+    {
+        return switch (m_random.nextInt(5)) {
+            case 0 -> new B();
+            case 1 -> new C();
+            case 2 -> new D();
+            case 3 -> new E();
+            default -> new F();
+        };
+    }
+}
+
+class F extends D {
+    public void foo() //override
+    {
+        Console.writeLine("F.foo");
+    }
+}
+
+class E extends C {
+    public void foo() //override
+    {
+        Console.writeLine("E.foo");
+    }
+}
+
+class D extends A {
+    public void foo() //override
+    {
+        Console.writeLine("D.foo");
+    }
+}
+
+class C extends B {
+    public void foo() //override
+    {
+        Console.writeLine("C.foo");
+    }
+}
+
+class B extends A {
+    public void foo() //override
+    {
+        Console.writeLine("B.foo");
+    }
+}
+
+class A {
+    public void foo() //virtual method
+    {
+        Console.writeLine("A.foo");
+    }
+
+    public final void bar() //not a virtual method
+    {
+        Console.writeLine("A.bar");
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.thread.ThreadUtil;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        Factory factory = new Factory();
+
+        while (true) {
+            A x = factory.create();
+
+            Util.doWork(x);
+            ThreadUtil.sleep(1000);
+        }
+    }
+}
+
+class Util {
+    public static void doWork(A a)
+    {
+        Console.writeLine("---------------------------------------------------------------");
+
+        Console.writeLine("Dynamic type:%s", a.getClass().getName());
+        a.foo();
+        Console.writeLine("---------------------------------------------------------------");
+    }
+}
+
+class Factory {
+    private final Random m_random = new Random();
+
+    public A create()
+    {
+        return switch (m_random.nextInt(5)) {
+            case 0 -> new B();
+            case 1 -> new C();
+            case 2 -> new D();
+            case 3 -> new E();
+            default -> new F();
+        };
+    }
+}
+
+class F extends D {
+
+}
+
+class E extends C {
+    public void foo() //override
+    {
+        Console.writeLine("E.foo");
+    }
+}
+
+class D extends A {
+
+}
+
+class C extends B {
+}
+
+class B extends A {
+    public void foo() //override
+    {
+        Console.writeLine("B.foo");
+    }
+}
+
+class A {
+    public void foo() //virtual method
+    {
+        Console.writeLine("A.foo");
+    }
+
+    public final void bar() //not a virtual method
+    {
+        Console.writeLine("A.bar");
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.thread.ThreadUtil;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        Factory factory = new Factory();
+
+        while (true) {
+            A x = factory.create();
+
+            Util.doWork(x);
+            ThreadUtil.sleep(1000);
+        }
+    }
+}
+
+class Util {
+    public static void doWork(A a)
+    {
+        Console.writeLine("---------------------------------------------------------------");
+
+        Console.writeLine("Dynamic type:%s", a.getClass().getName());
+        a.foo();
+        Console.writeLine("---------------------------------------------------------------");
+    }
+}
+
+class Factory {
+    private final Random m_random = new Random();
+
+    public A create()
+    {
+        return switch (m_random.nextInt(5)) {
+            case 0 -> new B();
+            case 1 -> new C();
+            case 2 -> new D();
+            case 3 -> new E();
+            default -> new F();
+        };
+    }
+}
+
+class F extends D {
+    public void foo() //override
+    {
+        Console.writeLine("F.foo");
+        super.foo();
+    }
+}
+
+class E extends C {
+    public void foo() //override
+    {
+        Console.writeLine("E.foo");
+        super.foo();
+    }
+}
+
+class D extends A {
+    public void foo() //override
+    {
+        Console.writeLine("D.foo");
+        super.foo();
+    }
+}
+
+class C extends B {
+    public void foo() //override
+    {
+        Console.writeLine("C.foo");
+        super.foo();
+    }
+}
+
+class B extends A {
+    public void foo() //override
+    {
+        Console.writeLine("B.foo");
+        super.foo();
+    }
+}
+
+class A {
+    public void foo() //virtual method
+    {
+        Console.writeLine("A.foo");
+    }
+
+    public final void bar() //not a virtual method
+    {
+        Console.writeLine("A.bar");
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
