@@ -27729,11 +27729,11 @@ class A {
     Şüphesiz yukarıdaki örnekler dışında pek çok örnek verilebilir.
 
     Programlamada temel amaç mümkün olduğunca yeni eklentilerin eski kodlara dokunmadan yapılabilmesidir. Bu işlem adeta
-    bir logonun parçası ya da bir plugin gibi yapılabilmeldir. Böyle bir tasarım ile ürünün yeni versiyonu daha çabuk ve
+    bir logonun parçası ya da bir plugin gibi yapılabilmelidir. Böyle bir tasarım ile ürünün yeni versiyonu daha çabuk ve
     daha sistematik bir şekilde elde edilebilir. RTP de bunu sağlayan araçlardan biridir. Aslında bir ürünün kod kalitesi
     için şu cümle söylenebilir: "Bir ürünün yeni versiyonu çıkartılırken eski kodlara ilişkin senaryolarda ve algoritmalarda
     değişiklik olmadıktan sonra, eski kodlara ne kadar az müdahale ediliyorsa ürün o kadar kaliteli yazılmıştır". Algoritmanın
-    tekrar daha etkin yazılması kodunn daha önce kalitesiz yazılmış olması anlamına gelmeyebilir. Çünkü örneğin yeni bir
+    tekrar daha etkin yazılması kodun daha önce kalitesiz yazılmış olması anlamına gelmeyebilir. Çünkü örneğin yeni bir
     sisteme göre eklenen bazı araçlar ile yazılan algoritmalar daha efektif olma eğilimindeyse değişiklik gerekebilir.
     Bu da zaten daha kaliteli yazmak içindir.
 ----------------------------------------------------------------------------------------------------------------------*/
@@ -27756,6 +27756,9 @@ class A {
    birleştirmesi işlemi yapılır. Diğer türün yazı karşılığı yine toString metodu çağrılarak elde edilir. Diğer tür temel
    türlerden biriyse önce otomatik kutulanır sonra ilgili sarmalayan sınıfın toString metodu çağrılarak yazı karşılığı
    elde edilir.
+
+   ArrayList sınıfının toString metodu elemanlara ilişkin yazı karşılığını yine her bir eleman için toString metodunu
+   çağırarak elde eder
 
    Object sınıfının toString metodu nesneye özgü tekil (unique) bir bilgiye ilişkin yazı döndürür. Bu yazının nasıl elde
    edildiğinin ve ne anlama geldiğinin önemi yoktur.
@@ -27898,11 +27901,661 @@ class App {
    dinamik türüne göre override edilmişse, override edilen equals çağrılmış olur. Bu durumda ilgili tür için mantıksal
    eşitlik karşılaştırması yapılmış olur.
 
+   equals metodu override edilirken aldığı Object referansına ilişkin dinamik türün ilgili sınıf türünden olup olmadığına
+   da genel olarak bakılır. Özel bir durum yoksa bu bir convention olarak düşünülmeldir. Pek çok static kod analizi aracı
+   default konfigürasyonda bu kontrolün yapılmadığı durumlarda uyarı vermektedir. Bu kontrol tipik olarak instanceof
+   operatörü ile yapılabilir.
+
    Anahtar Notlar: Bir sınıfta equals metodu override ediliğinde, Object sınıfının hashCode metodu da override edilir veya
    tersine hashCode metodu override edildiğinde equals metodu da override edilir. Yani bu iki metot bir sınıf içerisinde
    ya ikisi birden override edilir ya da ikisi de override edilmez. hashCode metodu "Java ile Uygulama Geliştirme 1"
    kursunda elde alınacaktır. Buradaki equals metodu override edilmiş sınıflarda override edilmeyecektir
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte Point sınıfının equals metodu olmasaydı hiç bir zaman origin noktası bulunamazdı. Örneği
+    Point sınıfınınn equals metodunu kaldırarak da çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.factory.RandomPointFactory;
+import org.csystem.math.geometry.Point;
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList points = new ArrayList();
+        Random random = new Random();
+        RandomPointFactory factory = new RandomPointFactory(random);
+        Point origin = Point.createCartesian();
+
+        while (random.nextInt(-1000, 10001) != 0)
+            points.add(factory.create(-2, 2));
+
+        System.out.println(points);
+        Console.writeLine("Size:%d", points.size());
+        int index = points.indexOf(origin);
+
+        Console.writeLine(index != -1 ? "Found" : "Not found");
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Point.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	Immutable Point class that represents a 2-dimensional
+	point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public final class Point {
+	private final double m_x, m_y;
+
+	private Point(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static Point createCartesian()
+	{
+		return createCartesian(0, 0);
+	}
+
+	public static Point createCartesian(double x, double y)
+	{
+		return new Point(x, y, false);
+	}
+
+	public static Point createPolar()
+	{
+		return createPolar(0, 0);
+	}
+
+	public static Point createPolar(double radius, double theta)
+	{
+		return new Point(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(Point other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public boolean equals(Object other)
+	{
+		return other instanceof Point p && PointCommon.equals(m_x, m_y, p.m_x, p.m_y);
+	}
+
+	//hashCode
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: MutablePoint.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	MutablePoint class that represents a 2-dimensional point
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public final class MutablePoint {
+	private double m_x, m_y;
+
+	private MutablePoint(double a, double b, boolean polar)
+	{
+		m_x = PointCommon.getXBy(polar, a, b);
+		m_y = PointCommon.getYBy(polar, a, b);
+	}
+
+	public static MutablePoint createCartesian(double x, double y)
+	{
+		return new MutablePoint(x, y, false);
+	}
+
+	public static MutablePoint createPolar(double radius, double theta)
+	{
+		return new MutablePoint(radius, theta, true);
+	}
+
+	public double getX()
+	{
+		return m_x;
+	}
+
+	public void setX(double x)
+	{
+		m_x = x;
+	}
+
+	public double getY()
+	{
+		return m_y;
+	}
+
+	public void setY(double y)
+	{
+		m_y = y;
+	}
+
+	public double distance()
+	{
+		return distance(0, 0);
+	}
+
+	public double distance(MutablePoint other)
+	{
+		return distance(other.m_x, other.m_y);
+	}
+
+	public double distance(double x, double y)
+	{
+		return PointCommon.distance(m_x, m_y, x, y);
+	}
+
+	public void offset(double dxy)
+	{
+		offset(dxy, dxy);
+	}
+
+	public void offset(double dx, double dy)
+	{
+		m_x += dx;
+		m_y += dy;
+	}
+
+	public boolean equals(Object other)
+	{
+		return other instanceof MutablePoint p && PointCommon.equals(m_x, m_y, p.m_x, p.m_y);
+	}
+
+	//hashCode
+
+	public String toString()
+	{
+		return PointCommon.toString(m_x, m_y);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: PointCommon.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	Friendly common utility class for Point and MutablePoint
+	classes
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+import static java.lang.Math.*;
+
+class PointCommon {
+    private PointCommon()
+    {
+    }
+
+    static final double DELTA = 0.000001;
+
+    static double getXBy(boolean polar, double a, double b)
+    {
+        return polar ? a * cos(b) : a;
+    }
+
+    static double getYBy(boolean polar, double a, double b)
+    {
+        return polar ? a * sin(b) : b;
+    }
+
+    static double distance(double x1, double y1, double x2, double y2)
+    {
+        return sqrt(pow(x1- x2, 2) + pow(y1 - y2, 2));
+    }
+
+    static boolean equals(double x1, double y1, double x2, double y2)
+    {
+        return Math.abs(x1 - x2) < PointCommon.DELTA && Math.abs(y1 - y2) < PointCommon.DELTA;
+    }
+
+    static String toString(double x, double y)
+    {
+        return String.format("(%f, %f)", x, y);
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Circle.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	Circle class that represents a circle
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class Circle {
+    private static final double DELTA = 0.000001;
+    private double m_radius;
+
+    public Circle()
+    {
+    }
+
+    public Circle(double radius)
+    {
+        setRadius(radius);
+    }
+
+    public void setRadius(double radius)
+    {
+        m_radius = Math.abs(radius);
+    }
+
+    public double getRadius()
+    {
+        return m_radius;
+    }
+
+    public double getArea()
+    {
+        return Math.PI * m_radius * m_radius;
+    }
+
+    public double getCircumference()
+    {
+        return 2 * Math.PI * m_radius;
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Circle c && Math.abs(m_radius - c.m_radius) < DELTA;
+    }
+
+    //hashCode
+
+    public String toString()
+    {
+        return String.format("Radius:%f, Area:%f, Circumference:%f", m_radius, getArea(), getCircumference());
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Circle.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	Circle class that represents a circle
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class Circle {
+    protected static final double DELTA = 0.000001;
+    private double m_radius;
+
+    public Circle()
+    {
+    }
+
+    public Circle(double radius)
+    {
+        setRadius(radius);
+    }
+
+    public void setRadius(double radius)
+    {
+        m_radius = Math.abs(radius);
+    }
+
+    public double getRadius()
+    {
+        return m_radius;
+    }
+
+    public double getArea()
+    {
+        return Math.PI * m_radius * m_radius;
+    }
+
+    public double getCircumference()
+    {
+        return 2 * Math.PI * m_radius;
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Circle c && Math.abs(m_radius - c.m_radius) < DELTA;
+    }
+
+    //hashCode
+
+    public String toString()
+    {
+        return String.format("Radius:%f, Area:%f, Circumference:%f", m_radius, getArea(), getCircumference());
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: AnalyticalCircle.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	AnalyticalCircle class that represents a circle
+	in cartesian plane
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package com.baturhansahin.math;
+
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.MutablePoint;
+
+public class AnalyticalCircle extends Circle {
+    private final MutablePoint m_center;
+
+    public AnalyticalCircle()
+    {
+        this(0);
+    }
+
+    public AnalyticalCircle(double radius)
+    {
+        this(radius, 0, 0);
+    }
+
+    public AnalyticalCircle(double x, double y)
+    {
+        this(0, x, y);
+    }
+
+    public AnalyticalCircle(double radius, double x, double y)
+    {
+        super(radius);
+        m_center = MutablePoint.createCartesian(x, y);
+    }
+
+    public double getX()
+    {
+        return m_center.getX();
+    }
+
+    public void setX(double x)
+    {
+        m_center.setX(x);
+    }
+
+    public double getY()
+    {
+        return m_center.getY();
+    }
+
+    public void setY(double y)
+    {
+        m_center.setY(y);
+    }
+
+    public void setCenter(double x, double y)
+    {
+        setX(x);
+        setY(y);
+    }
+
+    public void offset(double dxy)
+    {
+        offset(dxy, dxy);
+    }
+
+    public void offset(double dx, double dy)
+    {
+        m_center.offset(dx, dy);
+    }
+
+    public double centerDistance(AnalyticalCircle other)
+    {
+        return m_center.distance(other.m_center);
+    }
+
+    public boolean isTangent(AnalyticalCircle other)
+    {
+        return Math.abs(centerDistance(other) - getRadius() - other.getRadius()) < DELTA;
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof AnalyticalCircle c && super.equals(other) && m_center.equals(c.m_center);
+    }
+
+    //hashCode
+
+    public String toString()
+    {
+        return String.format("%s, Center:%s", super.toString(), m_center);
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Complex.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 1tth February 2024
+
+	Complex class that represents a complex number
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math;
+
+public class Complex {
+	private static final double DELTA = 0.000001;
+	private double m_real, m_imag;
+
+	private static Complex add(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 + re2, im1 + im2);
+	}
+
+	private static Complex subtract(double re1, double im1, double re2, double im2)
+	{
+		return add(re1, im1, -re2, -im2);
+	}
+
+	private static Complex multiply(double re1, double im1, double re2, double im2)
+	{
+		return new Complex(re1 * re2 - im1 * im2, re1 * im2 + re2 * im1);
+	}
+
+	public Complex()
+	{
+	}
+
+	public Complex(double re)
+	{
+		m_real = re;
+	}
+
+	public Complex(double re, double im)
+	{
+		m_real = re;
+		m_imag = im;
+	}
+
+	public static Complex add(double val, Complex z)
+	{
+		return add(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex add(double val)
+	{
+		return add(m_real, m_imag, val, 0);
+	}
+
+	public Complex add(Complex other)
+	{
+		return add(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public static Complex subtract(double val, Complex z)
+	{
+		return subtract(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex subtract(double val)
+	{
+		return subtract(m_real, m_imag, val, 0);
+	}
+
+	public Complex subtract(Complex other)
+	{
+		return subtract(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public static Complex multiply(double val, Complex z)
+	{
+		return multiply(val, 0, z.m_real, z.m_imag);
+	}
+
+	public Complex multiply(double val)
+	{
+		return multiply(m_real, m_imag, val, 0);
+	}
+
+	public Complex multiply(Complex other)
+	{
+		return multiply(m_real, m_imag, other.m_real, other.m_imag);
+	}
+
+	public Complex conjugate()
+	{
+		return new Complex(m_real, -m_imag);
+	}
+
+	public Complex negate()
+	{
+		return new Complex(-m_real, -m_imag);
+	}
+
+	public void inc()
+	{
+		++m_real;
+	}
+
+	public void dec()
+	{
+		--m_real;
+	}
+
+	public boolean equals(Object other)
+	{
+		return other instanceof Complex c && Math.abs(m_real - c.m_real) < DELTA && Math.abs(m_imag - c.m_imag) < DELTA;
+	}
+
+	//hashCode
+
+	public String toString()
+	{
+		return String.format("%f + %f * i", m_real, m_imag);
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: IntValue.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 11th February 2024
+
+	Wrapper class that use cache for values in [-128, 127]
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.primitive.wrapper;
+
+public final class IntValue {
+    private static final int CACHE_MIN_VALUE = -128;
+    private static final int CACHE_MAX_VALUE = 127;
+    private static final IntValue [] CACHE = new IntValue[CACHE_MAX_VALUE - CACHE_MIN_VALUE + 1];
+    private final int m_value;
+
+    private IntValue(int value)
+    {
+        m_value = value;
+    }
+
+    public static final IntValue ZERO = of(0);
+    public static final IntValue ONE = of(1);
+
+    public static IntValue of(int value)
+    {
+        if (value < CACHE_MIN_VALUE || value > CACHE_MAX_VALUE)
+            return new IntValue(value);
+
+        if (CACHE[value - CACHE_MIN_VALUE] == null)
+            CACHE[value - CACHE_MIN_VALUE] = new IntValue(value);
+
+        return CACHE[value - CACHE_MIN_VALUE];
+    }
+
+    public int getValue()
+    {
+        return m_value;
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof IntValue v && m_value == v.m_value;
+    }
+
+    //hashCode
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
 
 
 

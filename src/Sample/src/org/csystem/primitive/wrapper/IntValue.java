@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: IntValue.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 11th February 2024
 
 	Wrapper class that use cache for values in [-128, 127]
 
@@ -39,6 +39,13 @@ public final class IntValue {
     {
         return m_value;
     }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof IntValue v && m_value == v.m_value;
+    }
+
+    //hashCode
 
     public String toString()
     {

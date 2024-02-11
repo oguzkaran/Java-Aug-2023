@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Complex.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 13th January 2024
+	LAST UPDATE	: 1tth February 2024
 	
 	Complex class that represents a complex number
 	
@@ -11,6 +11,7 @@
 package org.csystem.math;
 
 public class Complex {
+	private static final double DELTA = 0.000001;
 	private double m_real, m_imag;
 	
 	private static Complex add(double re1, double im1, double re2, double im2)
@@ -107,6 +108,13 @@ public class Complex {
 	{
 		--m_real;
 	}
+
+	public boolean equals(Object other)
+	{
+		return other instanceof Complex c && Math.abs(m_real - c.m_real) < DELTA && Math.abs(m_imag - c.m_imag) < DELTA;
+	}
+
+	//hashCode
 
 	public String toString()
 	{

@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: MutablePoint.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 11th February 2024
 	
 	MutablePoint class that represents a 2-dimensional point
 	
@@ -74,7 +74,14 @@ public final class MutablePoint {
 		m_x += dx;
 		m_y += dy;
 	}
-	
+
+	public boolean equals(Object other)
+	{
+		return other instanceof MutablePoint p && PointCommon.equals(m_x, m_y, p.m_x, p.m_y);
+	}
+
+	//hashCode
+
 	public String toString()
 	{
 		return PointCommon.toString(m_x, m_y);

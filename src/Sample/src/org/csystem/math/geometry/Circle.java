@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Circle.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 6th January 2024
+	LAST UPDATE	: 11th February 2024
 
 	Circle class that represents a circle
 
@@ -11,6 +11,7 @@
 package org.csystem.math.geometry;
 
 public class Circle {
+    protected static final double DELTA = 0.000001;
     private double m_radius;
 
     public Circle()
@@ -41,6 +42,13 @@ public class Circle {
     {
         return 2 * Math.PI * m_radius;
     }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Circle c && Math.abs(m_radius - c.m_radius) < DELTA;
+    }
+
+    //hashCode
 
     public String toString()
     {

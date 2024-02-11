@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Point.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 11th February 2024
 	
 	Immutable Point class that represents a 2-dimensional
 	point
@@ -20,9 +20,19 @@ public final class Point {
 		m_y = PointCommon.getYBy(polar, a, b);
 	}
 
+	public static Point createCartesian()
+	{
+		return createCartesian(0, 0);
+	}
+
 	public static Point createCartesian(double x, double y)
 	{
 		return new Point(x, y, false);
+	}
+
+	public static Point createPolar()
+	{
+		return createPolar(0, 0);
 	}
 
 	public static Point createPolar(double radius, double theta)
@@ -55,7 +65,14 @@ public final class Point {
 	{
 		return PointCommon.distance(m_x, m_y, x, y);
 	}
-	
+
+	public boolean equals(Object other)
+	{
+		return other instanceof Point p && PointCommon.equals(m_x, m_y, p.m_x, p.m_y);
+	}
+
+	//hashCode
+
 	public String toString()
 	{
 		return PointCommon.toString(m_x, m_y);
