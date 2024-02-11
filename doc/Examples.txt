@@ -27701,6 +27701,209 @@ class A {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    11.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Polymorphism'e ilişkin bazı örnekler:
+    1. Sürekli devam eden (endless) bir oyunda bir karakter kendisine gelen toplara vurmakta olsun. Bu karaktere gelen
+    topların çeşitlerine göre vurduktan sonraki davranışları değişiklik göstersin. Böyle bir ıyun uygulamasında vurma
+    esnasında gelen topa göre işlem yapmak yerine, bu davranışı topa ait kabul edip bir taban sınıf ve bir sanal metot
+    (örneğin Ball sınıfı ve kick metodu gibi) ile karaktere gelen topa yalnızca vurma kodu yazılıp vurma işleminden sonra
+    dinamik türe göre metodun çağrılması sağlanabilir. Bu durumda oyuna yeni bir top da eklense topun karaktere gelip
+    vurulması kodlarında değişiklik gerekmez.
+
+    2. Popüler tuğla kırma oyununda (birick world) top tuğlaya çarptığında tuğlanın şekline göre olay gerçekleşmektedir.
+    Bu durumda çeşitli tuğlalar için çeşitli davranışlar söz konusu olmaktadır. Bu durumda topun tuğlaya çarptığı sırada
+    tuğlanın ne olduğuna işlem yapmak yerine bir taban sınıf ve bir sanal metot (örneğin Brick sınıf ve hit metodu gibi)
+    ile tüm tuğlalar bir matris düşünülüp ilgili elema top çarptığında sanal metot çağrılarak dinamik türe işlem yapılması
+    sağlanabilir. Bu durumda yeni bir tuğla eklense de topun tuğlaya çarpması kodlarınde değişiklik gerekmez
+
+    3. Popüler "angry birds" oyununda çeşitli kuşlar bir sapandan atılmaktadır. Oyunda atıldığında değişik davranışlar
+    gösteren kulşar bulunmaktadır. Bu durumda kuşun davranışının atıldıktan sonra kuşun türüne bakarak gerçekleştirilmesi
+    yerine kuş için bir taban sınıf ve bir sanal metot (örneğin Bird sınıfı ve throwBird gibi) belirlenerek fırlatma işlemi
+    için taban sınıf referansı kullanılarak yapılabilir. Bu durumda dinamik türe göre işlem yapılmış olur. Yeni bir kuş
+    türü eklendiğinde fırlatma kodlarında değişiklik gerekmez.
+
+    Şüphesiz yukarıdaki örnekler dışında pek çok örnek verilebilir.
+
+    Programlamada temel amaç mümkün olduğunca yeni eklentilerin eski kodlara dokunmadan yapılabilmesidir. Bu işlem adeta
+    bir logonun parçası ya da bir plugin gibi yapılabilmeldir. Böyle bir tasarım ile ürünün yeni versiyonu daha çabuk ve
+    daha sistematik bir şekilde elde edilebilir. RTP de bunu sağlayan araçlardan biridir. Aslında bir ürünün kod kalitesi
+    için şu cümle söylenebilir: "Bir ürünün yeni versiyonu çıkartılırken eski kodlara ilişkin senaryolarda ve algoritmalarda
+    değişiklik olmadıktan sonra, eski kodlara ne kadar az müdahale ediliyorsa ürün o kadar kaliteli yazılmıştır". Algoritmanın
+    tekrar daha etkin yazılması kodunn daha önce kalitesiz yazılmış olması anlamına gelmeyebilir. Çünkü örneğin yeni bir
+    sisteme göre eklenen bazı araçlar ile yazılan algoritmalar daha efektif olma eğilimindeyse değişiklik gerekebilir.
+    Bu da zaten daha kaliteli yazmak içindir.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Object sınıfının toString isimli sanal bir metodu vardır. Bu metot bir nesneye ilişkin yazı karşılığı olması durumunda
+   override edilmesi bir convention olan metottur. Aslında biz sınıflarımız içerisinde toString metodunu hep override
+   ettik. toString metodu JavaSE ve çeşitli üçüncü parti kütüphaler tarafından da duruma göre Object sınıfı üzerinden
+   çağrılmaktadır. Örneğin print ve println metotlarının Object parametreli overload'ları standart output'a yani ekrana
+   basacakları yazıyı toString metodunu çağrırarak elde ederler. Benzer şekilde printf (ve String sınıfının format metodu()
+   metodu s format karakteri ile verilen bir argüman için yazı karşılığını toString metodunu çağırarak elde eder
+   metodu s format karakteri ile verilen bir argüman için yazı karşılığını toString metodunu çağırarak elde eder.
+
+   Temel bir tür için de printf metodu (ve String sınıfının format metodu) s format karakteri için dolaylı olarak
+   toString metodunu çağırarak değerin yazı karşılığını elde eder. Çünkü temel türden bir ifadenin değeri printf metoduna
+   geçilirken parametre türü Object olduğundan otomatik kutulama yapılır, sonrasında ilgili sarmalayan sınıfın toString
+   metodu çağrılmış olur.
+
+   Anımsanacağı gibi + operatörünün bir operandı String türündense diğer operandının yazı karşılığı elde edilerek yazı
+   birleştirmesi işlemi yapılır. Diğer türün yazı karşılığı yine toString metodu çağrılarak elde edilir. Diğer tür temel
+   türlerden biriyse önce otomatik kutulanır sonra ilgili sarmalayan sınıfın toString metodu çağrılarak yazı karşılığı
+   elde edilir.
+
+   Object sınıfının toString metodu nesneye özgü tekil (unique) bir bilgiye ilişkin yazı döndürür. Bu yazının nasıl elde
+   edildiğinin ve ne anlama geldiğinin önemi yoktur.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+
+class App {
+    public static void main(String[] args)
+    {
+        Circle c = new Circle(13);
+        Point p = Point.createCartesian(4.5, 6.7);
+
+        System.out.printf("Circle -> %s%n", c);
+        System.out.printf("Point -> %s%n", p);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+
+class App {
+    public static void main(String[] args)
+    {
+        Circle c = new Circle(13);
+        Point p = Point.createCartesian(4.5, 6.7);
+
+        System.out.println(c);
+        System.out.println(p);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        int a = Console.readInt("Birinci sayıyı giriniz:");
+        double b = Console.readDouble("İkinci sayıyı giriniz:");
+
+        System.out.printf("a = %s, b = %s%n", a, b);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        int a = Console.readInt("Birinci sayıyı giriniz:");
+        double b = Console.readDouble("İkinci sayıyı giriniz:");
+
+        System.out.println("a = " + a + " b = " + b); //System.out.println("a = " + Integer.valueOf(a).toString() + "b = " + Double.valueOf(b).toString());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.math.geometry.Circle;
+import org.csystem.math.geometry.Point;
+
+class App {
+    public static void main(String[] args)
+    {
+        Circle c = new Circle(13);
+        Point p = Point.createCartesian(4.5, 6.7);
+
+        System.out.println("Circle ->" + c);
+        System.out.println("Point ->" + p);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Object o1 = new Sample();
+        Object o2 = new Sample();
+
+        System.out.println(o1);
+        System.out.println(o2);
+    }
+}
+
+class Sample {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        Random r = new Random();
+
+        System.out.println(r);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Object sınıfının equals isimli Object parametreli ve geri dönüş değeri boolean olan sanal bir metodu vardır. Bu metot
+   aynı türden iki nesne için mantıksal eşitlik karşılaştırmasında kullanılır. İki nesne için eşitlik kavramı söz konusuysa
+   equals metodu override edilir. Bu da Java'da bir convention'dır. Object sınıfının equals metodu klasik adres karşılaştırması
+   yapar. JavaSE ve üçüncü parti pek çok kütüphane içerisinde equals metodunu Object türü üzerinden çağıran sınıflar ve
+   dolayısıyla metotları bulunmaktadır. Örneğin ArrayList sınıfının indexOf ve lastIndexOf metotları arama işlemini
+   null adres araması yapılmıyorsa equals metodunu çağrırarak yaparlar. Bu durumda ArrayList içerisinde tutulan referansın
+   dinamik türüne göre override edilmişse, override edilen equals çağrılmış olur. Bu durumda ilgili tür için mantıksal
+   eşitlik karşılaştırması yapılmış olur.
+
+   Anahtar Notlar: Bir sınıfta equals metodu override ediliğinde, Object sınıfının hashCode metodu da override edilir veya
+   tersine hashCode metodu override edildiğinde equals metodu da override edilir. Yani bu iki metot bir sınıf içerisinde
+   ya ikisi birden override edilir ya da ikisi de override edilmez. hashCode metodu "Java ile Uygulama Geliştirme 1"
+   kursunda elde alınacaktır. Buradaki equals metodu override edilmiş sınıflarda override edilmeyecektir
+----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
