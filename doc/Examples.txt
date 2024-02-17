@@ -329,8 +329,8 @@ packagecsd;class App{public static void main(String [] args){System.out.println(
 
 	Programın çalışma zamanı sırasında oluşan hatalı durumlara genel olarak "exception" denir. Exception işlemleri
 	ileride "exception handling" isimli bölümde ele alınacaktır. Bu konu ele alınana kadar exception oluştuğunda
-	"program sonlanır" olarak anlaşılacaktır. Exception terimi yerine "run time error" da kullanılmaktadır. "error" dendiğinde
-	"compile time error" anlaşılır
+	"program sonlanır" olarak anlaşılacaktır. Exception terimi yerine "run time error" da kullanılmaktadır. "error"
+	dendiğinde "compile time error" anlaşılır
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -28955,11 +28955,295 @@ public class Worker extends Employee {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    Non-static bir metot final olarak bildirildiğinde o metot artık override edilemez. Bu durumda final bir metot sanal
+    değildir. Bir metot override edildikten sonra da final yapılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class D extends C {
+    public void bar() //error
+    {
+        //...
+    }
+}
+
+class C extends A {
+    public final void bar()
+    {
+        //...
+    }
+}
+class B extends A {
+    public void foo() //error
+    {
+
+    }
+}
+class A {
+    public final void foo()
+    {
+        //...
+    }
+
+    public void bar()
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Sanal bir metot override edilirken erişim belirleyicisi erişim anlamında yükseltilebilir ancak düşürülemez. Yani
+    örneğin protected olarak bildirilmiş bir sanal metot public olarak override edilebilir. protected olarak da override
+    edilebilir ancak no-modifier olarak override edilemez. Bu durumda public olarak bildirilmiş sanal bir metot yalnızca
+    public olarak override edilebilir. private metotlar sanal olmazlar, dolayısıyla override edilmeleri söz konusu değildir.
+    Türemiş sınıf içerisinde private metot ile aynı geri dönüş değerine ve aynı imzaya sahip bir metot olabilir. Ancak
+    bu override etmek değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class D extends A {
+    void foo() //error
+    {
+        //...
+    }
+
+    protected void bar() //error
+    {
+
+    }
+}
+
+class C extends A {
+    public void foo()
+    {
+        //...
+    }
+}
+
+class B extends A {
+    protected void foo()
+    {
+        //...
+    }
+
+    public void bar()
+    {
+        //...
+    }
+
+    private void tar()
+    {
+        //...
+    }
+}
+
+class A {
+    private void tar()
+    {
+        //...
+    }
+
+    protected void foo()
+    {
+        //...
+    }
+    public void bar()
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Exception işlemleri: Anımsanacağı gibi programın çalışma zamanı sırasında oluşan genel olarak hatalı durumlara
+    "exception" ya da "runtime error" denir. Bir exception oluştuğunda akışın oluşan exception'a göre yönlendirilmesine
+    "exception handling" denir. Örneğin bir konum bilgisi veren uygulamanın, konum bilgisi elde edilemediğinde oluşan
+    exception'a göre kullanıcıyı uygun mesajla bilgilendirmesi işlemi exception handling yapılarak gerçekleştirilebilir.
+
+    Exception işlemleri Java'da 5 tane anahtar sözcük ile gerçekleştirilir: throw, try, catch, finally, throws.
+
+    Akış içerisinde bir exception oluşturulması (fırlatılması) için throw deyimi kullanılır. throw deyiminin genel
+    biçimi şu şekildedir:
+
+        throw <referans>;
+
+    Burada referansa ilişkin türün Throwable sınıfından doğrudan ya da dolaylı olarak türetilmiş bir sınıf türünden
+    olması zorunludur. Akış, throw deyimine geldiğinde metodu terkeder. Bu terkediş return deyimi ya da void metotlardaki
+    gibi metodun sonuna gelindiğinde akışın çağrılan noktaya geri dönmesi biçiminde bir sonlanma değildir.
+
+    Anahtar Notlar: Throwable sınıfından doğrudan ya da dolaylı olarak türetilmiş sınıflara "exception sınıfları (exception classes)"
+    denir. Bir convention olarak Error sınıfınden doğrudan ya da dolaylı olarak türetilen sınıflar dışındaki exception
+    sınıflarının isimlendirmesinde son kelime olarak "Exception" kullanılır.
+
+    Akış exception bakımından ele alınacaksa (handling) try deyimi (try statement) içerisinde yazılmalıdır. try deyimi
+    tek başına olamaz. try deyiminden sonra bir catch bloğu veya blokları veya finally bloğu veya catch blokları ile
+    birlikte finally bloğu olabilir. try deyiminde bu bloklar arasında herhangi bir deyim yazılamaz. Yani try deyimi
+    takip eden bloklarla birlikte tek bir deyimdir.
+
+    catch bloğu parantezi içerisinde bir referans bildirilir. Bu referansa catch parametresi de denilmektedir. Bu
+    parametre bir exception sınıfı türünden olmalıdır. Aksi durumda error oluşur.
+
+    Anahtar Notlar: catch parametre referansı catch bloğu içerisinde kullanılmayacaksa yine bir convention isimlendirmede
+    "ignore" yada "ignored" kullanılması okunabilirlik açısından iyi bir tekniktir.
+
+    try deyimi içerisinde bir exception oluştuğunda akış try bloğunu bir daha geri dönmemek üzere (non-resumptive) terkeder.
+    Bu durumda try deyimine ilişkin ilk catch bloğuna dallanır. catch blokları yukarıdan aşağıya taranır ve ilk uygun
+    catch bloğu çalıştırılır. Uygun catch bloğu fırlatılan exception nesnesine ilişkin referansın atanabildiği ilk
+    catch bloğudur. Bu durumda bir catch bloğu çalıştırıldıktan sonra o try deyimine ilişkin diğer catch blokları
+    atlanır ve akış devam eder. Uygun catch bloğunun bulunamaması durumunda akışın nasıl ilerleyeceği ileride ele
+    alınacaktır. Akış try bloğunun sonuna gelirse yani try bloğunda hiç exception oluşmazsa akış tüm catch blokları
+    atlanarak devam eder. try bloğu içerisinde bir exception oluşur ve uygun catch bloğu bulunamazsa yani exception
+    yakalanamazsa bu durumda varsa onu kapsayan try bloğuna ilişkin catch bloklarına bakılır. Bu durum uygun catch
+    bloğu bulununcaya veya hiç bulunamayıncaya kadar devam eder. Uygun catch bloğu bulunamazsa program abnormal bir biçimde
+    sonlanır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örneke fırlatılan referansa ilişkin sınıf Throwable olmadığından yani doğrudan ya da dolaylı olarak
+    Throwable sınıfından türetilmediğinden error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+
+    }
+}
+
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a <= 0)
+            throw new MathException(); //error
+
+    }
+}
+
+class MathException {
+    //...
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+            double result = MathUtil.log(val);
+
+            Console.writeLine("log(%f) = %f", val, result);
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        catch (IndeterminateException ignore) {
+            Console.writeLine("Indeterminate!...");
+        }
+        Console.writeLine("main ends!...");
+    }
+}
+
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte dolaylı olarak içiçe try blokları vardır. run metodunu yazan programcı dökumanı içerisinde
+    fırlattığı exception'ları belirtir. Dikkat edilirse run metodu IndeterminateException fırlatmamaktadır. Bu metot
+    dökumanında UndefinecException ve NumberFormatException fırlattığını söyler. Örnekte NumberFormatException
+    fırlatıldığında yakalayan uygun bir catch bloğu bulunamadığından program abnormal bir biçimde sonlanır. Örneği
+    çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+            double result = MathUtil.log(val);
+
+            Console.writeLine("log(%f) = %f", val, result);
+        }
+        catch (IndeterminateException ignore) {
+            Console.writeLine("run:Indeterminate!...");
+        }
+
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
+
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/
