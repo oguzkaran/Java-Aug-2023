@@ -28557,6 +28557,404 @@ public final class IntValue {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    17.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    abstract sınıflar ve abstract metotlar:
+    Bazı sınıflar türünden doğrudan nesne yaratmanın anlamı yoktur. Bu sınıflar tipik olarak bir kavramı soyut (abstract)
+    olarak temsil ederler. Bu sınıftan türemiş olan sınıflar türünden nesnelerin anlamı vardır. Örneğin, DemoCompanyApp
+    uygulamasında Employee sınıfı böyle bir sınıftır. Burada Employee sınıfından türetilen sınıflar ile birlikte Employee
+    nesnesi anlamlıdır. Ayrıca bu tarz sınıflarda sanal bazı metotların gövdesinin olması gerekmez. Bu metotlar türemiş
+    sınıfta override edilir. İşte böylesi sınıflara soyut (abstract) sınıflar ve gövdesi olması gerekmeyen sanal metotlara da
+    soyut metotlar denir. Doğrudan nesne özelliği gösteren sınıflara ise somut (concrete) sınıflar denir.
+
+    Programcı soyut bir sınıf gördüğünde şunu anlamalıdır: "Bu sınıf bir kavramı temsil ediyor, bu sınıf türünden bir
+    nesneyi doğrudan yaratamam çünkü anlamsız. Bu sınıftan türetilen sınıflar yazmalıyım ve bu sınıfın içerisinde
+    bulunan abstract metotları (veya belki abstract olmayan sanal metotları da) override etmeliyim". Benzer şekilde
+    programcı bir sınıf hiyararşisi için soyut bir kavramı temsil eden sınıfı abstract sınıf olarak düşünmelidir
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    Soyut bir sınıf abstract anahtar sözcüğü ile bildirilir. Bir metot abstract olarak bildirildiğinde metoda gövde
+    yazılmaz. Yazılması error oluşturur. Bir sınıfın en az bir tane abstract metodu varsa sınıf abstract olarak
+    bildirilmelidir. Aksi durumda error oluşur. abstract bir sınıfın abstract metodu olmak zorunda değildir. abstract
+    bir sınıfın abstract olmayan metotları da olabilir. abstract bir sınıfın da veri elemanları olabilir. abstract
+    bir sınıf türünden nesne new operatörü ile yaratılamaz. abstract bir sınıf türünden nesne türemiş sınıf nesnesi
+    içerisinde yaratılır. abstract bir sınıfın ctor'u da olabilir.  abstract bir sınıfın ctor'unun public yapılmasının
+    anlamı yoktur. Çünkü zaten sınıf dışından nesne yaratılamaz. Bu durumda ctor'un protected yapılması daha uygundur.
+    Şüphesiz duruma göre private ya da no-modifier ctor'lar da olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        A a = new A(); //error
+    }
+}
+
+abstract class D {
+    //...
+}
+
+class C {
+    abstract void foo(); //error
+}
+abstract class B {
+    public abstract void foo() //error
+    {}
+}
+
+abstract class A {
+    private static int m_y;
+    private int m_x;
+
+    protected A(int x)
+    {
+        //...
+        m_x = x;
+    }
+
+    public abstract void foo();
+
+    public void bar()
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.company;
+
+import org.csystem.app.company.employee.Employee;
+import org.csystem.app.company.factory.EmployeeFactory;
+import org.csystem.app.company.hr.HumanResources;
+import org.csystem.util.console.Console;
+import org.csystem.util.thread.ThreadUtil;
+
+public class DemoCompanyApp {
+    public static void run()
+    {
+        HumanResources hr = new HumanResources();
+        EmployeeFactory ef = new EmployeeFactory();
+
+        while (true) {
+            Employee e = ef.getEmployee();
+
+            Console.writeLine("------------------------------------------------------");
+            Console.writeLine(e.getClass().getName());
+            hr.payInsurance(e);
+            Console.writeLine("------------------------------------------------------");
+
+            ThreadUtil.sleep(1000);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.app.company.factory;
+
+import org.csystem.app.company.employee.*;
+
+import java.util.Random;
+
+public class EmployeeFactory {
+    private final Random m_random = new Random();
+
+    private Worker getWorker()
+    {
+        //...
+        return new Worker("Ali", "12345678", "Mecidiyeköy", 8, 900);
+    }
+
+    private Manager getManager()
+    {
+        //...
+        return new Manager("Veli", "123456786", "Şişli", "Pazarlama", 200000);
+    }
+
+    private Manager getSalesManager()
+    {
+        //...
+        return new SalesManager("Selami", "1234567868", "Fulya", "Pazarlama", 200000, 10000);
+    }
+
+    private ProjectWorker getProjectWorker()
+    {
+        //...
+        return new ProjectWorker("Ali", "12345678", "Mecidiyeköy", 8, 900, "Mobile", 234);
+    }
+
+    public Employee getEmployee()
+    {
+        return switch (m_random.nextInt(4)) {
+            case 0 -> getWorker();
+            case 1 -> getManager();
+            case 2 -> getProjectWorker();
+            default -> getSalesManager();
+        };
+    }
+}
+
+package org.csystem.app.company.employee;
+
+public abstract class Employee {
+    private String m_name;
+    private String m_citizenId;
+    private String m_address;
+
+    //...
+
+    protected Employee(String name, String citizenId, String address)
+    {
+        m_name = name;
+        m_citizenId = citizenId;
+        m_address = address;
+    }
+
+    public String getName()
+    {
+        return m_name;
+    }
+
+    public void setName(String name)
+    {
+        m_name = name;
+    }
+
+    public String getCitizenId()
+    {
+        return m_citizenId;
+    }
+
+    public void setCitizenId(String citizenId)
+    {
+        m_citizenId = citizenId;
+    }
+
+    public String getAddress()
+    {
+        return m_address;
+    }
+
+    public void setAddress(String address)
+    {
+        m_address = address;
+    }
+
+    //...
+
+    public abstract double calculateInsurancePayment();
+
+    public String toString()
+    {
+        return String.format("[%s]%s", m_citizenId, m_name);
+    }
+}
+
+
+package org.csystem.app.company.hr;
+
+import org.csystem.app.company.employee.Employee;
+import org.csystem.util.console.Console;
+
+public class HumanResources {
+    //...
+    public void payInsurance(Employee employee)
+    {
+        Console.writeLine("Citizen Id:%s, Name:%s", employee.getCitizenId(), employee.getName());
+        Console.writeLine("Insurance payment:%f", employee.calculateInsurancePayment());
+    }
+}
+
+package org.csystem.app.company.employee;
+
+public class Manager extends Employee {
+    private String m_department;
+    private double m_salary;
+
+    //...
+
+    public Manager(String name, String citizenId, String address, String department, double salary)
+    {
+        super(name, citizenId, address);
+        m_department = department;
+        m_salary = salary;
+    }
+
+    public String getDepartment()
+    {
+        return m_department;
+    }
+
+    public void setDepartment(String department)
+    {
+        m_department = department;
+    }
+
+    public double getSalary()
+    {
+        return m_salary;
+    }
+
+    public void setSalary(double salary)
+    {
+        m_salary = salary;
+    }
+
+    //...
+
+    public double calculateInsurancePayment()
+    {
+        return m_salary * 1.5;
+    }
+
+    public String toString()
+    {
+        return String.format("%s, %s, %s", super.toString(), m_salary, m_department);
+    }
+}
+
+package org.csystem.app.company.employee;
+
+public class ProjectWorker extends Worker {
+    private String m_projectName;
+    private double m_extraFee;
+
+    //...
+
+    public ProjectWorker(String name, String citizenId, String address, int hourPerDay, double feePerHour, String projectName, double extraFee)
+    {
+        super(name, citizenId, address, hourPerDay, feePerHour);
+        m_projectName = projectName;
+        m_extraFee = extraFee;
+    }
+
+    public String getProjectName()
+    {
+        return m_projectName;
+    }
+
+    public void setProjectName(String projectName)
+    {
+        m_projectName = projectName;
+    }
+
+    public double getExtraFee()
+    {
+        return m_extraFee;
+    }
+
+    public void setExtraFee(double extraFee)
+    {
+        m_extraFee = extraFee;
+    }
+
+    //...
+
+    public double calculateInsurancePayment()
+    {
+        return super.calculateInsurancePayment() + m_extraFee * 30;
+    }
+
+    public String toString()
+    {
+        return String.format("%s, %s, %f", super.toString(), m_projectName, m_extraFee);
+    }
+}
+
+package org.csystem.app.company.employee;
+
+public class SalesManager extends Manager {
+    private double m_extraFee;
+
+    //...
+
+    public SalesManager(String name, String citizenId, String address, String department, double salary, double extraFee)
+    {
+        super(name, citizenId, address, department, salary);
+        m_extraFee = extraFee;
+    }
+
+    public double getExtraFee()
+    {
+        return m_extraFee;
+    }
+
+    public void setExtraFee(double extraFee)
+    {
+        m_extraFee = extraFee;
+    }
+
+    //...
+
+    public double calculateInsurancePayment()
+    {
+        return super.calculateInsurancePayment() + m_extraFee;
+    }
+
+    public String toString()
+    {
+        return String.format("%s, %f", super.toString(), m_extraFee);
+    }
+}
+
+package org.csystem.app.company.employee;
+
+public class Worker extends Employee {
+    private int m_hourPerDay;
+    private double m_feePerHour;
+
+    //...
+
+    public Worker(String name, String citizenId, String address, int hourPerDay, double feePerHour)
+    {
+        super(name, citizenId, address);
+        m_hourPerDay = hourPerDay;
+        m_feePerHour = feePerHour;
+    }
+
+    public int getHourPerDay()
+    {
+        return m_hourPerDay;
+    }
+
+    public void setHourPerDay(int hourPerDay)
+    {
+        m_hourPerDay = hourPerDay;
+    }
+
+    public double getFeePerHour()
+    {
+        return m_feePerHour;
+    }
+
+    public void setFeePerHour(double feePerHour)
+    {
+        m_feePerHour = feePerHour;
+    }
+
+    public double calculateInsurancePayment()
+    {
+        return m_feePerHour * m_hourPerDay * 30;
+    }
+
+    //...
+
+    public String toString()
+    {
+        return String.format("%s, %d, %f", super.toString(), m_hourPerDay, m_feePerHour);
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
