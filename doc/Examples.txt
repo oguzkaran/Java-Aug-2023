@@ -30781,13 +30781,25 @@ enum MathExceptionStatus {
     NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
 }
 
-/*----------------------------------------------------------------------------------------------------------------------
-    Sanal bir metotta throws bildirimi yapılmışsa, override etme işleminde şunlardan biri yapılabiilir:
-    1. throws listesindeki exception sınıfı kaldırılabilir. Bu durumda throws listesi de kaldırılabilir.
-    2. Türemiş sınıfta override edilen metotta throws listesine taban sınıftaki ilgili metodun throws listesindeki
-    exception sınıfları veya onlardan türemiş olan exception sınıfları yazılabilir. Aksi durumda error oluşur. Aşağıdaki
-    örneği inceleyiniz
-----------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------
+	Anahtar Notlar: throws bildirimi metodun imzasına dahil değildir
+-----------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------
+	throws listesi olan sanal bir metot override edildiğinde, throws listesi anlamında şu kurallar söz konusudur
+	- throws listesine ilişkin sınıflar override edilen metotta yazılmayabilir. Bu durumda hiç throws bildirimi de
+	yapılmayabilir.
+
+	- override edilen metotta throws listesine, sanal metodun throws listesinde bulunan sınıflar veya bu sınıflardan
+	doğrudan ya da dolaylı olarak türetilmiş sınıflar yazılabilir
+
+	Bu kurallara göre override edilen metotta, sanal metodun throws listesinde bulunmayan bir checked exception sınıfı
+	throws listesinde yazıldığında error oluşur
+
+	Aşağıdaki demo örnekte DEsınıfının foo metodunda OurException fırlatıldığından ya throws listesine yazılması ya da
+	foo metodu içerisinde yakalanıp işlenmelidir. Bu durumda throws listesine yazılması error oluşturur. Çünkü taban
+	türdeki sanal metodun throws listesinde OurException'ın kendisi veya doğrudan ya da dolaylı taban sınıflarından biri
+	yoktur. Örnekte interface'in değiştirilemediğini var sayınız
+-----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
 class E extends A {
