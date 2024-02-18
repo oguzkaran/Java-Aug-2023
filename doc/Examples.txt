@@ -29054,6 +29054,77 @@ class A {
     }
 }
 
+/*--------------------------------------------------------
+	FILE NAME	: Console.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 10th February 2024
+
+	Utility class for console operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.console;
+
+import java.util.Scanner;
+
+public final class Console {
+    private static final Scanner KB = new Scanner(System.in);
+
+    private Console()
+    {
+    }
+
+    public static int readInt(String prompt)
+    {
+        write(prompt);
+        return Integer.parseInt(KB.nextLine());
+    }
+
+    public static long readLong(String prompt)
+    {
+        write(prompt);
+        return Long.parseLong(KB.nextLine());
+    }
+
+    public static double readDouble(String prompt)
+    {
+        write(prompt);
+        return Double.parseDouble(KB.nextLine());
+    }
+
+    public static String readString(String prompt)
+    {
+        write(prompt);
+        return KB.nextLine();
+    }
+
+    public static void write(String fmt, Object...params)
+    {
+        System.out.printf(fmt, params);
+    }
+
+    public static void write(Object o)
+    {
+        write("%s", o);
+    }
+
+    public static void writeLine()
+    {
+        System.out.println();
+    }
+
+    public static void writeLine(String fmt, Object...params)
+    {
+        write(fmt + "\n", params);
+    }
+
+    public static void writeLine(Object o)
+    {
+        writeLine("%s", o);
+    }
+}
+
 /*----------------------------------------------------------------------------------------------------------------------
     Exception işlemleri: Anımsanacağı gibi programın çalışma zamanı sırasında oluşan genel olarak hatalı durumlara
     "exception" ya da "runtime error" denir. Bir exception oluştuğunda akışın oluşan exception'a göre yönlendirilmesine
@@ -29236,6 +29307,1565 @@ class UndefinedException extends RuntimeException {
 
 class IndeterminateException extends RuntimeException {
     //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    18.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    Bazen bir metot bir exception oluştuğunda onu handle eder ancak o metodu çağıran metodun da o exception'dan haberi
+    olmasını ister. Bu durumda catch bloğunda ilgili işlem yapıldıktan sonra aynı referansın yeniden fırlatılması gerekir.
+    Bu işleme "re-throw" denir. Şüphesiz re-throw yapan metodun dökumanlarında ilgili exception'ı da fırlattığı
+    söylenmelidir. Ancak dökümanlarda re-throw ettiği söylenmeyebilir. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        catch (IndeterminateException ex) {
+            Console.writeLine("main:Indeterminate!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+            double result = MathUtil.log(val);
+
+            Console.writeLine("log(%f) = %f", val, result);
+        }
+        catch (IndeterminateException ex) {
+            Console.writeLine("run:Indeterminate!...");
+            throw ex; //re-throw
+        }
+
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Taban sınıf türünden parametreli catch bloğu ile türemiş sınıf türünden bir exception'ı yakalanabilir. Bu işlem
+    aslında upcasting işlemidir. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ignore) {
+            Console.writeLine("Math exception occurred!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+            double result = MathUtil.log(val);
+
+            Console.writeLine("log(%f) = %f", val, result);
+        }
+        catch (IndeterminateException ex) {
+            Console.writeLine("run:Indeterminate!...");
+            throw ex;
+        }
+        catch (NumberFormatException ignore) {
+            Console.writeLine("Invalid number format!...");
+        }
+
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends MathException {
+    //...
+}
+
+class IndeterminateException extends MathException {
+    //...
+}
+
+class MathException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte UndefinedException fırlatıldığında ayrı catch bloğu ile yakalanmıştır. Çünkü uygun catch
+    bloğu araması yukarıdan aşağıya yapılmaktadır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        catch (MathException ignore) {
+            Console.writeLine("Math exception occurred!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (NumberFormatException ignore) {
+            Console.writeLine("Invalid number format!...");
+        }
+
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends MathException {
+    //...
+}
+
+class IndeterminateException extends MathException {
+    //...
+}
+
+class MathException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Türemiş sınıf parametreli catch bloğu taban sınıf parametreli catch bloğundan önce yazılmalıdır. Aksi durumda akış
+    hiç bir zaman türemiş sınıf catch bloğuna gelemeceğinden error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ignore) {
+            Console.writeLine("Math exception occurred!...");
+        }
+        catch (UndefinedException ignore) { //error
+            Console.writeLine("Undefined!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (NumberFormatException ignore) {
+            Console.writeLine("Invalid number format!...");
+        }
+
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends MathException {
+    //...
+}
+
+class IndeterminateException extends MathException {
+    //...
+}
+
+class MathException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Throwable parametreli catch bloğu ile tüm exception'lar yakalanabilir. Bu durumda Throwable parametreli catch
+    bloğunun en son catch bloğu olarak yazılması gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        catch (Throwable ignore) {
+            Console.writeLine("Exception occurred!...");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        double val = Console.readDouble("Input a value:");
+
+        Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    finally bloğu akış try bloğundan nasıl çıkarsa çıksın çalıştırılan bloktur. finally bloğu tüm catch bloklarından
+    sonra gelmelidir. Eğer exception oluşmuşsa ve yakalanmışsa catch bloğundan sonra çalıştırılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (IndeterminateException ignore) {
+            Console.writeLine("Indeterminate!...");
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    finally bloğunda tipik olarak akış içerisinde exception oluşsa da oluşmasa da yapılacak ortak bir işe ilişkin kodlar
+    yazılır. Örneğin bir dosya açıldığında dosya ile işlemler yapıldıktan sonra dosyanın kapatılması gerekir. Bu durumda
+    dosya ile işlemler yapılırken bir exception oluşursa da dosyanın kapatılabilmesi için kapatmaya ilişkin kodlar finally
+    bloğunda yazılır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    try deyiminde finaly bloğu hiç catch bloğu olmadan da yazılabilir. Bu durumda programce exception oluşsa da oluşmasa
+    da yapacağı işi finally bloğuna yazmıştır. Ancak fırlatılan exceptionn'ı yakalamamıştır. Aşağıdaki demo örneği
+    inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (IndeterminateException ignore) {
+            Console.writeLine("Indeterminate!...");
+        }
+        catch (UndefinedException ignore) {
+            Console.writeLine("Undefined!...");
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new UndefinedException();
+
+        if (a < 0)
+            throw new IndeterminateException();
+
+        return Math.log(a);
+    }
+}
+
+class UndefinedException extends RuntimeException {
+    //...
+}
+
+class IndeterminateException extends RuntimeException {
+    //...
+}
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        Console.writeLine(Sample.foo("foo")); //fooreturnfinally
+    }
+}
+
+class Sample {
+    public static StringBuilder foo(String str)
+    {
+        StringBuilder sb = new StringBuilder(str);
+
+        try {
+            return sb.append("return");
+        }
+        finally {
+            sb.append("finally");
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        Console.writeLine(Sample.foo("foo")); //fooreturn
+    }
+}
+
+class Sample {
+    public static String foo(String str)
+    {
+        StringBuilder sb = new StringBuilder(str);
+
+        try {
+            return sb.append("return").toString();
+        }
+        finally {
+            sb.append("finally");
+        }
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: Console.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 18th February 2024
+
+	Utility class for console operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.console;
+
+import java.util.Scanner;
+
+public final class Console {
+    private static final Scanner KB = new Scanner(System.in);
+
+    private Console()
+    {
+    }
+
+    public static int readInt()
+    {
+        return readInt("");
+    }
+
+    public static int readInt(String prompt)
+    {
+        return readInt(prompt, "");
+    }
+
+    public static int readInt(String prompt, String errorPrompt)
+    {
+        while (true) {
+            try {
+                write(prompt);
+                return Integer.parseInt(KB.nextLine());
+            }
+            catch (NumberFormatException ignore) {
+                write(errorPrompt);
+            }
+        }
+    }
+
+    public static long readLong()
+    {
+        return readLong("");
+    }
+
+    public static long readLong(String prompt)
+    {
+        return readLong(prompt, "");
+    }
+
+    public static long readLong(String prompt, String errorPrompt)
+    {
+        while (true) {
+            try {
+                write(prompt);
+                return Long.parseLong(KB.nextLine());
+            }
+            catch (NumberFormatException ignore) {
+                write(errorPrompt);
+            }
+        }
+    }
+
+    public static double readDouble()
+    {
+        return readDouble("");
+    }
+
+    public static double readDouble(String prompt)
+    {
+        return readDouble(prompt, "");
+    }
+
+    public static double readDouble(String prompt, String errorPrompt)
+    {
+        while (true) {
+            try {
+                write(prompt);
+                return Double.parseDouble(KB.nextLine());
+            }
+            catch (NumberFormatException ignore) {
+                write(errorPrompt);
+            }
+        }
+    }
+
+    public static short readShort()
+    {
+        return readShort("");
+    }
+
+    public static short readShort(String prompt)
+    {
+        return readShort(prompt, "");
+    }
+
+    public static short readShort(String prompt, String errorPrompt)
+    {
+        while (true) {
+            try {
+                write(prompt);
+                return Short.parseShort(KB.nextLine());
+            }
+            catch (NumberFormatException ignore) {
+                write(errorPrompt);
+            }
+        }
+    }
+
+    public static byte readByte()
+    {
+        return readByte("");
+    }
+
+    public static byte readByte(String prompt)
+    {
+        return readByte(prompt, "");
+    }
+
+    public static byte readByte(String prompt, String errorPrompt)
+    {
+        while (true) {
+            try {
+                write(prompt);
+                return Byte.parseByte(KB.nextLine());
+            }
+            catch (NumberFormatException ignore) {
+                write(errorPrompt);
+            }
+        }
+    }
+
+    public static boolean readBoolean()
+    {
+        return readBoolean("");
+    }
+
+    public static boolean readBoolean(String prompt)
+    {
+        return readBoolean(prompt, "");
+    }
+
+    public static boolean readBoolean(String prompt, String errorPrompt)
+    {
+        while (true) {
+            write(prompt);
+            String str = KB.nextLine();
+
+            if (str.equalsIgnoreCase("false") || str.equalsIgnoreCase("true"))
+                return Boolean.parseBoolean(str);
+
+            write(errorPrompt);
+        }
+    }
+
+    public static char readChar()
+    {
+        return readChar("");
+    }
+
+    public static char readChar(String prompt)
+    {
+        return readChar(prompt, "");
+    }
+
+    public static char readChar(String prompt, String errorPrompt)
+    {
+        while (true) {
+            write(prompt);
+            String str = KB.nextLine();
+
+            if (str.length() <= 1)
+                return str.isEmpty() ? '\n' : str.charAt(0);
+
+            write(errorPrompt);
+        }
+    }
+
+    public static String readString(String prompt)
+    {
+        write(prompt);
+        return KB.nextLine();
+    }
+
+    public static void write(String fmt, Object...params)
+    {
+        System.out.printf(fmt, params);
+    }
+
+    public static void write(Object o)
+    {
+        write("%s", o);
+    }
+
+    public static void writeLine()
+    {
+        System.out.println();
+    }
+
+    public static void writeLine(String fmt, Object...params)
+    {
+        write(fmt + "\n", params);
+    }
+
+    public static void writeLine(Object o)
+    {
+        writeLine("%s", o);
+    }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir exception sınıfı içerisinde çeşitli veriler tutularak kullanılabilir. Bu anlamda Throwable sınıfı içerisinde de
+    bazı veri elemanları tutulmaktadır. Bunlardan en tipik olarak String türden olan ve message (detail message) elemanıdır.
+    Bu anlamdaThrowable sınıfının message parametreli ctor'ları bulunur. Ayrıca message değerini elde etmek için de
+    getMessage isimli bir metot da vardır. Bu sınıftan türetilen sınıflarda genel olarak message parametreli ctor veya
+    ctor'lar bulundurulur. Örneğin Exception, RuntimeException ve Error sınıflarında da message parametreli ctor'lar vardır.
+    Programcı da isterse kendi exception sınıfına başka veri elemanları ekleyebilir. getMessage metodu sanaldır. İstenirse
+    override edilebilir. Throwable sınıfı içerisinde Throwable türünden bir referans da tutulmaktadır. Yani Throwable
+    sınıfı aslında bir exception referansını da tutabilmektedir. Tututlan bu exception referansına cause denilmektedir.
+    Ayrıca Throwable parametreli ctor'ları ve getCause metodu da vardır. Cause bilgisi bir exception içerisinde exception
+    oluşmasına sebep olan bir exception referansının tutulması için düşünülmüştür. Bu kavrama "inner exception" da
+    denilmektedir. Cause kullanımı ileride ele alınacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) {
+            Console.writeLine("Message:%s, Status:%s", ex.getMessage(), ex.getMathExceptionStatus());
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new MathException("Undefined", MathExceptionStatus.NEGATIVE_INFINITY);
+
+
+        if (a < 0)
+            throw new MathException("Indeterminate", MathExceptionStatus.NAN);
+
+        return Math.log(a);
+    }
+}
+
+class MathException extends RuntimeException {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz. Örnekte MathException sınıfında getMessage metodu override edildiğinden, MathException
+    fırlatıldığında, Throwable parametreli catch bloğunda RTP gereği MathException sınıfının getMessage metodu çağrılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (Throwable ex) {
+            Console.writeLine(ex.getMessage());
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new MathException("Undefined", MathExceptionStatus.NEGATIVE_INFINITY);
+
+        if (a < 0)
+            throw new MathException("Indeterminate", MathExceptionStatus.NAN);
+
+        return Math.log(a);
+    }
+}
+
+class MathException extends RuntimeException {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) {
+            Console.writeLine(ex.getMessage());
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends RuntimeException {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Throwable sınıfının printStackTrace metotları exception oluşma noktalarını bir stack olarak gösteren bir mesajı
+    ilgili output'a gönderir. Parametresiz printStackTrace metodu ekrana (aslında stderr'ye) basmak için kullanılabilir.
+    Basılan mesaj exception'dan dolayı akış sonlanırken basılan mesaja çok benzer. Bu mesajlar tipik olarak geliştirme
+    aşamasında debug etmek için kullanılabilmektedir
+
+    Anahtar Notlar: Bir takım bilgilerin daha sonra incelenmek üzere saklanmasına yazılım geliştirmede "logging" denir.
+    Örneğin uygulama test aşamasında çalıştırılırken bir takım hata mesajları saklanarak daha sonra incelenebilir. Bunun
+    için her ne kadar printStackTrace metotları kullanılabilese de daha detaylı durumlar için bu mesajlar yetersiz
+    kalabilmektedir. Bu durumda bazı "logger" denilen üçüncü parti kütüphaneler kullanılır. Bu sebeple printStackTrace
+    kullanımında bazı static kod analizi araçları uyarı mesajı verebilirler. Logger'lar Java ile Uygulama kurslarında
+    kullanılacak ve çeşitli düzeylerde ele alınacaktır
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceliyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            Console.writeLine("main:finally");
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends RuntimeException {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Java'da exception'lar kategori olarak iki gruba ayrılmaktadır: checked, unchecked
+
+    checked exception: Bir exception sınıfının doğrudan taban sınıfı ya da dolaylı taban sınıflarından biri, RuntimeException
+    ve Error sınıflarından biri değilse sınıf checked exception sınıfıdır.
+
+    unchecked exception: checked exception olmayan exception sınıflarıdır
+
+    Bu tanımlara göre türemiş exception sınıfın kategorisi, taban sınıfının kategorisi ile aynıdır ve değiştirilemez.
+
+    Anahtar Notlar: Bir exception'ın checked ya da unchecked olması çalışma zamanına ilişkin bir kavramm değildir. Derleme
+    zamanında checked exception'lar bazı zorunluluklar bulunmaktadır. Kategori ne olursa olsun çalışma zamanında exception
+    işlemlerine ilişkin bir değişiklik yoktur.
+
+    Anahtar Notlar: Bir convention olarak bir exception sınıfı doğrudan Throwable sınıfından türetilmez. Ya Exception,
+    ya RuntimeException ya da Error sınıfından doğrudan ya da dolaylı olarak türetilir. Bu convention'a göre Throwable
+    sınıfı exception sınıflarının dolaylı taban sınıfı olur.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Bir sınıf checked bir sınıfı ise bu durumda, bu exception'ın fırlatılma potansiyeli olan bir akışın ya try deyimi
+   içerisinde olup uygun catch bloğunun bulunması ya da akışa ilişkin meotta throws bildirimi yapılması gerekir. Aksi
+   durumda error oluşur. Aşağıdaki örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) {
+            Console.writeLine(ex.getMessage());
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run() throws NaNException
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (NegativeInfinityException ex) {
+            Console.writeLine("run:%s", ex.getMessage());
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a) throws NegativeInfinityException, NaNException
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   throws listesinde taban exception sınıfı varsa ondan türemiş exception listeye konmayabilir. Konması error oluşturmaz.
+   Ancak böyle durumda bir koymamayı tercih edeceğiz. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) {
+            Console.writeLine(ex.getMessage());
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run() throws MathException
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (NegativeInfinityException ex) {
+            Console.writeLine("run:%s", ex.getMessage());
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a) throws MathException
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Bir catch bloğunun parametresi checked bir exception türündense ilgili try bloğu içerisinde o exception'ın fırlatabileceği
+   en az bir deyimin bulunması gerekir. Aksi durumda error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (MathException ex) { //error
+            Console.writeLine(ex.getMessage());
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (MathException ex) {
+            Console.writeLine("run:%s", ex.getMessage());
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a) throws MathException
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki kural Exception ve Throwable sınıfları geçersizdir. Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (Exception ex) {
+            Console.writeLine(ex.getMessage());
+        }
+
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        try {
+            double val = Console.readDouble("Input a value:", "Invalid value!...");
+
+            Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+        }
+        catch (MathException ex) {
+            Console.writeLine("run:%s", ex.getMessage());
+        }
+        finally {
+            Console.writeLine("run:finally");
+        }
+        Console.writeLine("run ends!...");
+    }
+}
+
+class MathUtil {
+    public static double log(double a) throws MathException
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Sanal bir metotta throws bildirimi yapılmışsa, override etme işleminde şunlardan biri yapılabiilir:
+    1. throws listesindeki exception sınıfı kaldırılabilir. Bu durumda throws listesi de kaldırılabilir.
+    2. Türemiş sınıfta override edilen metotta throws listesine taban sınıftaki ilgili metodun throws listesindeki
+    exception sınıfları veya onlardan türemiş olan exception sınıfları yazılabilir. Aksi durumda error oluşur. Aşağıdaki
+    örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class E extends A {
+    public void foo() throws MathException //error
+    {
+        //...
+    }
+}
+
+class D extends A {
+    public void foo() throws IndeterminateException
+    {
+        //...
+    }
+}
+
+class C extends A {
+    public void foo()
+    {
+        //...
+    }
+}
+
+class B extends A {
+    public void foo() throws NaNException
+    {
+        //...
+    }
+}
+
+
+abstract class A {
+    public abstract void foo() throws NegativeInfinityException, NaNException;
+}
+
+class IndeterminateException extends NaNException {
+    public IndeterminateException(String message)
+    {
+        super(message);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
 }
 
 

@@ -1,63 +1,94 @@
 /*----------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki demo örnekte dolaylı olarak içiçe try blokları vardır. run metodunu yazan programcı dökumanı içerisinde
-    fırlattığı exception'ları belirtir. Dikkat edilirse run metodu IndeterminateException fırlatmamaktadır. Bu metot
-    dökumanında UndefinecException ve NumberFormatException fırlattığını söyler. Örnekte NumberFormatException
-    fırlatıldığında yakalayan uygun bir catch bloğu bulunamadığından program abnormal bir biçimde sonlanır. Örneği
-    çeşitli değerler ile çalıştırıp sonuçları gözlemleyiniz
+    Sanal bir metotta throws bildirimi yapılmışsa, override etme işleminde şunlardan biri yapılabiilir:
+    1. throws listesindeki exception sınıfı kaldırılabilir. Bu durumda throws listesi de kaldırılabilir.
+    2. Türemiş sınıfta override edilen metotta throws listesine taban sınıftaki ilgili metodun throws listesindeki
+    exception sınıfları veya onlardan türemiş olan exception sınıfları yazılabilir. Aksi durumda error oluşur. Aşağıdaki
+    örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
-
-import org.csystem.util.console.Console;
 
 class App {
     public static void main(String[] args)
     {
-        try {
-            DemoApp.run();
-        }
-        catch (UndefinedException ignore) {
-            Console.writeLine("Undefined!...");
-        }
 
-        Console.writeLine("main ends!...");
     }
+
 }
 
-
-class DemoApp {
-    public static void run()
+class E extends A {
+    public void foo() throws MathException //error
     {
-        try {
-            double val = Console.readDouble("Input a value:");
-            double result = MathUtil.log(val);
-
-            Console.writeLine("log(%f) = %f", val, result);
-        }
-        catch (IndeterminateException ignore) {
-            Console.writeLine("run:Indeterminate!...");
-        }
-
-        Console.writeLine("run ends!...");
+        //...
     }
 }
 
-class MathUtil {
-    public static double log(double a)
+class D extends A {
+    public void foo() throws IndeterminateException
     {
-        if (a == 0)
-            throw new UndefinedException();
-
-        if (a < 0)
-            throw new IndeterminateException();
-
-        return Math.log(a);
+        //...
     }
 }
 
-class UndefinedException extends RuntimeException {
-    //...
+class C extends A {
+    public void foo()
+    {
+        //...
+    }
 }
 
-class IndeterminateException extends RuntimeException {
-    //...
+class B extends A {
+    public void foo() throws NaNException
+    {
+        //...
+    }
+}
+
+
+abstract class A {
+    public abstract void foo() throws NegativeInfinityException, NaNException;
+}
+
+class IndeterminateException extends NaNException {
+    public IndeterminateException(String message)
+    {
+        super(message);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
 }
