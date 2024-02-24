@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------
 	FILE		: DayOfWeek.java
 	AUTHOR		: Java-Mar-2023 Group
-	Last UPDATE	: 11th February 2023
+	Last UPDATE	: 24th February 2023
 
 	DayOfWeek enum class
 

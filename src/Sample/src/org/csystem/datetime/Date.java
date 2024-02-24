@@ -7,7 +7,8 @@
 
         - Sınıfın public bölümünü değiştirmeden istediğiniz eklemeyi yapabilirsiniz
 
-        - Sınıf geçersiz tarih durumunu kontrol edecektir. Geçersizlik durumunda uygun mesajı verip program sonlandırılacaktır
+        - Sınıf geçersiz tarih durumunu kontrol edecektir. Geçersizlik durumunda uygun mesaj ile birlikte, yazılmış olan
+         DateTimeException sınıfı fırlatılacaktır
 
         - Sınıf DayOfWeek ve Month enum class'larını kullanmaktadır. enum class'ların sabitlerini değiştirmeden istediğiniz
         eklemeyi yapabilirsiniz
@@ -18,16 +19,11 @@
         - Ay bilgisini değer olarak alan veya değer olarak geri döndüren metotlar için değer [1, 12] aralığında olacaktır
 
         - Sınıfa ilişkin test kodlarını da yazınız
-
-        - Sınıfın public metotlarındaki
-	            throw new UnsupportedOperationException("TODO:");
-        deyimini silerek ilgili metodu yazabilirsiniz. Bu deyim bazı error durumlarını engellemek için eklenmiştir. Şu an
-        bu deyime odaklanmanız gerekmez
 -----------------------------------------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------
 	FILE		: Date.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 11th February 2023
+	LAST UPDATE	: 24th February 2023
 
 	Date class that represents a date
 

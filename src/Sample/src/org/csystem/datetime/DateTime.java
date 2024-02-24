@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 	FILE		: DateTime.java
 	AUTHOR		: Java-Auf-2023 Group
-	LAST UPDATE	: 11th February 2023
+	LAST UPDATE	: 24th February 2023
 
 	DateTime class that represents a datetime
 

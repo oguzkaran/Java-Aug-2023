@@ -5,8 +5,8 @@
 
 	+ Sınıfın ilgili set ve get metotları yazılacaktır
 
-	+ Pay'ın sıfırdan farklı veya sıfır ve paydanın sıfır olması durumunda tanımsızlık ve belirsizliğe ilişkin uygun mesaj
-	verilip program sonlandırılacaktır.
+	+ Pay'ın sıfırdan farklı veya sıfır ve paydanın sıfır olması durumunda uygun mesajla birlikte NumberFormatException
+	fırlatılacaktır
 
 	+ Kesir her durumda sadeleşmiş bir biçimde tutulacaktır. Örneğin kesrin pay ve paydası sırasıyla 4 ve 18 olarak
 	verildiğinde kesir 2 / 9 olarak tutulacaktır.
@@ -38,11 +38,6 @@
 	+ Kesrin double türden ondalık değerini döndüren getRealValue metodu yazılacaktır
 
 	+ Sınıfın public bölümünü değiştirmeden istediğiniz değişikliği ve eklemeleri yapabilirsiniz
-
-	+ Sınıfın public metotlarındaki
-	    throw new UnsupportedOperationException("TODO:");
-    deyimini silerek ilgili metodu yazabilirsiniz. Bu deyim bazı error durumlarını engellemek için eklenmiştir. Şu an
-    bu deyime odaklanmanız gerekmez
 
 	Sınıfın public bölümü ile birlikte iskeleti şu şekildedir:
 
@@ -159,7 +154,7 @@
 /*----------------------------------------------------------------
 	FILE		: Fraction.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 11th February 2024
+	LAST UPDATE	: 24th February 2024
 
 	Fraction class that represents fraction
 

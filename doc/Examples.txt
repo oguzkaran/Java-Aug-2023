@@ -30781,26 +30781,46 @@ enum MathExceptionStatus {
     NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
 }
 
-/*-----------------------------------------------------------------------------------------------------------------------
+/*----------------------------------------------------------------------------------------------------------------------
 	Anahtar Notlar: throws bildirimi metodun imzasına dahil değildir
------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	24.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
 	throws listesi olan sanal bir metot override edildiğinde, throws listesi anlamında şu kurallar söz konusudur
 	- throws listesine ilişkin sınıflar override edilen metotta yazılmayabilir. Bu durumda hiç throws bildirimi de
 	yapılmayabilir.
 
 	- override edilen metotta throws listesine, sanal metodun throws listesinde bulunan sınıflar veya bu sınıflardan
-	doğrudan ya da dolaylı olarak türetilmiş sınıflar yazılabilir
+	doğrudan ya da dolaylı olarak türetilmiş exception sınıfları yazılabilir.
 
 	Bu kurallara göre override edilen metotta, sanal metodun throws listesinde bulunmayan bir checked exception sınıfı
 	throws listesinde yazıldığında error oluşur
 
-	Aşağıdaki demo örnekte DEsınıfının foo metodunda OurException fırlatıldığından ya throws listesine yazılması ya da
-	foo metodu içerisinde yakalanıp işlenmelidir. Bu durumda throws listesine yazılması error oluşturur. Çünkü taban
-	türdeki sanal metodun throws listesinde OurException'ın kendisi veya doğrudan ya da dolaylı taban sınıflarından biri
-	yoktur. Örnekte interface'in değiştirilemediğini var sayınız
------------------------------------------------------------------------------------------------------------------------*/
+	Aşağıdaki demo örnekte E sınıfının foo metodunda MathException fırlatıldığından ya throws listesine yazılması ya da
+	foo metodu içerisinde yakalanıp işlenmesi gerekir. Bu durumda throws listesine yazılması error oluşturur. Çünkü taban
+	türdeki sanal metodun throws listesinde MathException'ın kendisi veya doğrudan ya da dolaylı taban sınıflarından biri
+	yoktur. Demo örnekte abstract sınıfın ve doWork metodunun değiştirilemedğini varsayınız
+----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
+
+class Sample {
+    public static void doWork() throws MathException
+    {
+        //...
+    }
+}
+
+class E extends A {
+    public void foo() throws MathException //error
+    {
+        //...
+
+        Sample.doWork();
+    }
+}
 
 class E extends A {
     public void foo() throws MathException //error
@@ -30879,6 +30899,444 @@ class MathException extends Exception {
 enum MathExceptionStatus {
     NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
 }
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki gibi bir durumda programcı abstract sınıfı değiştiremeyeceğine göre E sınfında algoritmasını değiştirilmeldir.
+    Örnekte unchecked bir exception sınıfı ile checked exception sınıfı sarmalanarak (cause) fırlatılmıştır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+    public static void doWork() throws MathException
+    {
+        //...
+    }
+}
+
+class E extends A {
+    public void foo()
+    {
+        //...
+        try {
+            Sample.doWork();
+        }
+        catch (MathException ex) {
+            throw new WrapperException("foo", ex);
+        }
+    }
+}
+
+class D extends A {
+    public void foo() throws IndeterminateException
+    {
+        //...
+    }
+}
+
+class C extends A {
+    public void foo()
+    {
+        //...
+    }
+}
+
+class B extends A {
+    public void foo() throws NaNException
+    {
+        //...
+    }
+}
+
+abstract class A {
+    public abstract void foo() throws NegativeInfinityException, NaNException;
+}
+
+class WrapperException extends RuntimeException {
+    public WrapperException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public String getMessage()
+    {
+        Throwable cause = getCause();
+
+        return String.format("Message:%s%s", super.getMessage(), cause != null ? ", Cause Message:" + cause.getMessage() : "");
+    }
+}
+
+class IndeterminateException extends NaNException {
+    public IndeterminateException(String message)
+    {
+        super(message);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Yukardaki örnekte abstract sınıf değiştirilebilseydi aşağıdaki gibi bir yaklaşımla da problem çözülebilirdi. Örnekte
+    abstract metodun throws bildiriminde Exception sınıfı yazıldığından ve tüm "checked exception" sınıfları Exception
+    sınıfından doğrudan ya da dolaylı olarak türetildiğinden artık her checked exception throws listesine yazılabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample {
+    public static void doWork() throws MathException
+    {
+        //...
+    }
+}
+
+class E extends A {
+    public void foo() throws MathException
+    {
+        //...
+        Sample.doWork();
+    }
+}
+
+class D extends A {
+    public void foo() throws IndeterminateException
+    {
+        //...
+    }
+}
+
+class C extends A {
+    public void foo()
+    {
+        //...
+    }
+}
+
+class B extends A {
+    public void foo() throws NaNException
+    {
+        //...
+    }
+}
+
+abstract class A {
+    public abstract void foo() throws Exception;
+}
+
+class IndeterminateException extends NaNException {
+    public IndeterminateException(String message)
+    {
+        super(message);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends Exception {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Dikkat edilirse checked exception sınıfları her ne kadar programcıyı "handle" etmeye zorlasa da
+    yani bu durum iyi olarak düşünülebilse de bazı noktalarda strateji değiştirmek zorunda kalması programcı açısından
+    kod yazma bütünlüğünü etkileyebilmektedir. Bu sebeple bazı programcılar checked exception kavramını eleştirirler.
+    Ayrıca exception kavramının çalışma zamanına ilişkin olması dolayısıyla, checked exception kavramında derleme
+    zamanına özgü kısıtlamaların olması da bazı programcılar tarafından eleştirilmesine yol açar. Java'nın exception
+    kavramını örnek aldığı C++ programlama dilinde ve Java'yı örnek alan popüler programlama dillerinin hiç birisinde
+    exception kavramı checked ve unchecked olarak ayrılmamıştır. Her ne kadar eleştirilse de bir Java programcısının
+    checked ve unchecked ayrımını iyi bilmesi ve kodlarını da ona göre uygun düzenlemesi gerekir
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Bütün bu anlatılanlara göre aşağıdaki iki soru sorulabilir:
+	1. Programcı bir exception sınıfını ne zaman yazacaktır yani yazıp yazmacağına nasıl karar verecektir? JavaSE'de
+	pek çok exception sınıfı bulunur. Bu durumda programcı bir exception fırlatması gerektiğinde önce JavaSE'de domain'ine
+	uygun bir exception sınıfı olup olmadığına bakmalıdır. Eğer varsa onu kullanmalıdır. Yoksa kullandığı teknolojiye
+	ilişkin kütüphanelerde domain'ine uygun bir exception sınıfı varsa onu kullanmalıdır. Yoksa artık exception sınıfı
+	yazmalıdır.
+
+	2. Programcı bir exception yazacaksa, sınıfı checked veya unchecked yapacağına nasıl karar verecektir? Aslında bu
+	durum, programcıdan programcıya yaklaşımsal olarak farklıdır. Bazı programcılar eğer bir zorunluluk yoksa checked
+	exception sınıfı yazmazlar. Burada zorunlu durumlardan biri, bir checked exception sınıfından türetme yapmaktır. Biz de
+	zorunlu olmadıkça checked exception kategorisinde bir sınıf yazmayacağız. Bazı programcılar ise genel olarak kritik
+	gördükleri yani hemen her durumda handle edilmesi gereken exception sınıflarını checked yapma eğilimindedir. Buradaki
+	iki teknik için de kötü ya da iyi denemez. Bunlar birer yaklaşımdır ve programcıdan programcıya değişiklik gösterebilir.
+	Ancak, checked exception sınıflarının bazı durumlarda programcının strateji değiştirmesine sebep olduğu da unutlmamalıdır.
+	Bu anlamda birinci yaklaşımı benimseyen programcılar, "Bir exception'ın kritik olup olmayacağına zaten programcı
+	karar vermek durumundadır. Bu durumda zorunlu bırakılması anlamsızdır" şeklinde düşünürler. İkinci yaklaşımı benmseyen
+	programcılar ise, "Önemli exception'lar	checked yapılarak programcının handle etmesi gerektiğinin farkına vardırırlar"
+	şeklinde düşünürler
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+	JavaSE'de bulunan çok kullanılan bazı exception sınıfları:
+	IllegalArgumentException: Genel olarak bir metodun parametresine geçilen argümanın geçersiz olması durumunda fırlatılan
+	exception sınıfıdır. Konuya özgü olarak bu sınıftan türetilmiş exception sınıfları da bulunmaktadır.
+
+	ClassCastException: Downcasting işleminde haksız dönüşüm olduğunda JVM tarafından fırlatılır. Haksız dönüşümün
+	kontrolü için handle edilebilir ancak bunun yerine instanceof operatörü ve benzeri araçlarla kullanımı tavsiye
+	edilir. Bu exception programcı tarafından bir metot içerisinde fırlatılmaz.
+
+	NumberFormatException: IllegalArgumentException sınıfından türetilmiştir. Sarmalayan sınıfların parseXXX metotları
+	(Boolean sınıfının parseBoolean metodu hariç) yazıyı ilgili temel türe çeviremezlerse bu exception'ı fırlatırlar.
+
+	NoSuchElementException: Tipik olarak bir elemanın yokluğu durumunda kullanılır.
+
+	InputMismatchException: Bu sınıf tipik olarak bir girdinin geçersizliği durumunda kullanılır. Örneğin Scanner sınıfının
+	çeşitli metotları (nextInt, nextDouble, nextLong gibi) bu exception'ı fırlatırlar. Bu sınıf NoSuchElementException
+	sınıfından türetilmiştir.
+
+	ArrayIndexOutOfBoundsException: Bu exception özel olarak dizinin indeks numarasının geçersiz olduğu durumlarda JVM
+	tarafından fırlatılır.
+
+	IndexOutOfBoundsException: Bu exception sınıfı indeks taşmalarında kullanılır. Örneğin ArrayList sınıfının bazı
+	metotları bu exception'ı fırlatırlar.
+
+	NullPointerException: Bir referansın null değeri tutması durumunda o referans ile non-static bir elemana erişilmeye
+	çalışıldığında fırlatılır. Bu exception sınıfının programlamada handle edilmesi tavsiye edilmez. Genel olarak bu
+	duruma yol açabilecek kod parçaları yazılmamalıdır ya da yazılmışsa da düzeltilmelidir.
+
+	UmSupportedOperationException: Tipik olarak bir metodun o tür için desteklenmediği ancak bulunması gerektiği durumda
+	kullanılır.
+
+	IOException: Input ve/veya output durumlarında kullanılan checked bir exception sınıfıdır. Bu exception sınıfından da
+	önemli bazı exception sınıfları türetilmiştir.
+
+	Yukarıdaki exception sınıfları dışında da pek çok exception sınıfı bulunmaktadır
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------
+	FILE NAME	: Circle.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 24th February 2024
+
+	Circle class that represents a circle
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.math.geometry;
+
+public class Circle {
+    protected static final double DELTA = 0.000001;
+    private double m_radius;
+
+    public Circle()
+    {
+    }
+
+    public Circle(double radius)
+    {
+        setRadius(radius);
+    }
+
+    public void setRadius(double radius)
+    {
+        if (radius < 0)
+            throw new IllegalArgumentException(String.format("Radius must be non-negative:%f", radius));
+
+        m_radius = radius;
+    }
+
+    public double getRadius()
+    {
+        return m_radius;
+    }
+
+    public double getArea()
+    {
+        return Math.PI * m_radius * m_radius;
+    }
+
+    public double getCircumference()
+    {
+        return 2 * Math.PI * m_radius;
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Circle c && Math.abs(m_radius - c.m_radius) < DELTA;
+    }
+
+    //hashCode
+
+    public String toString()
+    {
+        return String.format("Radius:%f, Area:%f, Circumference:%f", m_radius, getArea(), getCircumference());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aralarında türetme ilişkisi olmayan birden fazla exception sınıfı fırlatma ihtimali olan bir akışta, tüm bu exception'lar
+    için ortak bir işlem yapılacaksa catch bloğunda exception sınıfları | atomu ile birbirinden ayrılabilir. Bu durumda
+    catch bloğu içerisinde exception sınıflarına ilişkin yalnızca ortak elemanlara erişilebilir. Bu sentaksa yazılan
+    exception sınıflarının aralarında türetme ilişkisi olması error oluşturur. Bu sentaks Java 7 ile dile eklenmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+class App {
+    public static void main(String[] args)
+    {
+        try {
+            DemoApp.run();
+        }
+        catch (InputMismatchException | MathException ex) {
+            String message = ex.getMessage();
+
+            Console.writeLine("Exception occurred%s", message != null ? ":" + message : "");
+        }
+        Console.writeLine("main ends!...");
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Input a number:");
+        double val = kb.nextDouble();
+
+        Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
+    }
+}
+
+class MathUtil {
+    public static double log(double a)
+    {
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
+
+        if (a < 0)
+            throw new NaNException("Indeterminate");
+
+        return Math.log(a);
+    }
+}
+
+class NaNException extends MathException {
+    public NaNException(String message)
+    {
+        super(message, MathExceptionStatus.NAN);
+    }
+}
+
+class NegativeInfinityException extends MathException {
+    public NegativeInfinityException(String message)
+    {
+        super(message, MathExceptionStatus.NEGATIVE_INFINITY);
+    }
+}
+
+class MathException extends RuntimeException {
+    private final MathExceptionStatus m_mathExceptionStatus;
+
+    public MathException(String message, MathExceptionStatus mathExceptionStatus)
+    {
+        super(message);
+        m_mathExceptionStatus = mathExceptionStatus;
+    }
+
+    public String getMessage()
+    {
+        return String.format("Message:%s, Status:%s", super.getMessage(), m_mathExceptionStatus);
+    }
+
+    public MathExceptionStatus getMathExceptionStatus()
+    {
+        return m_mathExceptionStatus;
+    }
+}
+
+enum MathExceptionStatus {
+    NAN, INFINITY, NEGATIVE_INFINITY, POSITIVE_INFINITY, UNDEFINED, INDETERMINATE
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir sınıfın içerisinde tüm metotların dışında static anahtar sözcüğü ile bildirilen bloklara "static initializer"
+    denilmektedir. Sınıfın static initializer'ı sınıfın bir elemanı ilk kez kullanıldığında bir kez olmak üzere
+    çalıştırılır. Sınıf içerisinde birden fazla static initializer bildirilebilir. Çalıştırılma sırası bildirim sırası
+    ile aynıdır. static initializer static metot etkisindedir. Sınıfın static initializer'ı içerisinde final ve static
+    olarak bildirilmiş veri elemanlarına değer verilebilir. Sınıfın birden fazla static initializer'ı varsa şüphesiz
+    yalnızca bir tanesinde değer verilebilir.
+
+    Bir sınıfın içerisinde tüm metotlşarın dışında bildirilen bloklara "non-static initializer" denilmektedir. Sınıfın
+    non-static initializer'ı herhangi bir ctor'dan önce çalıştırılır. Yani ctor'un başına gizlice non-static initializer
+    kodları yerleştirilir. Sınıf içerisinde birden fazla non-static initializer bildirilebilir. Çalıştırılma sırası
+    bildirim sırası ile aynıdır. Non-static initializer non-static metot etkisindedir. Sınıfın non-static initializer'ı
+    içerisinde final olarak bildirilmiş non-static veri elemanlarına değer verilebilir. Sınıfın birden fazla non-static
+    initializer'ı varsa şüphesiz yalnızca bir tanesinde değer verilebilir.
+----------------------------------------------------------------------------------------------------------------------*/
 
 
 

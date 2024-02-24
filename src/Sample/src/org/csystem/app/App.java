@@ -1,57 +1,61 @@
 /*----------------------------------------------------------------------------------------------------------------------
-    Sanal bir metotta throws bildirimi yapılmışsa, override etme işleminde şunlardan biri yapılabiilir:
-    1. throws listesindeki exception sınıfı kaldırılabilir. Bu durumda throws listesi de kaldırılabilir.
-    2. Türemiş sınıfta override edilen metotta throws listesine taban sınıftaki ilgili metodun throws listesindeki
-    exception sınıfları veya onlardan türemiş olan exception sınıfları yazılabilir. Aksi durumda error oluşur. Aşağıdaki
-    örneği inceleyiniz
+    Bir sınıfın içerisinde tüm metotların dışında static anahtar sözcüğü ile bildirilen bloklara "static initializer"
+    denilmektedir. Sınıfın static initializer'ı sınıfın bir elemanı ilk kez kullanıldığında bir kez olmak üzere
+    çalıştırılır. Sınıf içerisinde birden fazla static initializer bildirilebilir. Çalıştırılma sırası bildirim sırası
+    ile aynıdır. static initializer static metot etkisindedir. Sınıfın static initializer'ı içerisinde final ve static
+    olarak bildirilmiş veri elemanlarına değer verilebilir. Sınıfın birden fazla static initializer'ı varsa şüphesiz
+    yalnızca bir tanesinde değer verilebilir.
+
+    Bir sınıfın içerisinde tüm metotlşarın dışında bildirilen bloklara "non-static initializer" denilmektedir. Sınıfın
+    non-static initializer'ı herhangi bir ctor'dan önce çalıştırılır. Yani ctor'un başına gizlice non-static initializer
+    kodları yerleştirilir. Sınıf içerisinde birden fazla non-static initializer bildirilebilir. Çalıştırılma sırası
+    bildirim sırası ile aynıdır. Non-static initializer non-static metot etkisindedir. Sınıfın non-static initializer'ı
+    içerisinde final olarak bildirilmiş non-static veri elemanlarına değer verilebilir. Sınıfın birden fazla non-static
+    initializer'ı varsa şüphesiz yalnızca bir tanesinde değer verilebilir.
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 class App {
     public static void main(String[] args)
     {
+        try {
+            DemoApp.run();
+        }
+        catch (InputMismatchException | MathException ex) {
+            String message = ex.getMessage();
 
-    }
-
-}
-
-class E extends A {
-    public void foo() throws MathException //error
-    {
-        //...
-    }
-}
-
-class D extends A {
-    public void foo() throws IndeterminateException
-    {
-        //...
+            Console.writeLine("Exception occurred%s", message != null ? ":" + message : "");
+        }
+        Console.writeLine("main ends!...");
     }
 }
 
-class C extends A {
-    public void foo()
+class DemoApp {
+    public static void run()
     {
-        //...
+        Scanner kb = new Scanner(System.in);
+        System.out.print("Input a number:");
+        double val = kb.nextDouble();
+
+        Console.writeLine("log(%f) = %f", val, MathUtil.log(val));
     }
 }
 
-class B extends A {
-    public void foo() throws NaNException
+class MathUtil {
+    public static double log(double a)
     {
-        //...
-    }
-}
+        if (a == 0)
+            throw new NegativeInfinityException("Undefined");
 
+        if (a < 0)
+            throw new NaNException("Indeterminate");
 
-abstract class A {
-    public abstract void foo() throws NegativeInfinityException, NaNException;
-}
-
-class IndeterminateException extends NaNException {
-    public IndeterminateException(String message)
-    {
-        super(message);
+        return Math.log(a);
     }
 }
 
@@ -69,7 +73,7 @@ class NegativeInfinityException extends MathException {
     }
 }
 
-class MathException extends Exception {
+class MathException extends RuntimeException {
     private final MathExceptionStatus m_mathExceptionStatus;
 
     public MathException(String message, MathExceptionStatus mathExceptionStatus)

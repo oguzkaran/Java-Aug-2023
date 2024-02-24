@@ -7,7 +7,8 @@
 
         - Sınıfın public bölümünü değiştirmeden istediğiniz eklemeyi yapabilirsiniz
 
-        - Sınıf geçersiz zaman durumunu kontrol edecektir. Geçersizlik durumunda uygun mesaj verilip program sonlandırılacaktır
+        - Sınıf geçersiz zaman durumunu kontrol edecektir. Geçersizlik durumunda uygun mesaj ile birlikte, yazılmış olan
+        DateTimeException sınıfı fırlatılacaktır
 
         - Zamana ilişkin sınırlar şu şekildedir:
             saat        -> [0, 23]
@@ -16,16 +17,11 @@
             mili saniye -> [0, 999]
 
         - Sınıfa ilişkin test kodlarını da yazınız
-
-        - Sınıfın public metotlarındaki
-	            throw new UnsupportedOperationException("TODO:");
-        deyimini silerek ilgili metodu yazabilirsiniz. Bu deyim bazı error durumlarını engellemek için eklenmiştir. Şu an
-        bu deyime odaklanmanız gerekmez
 -----------------------------------------------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------
 	FILE		: Time.java
 	AUTHOR		: Java-Mar-2023 Group
-	LAST UPDATE	: 11th February 2023
+	LAST UPDATE	: 24th February 2023
 
 	Time class that represents a time
 

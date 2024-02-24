@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: MatrixUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 24th February 2024
 
 	Utility class for matrix operations
 
@@ -50,15 +50,7 @@ public final class MatrixUtil {
         return total;
     }
 
-    public static void subtractBy(int [][] a, int val)
-    {
-        ArrayUtil.subtractBy(a, val);
-    }
 
-    public static void multiplyBy(int [][] a, int val)
-    {
-        ArrayUtil.multiplyBy(a, val);
-    }
 
     public static int [][] generateRandomMatrix(Random random, int row, int col, int origin, int bound)
     {
@@ -86,6 +78,15 @@ public final class MatrixUtil {
     public static boolean isSquareMatrix(int [][] a)
     {
         return isMatrix(a) && a.length == a[0].length;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        ArrayUtil.multiplyBy(a, val);
+    }
+    public static void subtractBy(int [][] a, int val)
+    {
+        ArrayUtil.subtractBy(a, val);
     }
 
     public static int sumDiagonal(int [][] a)
