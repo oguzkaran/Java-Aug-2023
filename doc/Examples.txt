@@ -31702,6 +31702,335 @@ interface IZ {
     //...
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	25.02.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Arayüzler ile abstract sınıflar arasındaki farklar şunlardır:
+	- Bir arayüz interface anahtar sözcüğü ile, (abstract) bir sınıf class anahtar sözcüğü ile bildirilir
+
+	- Bir sınıf tek bir sınıftan türetilebilirken, istediği kadar arayüzü destekleyebilir
+
+	- Bir arayüz içerisinde yalnızca private ve public elemanlar olabilir, (asbtract) sınıf içerisinde protected
+	veya friendly elemanlar da olabilir
+
+	- Bir arayüzün non-static veri elemanı olamaz. Bir abstract sınıfın olabilir
+
+	- Bir arayüz nesne özelliği göstermez. Bir abstract sınıf türünden nesne, türemiş sınıf nesnesi içerisinde
+	yaratılır. Bu durumda bir arayüzün ctor'u da olamaz
+
+	- Bir arayüzün gövdesiz metodu abstract'dır, abstract bir sınıfın abstract metodu abstract ile bildirilmelidir
+
+	- Bir arayüzün gövdeli metodu default anahtar sözcüğü ile bildirilmelidir, abstract bir sınıfın gövdeli metodu
+	doğrudan yazılır.
+
+	- Bir abstract sınıf içerisinde no-modified bir eleman friendly anlamındadır, bir interface içerisinde public
+	anlamındadır
+
+	- Arayüzler arasında çoklu türetme yapılabilir, sınıflar arasında yapılamaz
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+	Programcı bir soyutlama (abstraction) yapmak istediğinde soyutlayacağı türü interface'mi yoksa abstract sınıf mı
+	yazacağına nasıl karar verecektir? Programcı bu durumda ilk olarak interface düşünmelidir. Eğer interface o türe
+	ilişkin ihtiyacı karşılamıyorsa abstract sınıf olarak tasarlamalıdır. Eğer interface yapılabildiği durumda programcı
+	abstract sınıf olarak türü soyutlarsa, hem okunabilirlik/algılanabilirlik olumsuz olarak etkilenebilir hem de
+	o abstract sınıftan türetilen bir sınıf başka bir sınıftan türetilemez. Halbuki, interface yapılırsa, bir sınıf
+	başka bir sınıftan türetilip o arayüzü destekleyebilir
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Arayüzlerle İlgili Tür Dönüştürmeleri
+    Arayüzlerle ilgili tür dönüştürmeleri 4 durum olarak ele alınailir:
+    1. Bir sınıf referansının onun desteklediği (implementation) bir arayüz referansına dönüştürülmesi
+    2. Bir arayüz referansının herhangi bir sınıf türüne dönüştürülmesi
+    3. Bir arayüz referansının başka bir arayüz referansına dönüştürülmesi
+    4. Bir sınıf referansının onun desteklemediği bir arayüz referansına dönüştürülmesi
+-----------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Bir sınıf referansının onun desteklediği (implementation) bir arayüz referansına dönüştürülmesi doğrudan (implicit)
+    yapılabilir. Bu durum çok aşikar bir durumdur. Arayüz referansının taban sınıf referansı gibi kullanılmasıdır. Zaten
+    interface'in hedeflerinden biri de budur
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IX ix;
+
+		ix = a;
+	}
+}
+
+
+class A implements IX {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Bir arayüz referansının herhangi bir sınıf türüne dönüştürülmesi explicit olarak yani tür dönüştürme operatörü
+    ile yapılır. Ancak çalışma zamanı sırasında arayüz referansının dinamik türünün dönüştürülecek sınıfı kapsayıp
+    kapsamadığına bakılır. Kapsıyorsa haklı dönüşümdür, akış devam eder. Kapsamıyorsa haksız dönüşümdür, ClassCastException
+    fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IX ix;
+
+		ix = a;
+
+		B b = (B)ix; //haklı dönüşüm
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class A extends B implements IX {
+	//...
+}
+
+class B  {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Bir arayüz referansının herhangi bir sınıf türüne dönüştürülmesi explicit olarak yani tür dönüştürme operatörü
+    ile yapılır. Ancak çalışma zamanı sırasında arayüz referansının dinamik türünün dönüştürülecek sınıfı kapsayıp
+    kapsamadığına bakılır. Kapsıyorsa haklı dönüşümdür, akış devam eder. Kapsamıyorsa haksız dönüşümdür, ClassCastException
+    fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IX ix;
+
+		ix = a;
+
+		B b = (B)ix; //haksız dönüşüm
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class A implements IX {
+	//...
+}
+
+class B  {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+	Bir arayüz referansının başka başka bir arayüz referansına dönüştürülmesi iki şekilde incelenebilir:
+	1. Kaynak arayüz hedef arayüzden türetilmişse doğrudan yapılablir
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IY iy = a;
+		IX ix;
+
+		ix = iy; //upcasting
+
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class A implements IY {
+	//...
+}
+
+interface IY extends IX {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+     Bir arayüz referansının başka başka bir arayüz referansına dönüştürülmesi iki şekilde incelenebilir:
+     2. Kaynak arayüz hedef arayüzden türetilmemişse explicit olarak yapılablir. Bu durumda çalışma zamanı sırasında
+     kaynak arayüz referansının dinamnik türünün hedef arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı
+     dönüşümdür. Desteklemiyorsa haksız dönüşümdür. ClassCastException fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IY iy = a;
+		IX ix;
+
+		ix = (IX)iy; //haklı dönüşüm
+
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class A implements IX, IY {
+	//...
+}
+
+interface IY {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+     Bir arayüz referansının başka başka bir arayüz referansına dönüştürülmesi iki şekilde incelenebilir:
+     2. Kaynak arayüz hedef arayüzden türetilmemişse explicit olarak yapılablir. Bu durumda çalışma zamanı sırasında
+     kaynak arayüz referansının dinamnik türünün hedef arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı
+     dönüşümdür. Desteklemiyorsa haksız dönüşümdür. ClassCastException fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new A();
+		IY iy = a;
+		IX ix;
+
+		ix = (IX)iy; //haksız dönüşüm
+
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class A implements IY {
+	//...
+}
+
+interface IY {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+     Bir sınıf referansının onun desteklemediği bir arayüz referansına dönüştürülmesi:
+     Bu işlem tür dönüştürme operatörü ile yapılabilir. Çalışma zamanı sırasında kaynak referansın dinamik türünün hedef
+     arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı dönüşümdür. Desteklemiyorsa haksız dönüşümdür
+     ClassCastException fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String[] args)
+	{
+		A a = new B();
+		IX ix;
+
+		ix = (IX)a; //haklı dönüşüm
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+
+class B extends A implements IX {
+	//...
+}
+
+class A  {
+	//...
+}
+
+interface IX {
+	//...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+     Bir sınıf referansının onun desteklemediği bir arayüz referansına dönüştürülmesi:
+     Bu işlem tür dönüştürme operatörü ile yapılabilir. Çalışma zamanı sırasında kaynak referansın dinamik türünün
+     hedef arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı dönüşümdür. Desteklemiyorsa haksız dönüşümdür
+     ClassCastException fırlatılır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+	public static void main(String [] args)
+	{
+		A a = new B();
+		IX ix;
+
+		ix = (IX)a; //haksız dönüşüm
+
+		System.out.println("Tekrar yapıyor musunuz?");
+	}
+}
+
+class B extends A {
+	//...
+}
+
+class A  {
+	//...
+}
+
+interface IX {
+	//...
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
