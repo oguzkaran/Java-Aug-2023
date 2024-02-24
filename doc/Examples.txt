@@ -31338,6 +31338,370 @@ enum MathExceptionStatus {
     initializer'ı varsa şüphesiz yalnızca bir tanesinde değer verilebilir.
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample.foo();
+        Console.writeLine("-------------------------------");
+        Sample.foo();
+        Console.writeLine("-------------------------------");
+        Sample s = new Sample();
+        Console.writeLine("-------------------------------");
+        Sample k = new Sample(10);
+
+    }
+}
+
+class Sample {
+    static {
+        Console.writeLine("static initializer-1");
+    }
+    static {
+        Console.writeLine("static initializer-2");
+    }
+
+    {
+        Console.writeLine("non-static initializer-1");
+    }
+
+    {
+        Console.writeLine("non-static initializer-2");
+    }
+
+    public Sample()
+    {
+        Console.writeLine("I am a default ctor");
+    }
+
+    public Sample(int a)
+    {
+        Console.writeLine("I am a ctor with parameter type int");
+    }
+
+    public static void foo()
+    {
+        Console.writeLine("foo");
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: StringUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 24th February 2024
+
+	Utility class for string operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.string;
+
+import java.util.Random;
+
+public final class StringUtil {
+	private static final String LETTERS_EN;
+	private static final String LETTERS_TR;
+	private static final String LETTERS_CAPITAL_EN;
+	private static final String LETTERS_CAPITAL_TR;
+	private static final String LETTERS_ALL_EN;
+	private static final String LETTERS_ALL_TR;
+
+	static {
+		LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+		LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+		LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+		LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+		LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+	}
+
+	private StringUtil()
+	{
+	}
+
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int index = -1;
+
+		while ((index = s1.indexOf(s2, index + 1)) != -1)
+			++count;
+
+		return count;
+	}
+
+	public static int countStringIgnoreCase(String s1, String s2)
+	{
+		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+
+	public static String generateRandomTextEN(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_EN);
+	}
+
+	public static String generateRandomTextTR(Random random, int count)
+	{
+		return generateRandomText(random, count, LETTERS_ALL_TR);
+	}
+
+	public static String generateRandomText(Random random, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(random.nextInt(len)));
+
+		return sb.toString();
+	}
+
+	public static String [] generateRandomTextsEN(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_EN);
+	}
+
+	public static String [] generateRandomTextsTR(Random random, int count, int min, int bound)
+	{
+		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_TR);
+	}
+
+	public static String [] generateRandomTexts(Random random, int count, int min, int bound, String sourceText)
+	{
+		String [] texts = new String[count];
+
+		for (int i = 0; i < count; ++i)
+			texts[i] = generateRandomText(random, random.nextInt(min, bound), sourceText);
+
+		return texts;
+	}
+
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+
+			char cRight = Character.toLowerCase(s.charAt(right));
+
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+
+			if (cLeft != cRight)
+				return false;
+
+			++left;
+			--right;
+		}
+
+		return true;
+	}
+
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_EN);
+	}
+
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_TR);
+	}
+
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+
+		return true;
+	}
+
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
+	}
+
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+
+	public static String reverse(String s)
+	{
+		return new StringBuilder(s).reverse().toString();
+	}
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Arayüzler (Interfaces): Bir arayüz bildirimi aslında bir UDT bildirimidir. Bir arayüz interface anahtar sözcüğü
+    ile bildirilir. Arayüzler en çok abstract sınıflara benzeseler de sentaks ve semantik olarak farklı kuralları vardır.
+    Arayüzler Java'da multiple inheritance'ın da belirli ölçüde kullanılabilmesini sağlar. Arayüzle, özellikle Java 8
+    ile birlikte eklenen bazı özellikler ile daha yetenekli hale getirilmişlerdir.
+
+    Arayüzler nesne özelliği göstermez. Yani bir arayüz türünden nesne hiç bir şekilde yaratılamaz ve yaratılmaz. Arayüzler
+    aslında bir anlaşma (contract) belirtmek için kullanılır.
+
+    Anahtar Notlar: Arayüzleri diğer tür bildirimlerinden ayırmak için isimlendirmede I ile başlatılması bazı programcılar
+    tarafınden bir convantion olarak kullanılmaktadır. Biz de arayüz isimlerimizi I ile başlatacağız. JavaSE'deki arayüzlerde
+    bu isimlendirme biçimine uyulmamaktadır.
+
+    Bir arayüz içerisinde veri elemanı olabilir. Arayüz içerisinde bildirilen veri elemanları yazılsa da yazılmasa da
+    public, static ve final olarak bildirilmiş olur. Yani bir arayüz içerisinde public olmayan veya non-static olan veya
+    final olmayan veri elemanı bildirimi yapılamaz. Biz bu anahtar sözcükleri yazmayacağız. Bir arayüz içerisinde
+    public abstract metotlar yazılabilir. Arayüz içerisindeki abstract bir metot için public ve abstract anahtar sözcükleri
+    yazılmayabilir. Biz yine yazmamayacağız. Java 8 ile birlikte non-static bir metodun gövdesi de yazılabilmektedir. Bu
+    durumda metodun default anahtar sözcüğü ile bildirilmesi gerekir. default metotlar public ve sanaldır. Java 8 ile
+    birlikte static bir metot bildirimi de yapılabilmektedir. Şüphesiz static metotların gövdesi olmalıdır. Java 9 ile
+    birlikte bir arayüz içerisinde private olarak bildirilmiş static ve non-static metotlar yazılabilmektedir. Şüphesiz
+    bu metotların da gövdeleri olmalıdır.
+
+    Anahtar Notlar: Bir arayüz içerisinde sınıflardaki "friendly" anlamına gelen no-modifier bir eleman olamaz. Bir arayüz
+    içerisindeki no-modifier bir eleman public olarak bildirilmiş olur. Bir arayüz içerisinde protected bir eleman
+    bildirilemez.
+
+    Hiç abstract metodu olmayan arayüzlere "marker interfaces" denilmektedir. Genel olarak bir marker interface'in
+    içerisinde hiç eleman bulundurulmaz.
+
+    Anahtar Notlar: Java 5 ile eklenen annotation'lar ile marker arayüzlere çok ihtiyaç kalmamıştır. Ancak Java 5 öncesinden
+    gelen ve önemli bazı sınıflarda kullanılan bazı marker interface'ler bulunmaktadır. Java programcısı Java 5 sonrasında
+    kendisi bir marker interface yazma ihtiyacı genel olarak duymaz. Annotation bir UDT'dir ve Java ile Uygulama Geliştirme 1
+    kursunda ele alanacaktır.
+
+    Java 8 ile birlikte içerisinde bir yalnız bir tane abstract metodu olan arayüzler "functional interface" olarak
+    kullanılabilmektedir. Functional interface'ler Java'da fonksiyonel programlama tekniği daha gelişmiş biçimde
+    kullanılabilir hale gelmiştir.
+
+    Anahtar Notlar: Java 8 ile birlikte "Lambda expressions ve method references" dile eklenmiştir. Lambda ifadeleri
+    ve method referansları fonksiyonel arayüzler ile kullanılabilmektedir. Bu anlamda fonksiyonel arayüzler Java'da
+    yeni nesil programlama tekniğini de kullanılabilir hale getirmiştir. Lambda ifadeleri ve method referansları
+    Java ile Uygulama Geliştirme 1 kursunda ele alınacaktır.
+
+    Bir arayüz abstract anahtar sözcüğü ile bildirilebilir. abstract yazmakla yazmamak arasında bir fark yoktur. Yine
+    yazmayacağız.
+
+    Bir sınıf bir arayüzü implements anahtar sözcüğü ile destekler (implementation). Bir sınıf istenildiği kadar arayüzü
+    destekleyebilir. Bu durumda arayüzler virgül atomu ile listelenir. Anımsanacağı gibi bir sınıf yalnızca tek bir
+    sınıftan türetilebilir ancak istediği kadar arayüzü destekleyebilir. Bir arayüzü destekleyen bir sınıf arayüzün
+    en az bir tane abstract metodunu override etmezse sınıfın abstract olarak bildirilmesi gerekir. Bu durumda bir sınıfın
+    concrete olabilmesi için tüm abstract metotları (taban sınıftan gelen veya arayüzlerden gelen) override etmiş olması
+    gerekir. Aksi durumda sınıf abstract olarak bildirilmelidir.
+
+    Bir interface referansı taban sınıf referansı olarak kullanılabilir. Bu anlamda RTP gerçekleştirilmiş olur. Aslında
+    bir sınıfın birden fazla arayüzü desteklemesi ile tüm arayüzlere ilişkin RTP yapılabilir. Bu da belirli ölçüde de
+    olsa multiple inheritance'a benzetilebilir.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+interface IX {
+    int VAL = 10;
+
+    private static void car() //Since Java 9
+    {
+        //...
+    }
+
+    private void zar() //Since Java 9
+    {
+        //...
+    }
+
+    static void tar() //Since Java 8
+    {
+        //...
+    }
+
+    void foo();
+
+    default void bar() //Since Java 8
+    {
+        //...
+    }
+}
+
+interface IY { //Marker interface
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class C extends B implements IX, IY, IZ {
+    //...
+
+    public void foo()
+    {
+        //...
+    }
+
+    public void bar()
+    {
+        //...
+    }
+}
+
+class A extends B implements IX, IY, IZ { //error
+    //...
+}
+
+class B {
+    //...
+}
+
+interface IX {
+    void foo();
+}
+
+interface IY {
+    void bar();
+}
+
+interface IZ {
+    //...
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------

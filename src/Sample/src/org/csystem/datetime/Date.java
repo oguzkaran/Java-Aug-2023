@@ -33,6 +33,22 @@
 package org.csystem.datetime;
 
 public class Date {
+    private static final int [] DAYS_OF_MONTHS;
+    private static final String [] DAY_OF_WEEKS_TR;
+    private static final String [] DAY_OF_WEEKS_EN;
+    private static final String [] MONTHS_TR;
+    private static final String [] MONTHS_EN;
+
+    static {
+        DAYS_OF_MONTHS = new int[]{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        DAY_OF_WEEKS_TR = new String[]{"Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"};
+        DAY_OF_WEEKS_EN = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        MONTHS_TR = new String[]{"", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",  "Ağustos",
+                "Eylül", "Ekim", "Kasım", "Aralık"};
+        MONTHS_EN = new String[]{"", "January", "February", "March", "April", "May", "June", "July",  "August",
+                "September", "October", "November", "December"};
+    }
+
     public Date(int day, int monthValue, int year)
     {
         throw new UnsupportedOperationException("TODO:");

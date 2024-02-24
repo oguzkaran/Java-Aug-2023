@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 4th February 2024
+	LAST UPDATE	: 24th February 2024
 	
 	Utility class for string operations
 	
@@ -13,12 +13,21 @@ package org.csystem.util.string;
 import java.util.Random;
 
 public final class StringUtil {
-	private static final String LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
-	private static final String LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
-	private static final String LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	private static final String LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
-	private static final String LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
-	private static final String LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+	private static final String LETTERS_EN;
+	private static final String LETTERS_TR;
+	private static final String LETTERS_CAPITAL_EN;
+	private static final String LETTERS_CAPITAL_TR;
+	private static final String LETTERS_ALL_EN;
+	private static final String LETTERS_ALL_TR;
+
+	static {
+		LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+		LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+		LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+		LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+		LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+	}
 
 	private StringUtil()
 	{
