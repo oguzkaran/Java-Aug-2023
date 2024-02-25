@@ -1,6 +1,6 @@
 package org.csystem.app.company.employee;
 
-public abstract class Employee {
+public abstract class Employee implements IInsurance {
     private String m_name;
     private String m_citizenId;
     private String m_address;
@@ -46,7 +46,10 @@ public abstract class Employee {
 
     //...
 
-    public abstract double calculateInsurancePayment();
+    public String getId()
+    {
+        return m_citizenId;
+    }
 
     public String toString()
     {

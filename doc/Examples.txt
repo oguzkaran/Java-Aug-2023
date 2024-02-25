@@ -31617,15 +31617,27 @@ public final class StringUtil {
     yazmayacağız.
 
     Bir sınıf bir arayüzü implements anahtar sözcüğü ile destekler (implementation). Bir sınıf istenildiği kadar arayüzü
-    destekleyebilir. Bu durumda arayüzler virgül atomu ile listelenir. Anımsanacağı gibi bir sınıf yalnızca tek bir
-    sınıftan türetilebilir ancak istediği kadar arayüzü destekleyebilir. Bir arayüzü destekleyen bir sınıf arayüzün
-    en az bir tane abstract metodunu override etmezse sınıfın abstract olarak bildirilmesi gerekir. Bu durumda bir sınıfın
-    concrete olabilmesi için tüm abstract metotları (taban sınıftan gelen veya arayüzlerden gelen) override etmiş olması
-    gerekir. Aksi durumda sınıf abstract olarak bildirilmelidir.
+    destekleyebilir. Bu durumda arayüzler virgül atomu ile listelenir. Bu durumda arayüzlerin listede sırasının önemi
+    yoktur. Anımsanacağı gibi bir sınıf yalnızca tek bir sınıftan türetilebilir ancak istediği kadar arayüzü destekleyebilir.
+    Bir arayüzü destekleyen bir sınıf arayüzün en az bir tane abstract metodunu override etmezse sınıfın abstract olarak
+    bildirilmesi gerekir. Bu durumda bir sınıfın concrete olabilmesi için tüm abstract metotları (taban sınıftan gelen
+    veya arayüzlerden gelen) override etmiş olması gerekir. Aksi durumda sınıf abstract olarak bildirilmelidir.
 
     Bir interface referansı taban sınıf referansı olarak kullanılabilir. Bu anlamda RTP gerçekleştirilmiş olur. Aslında
     bir sınıfın birden fazla arayüzü desteklemesi ile tüm arayüzlere ilişkin RTP yapılabilir. Bu da belirli ölçüde de
     olsa multiple inheritance'a benzetilebilir.
+
+    Bir sınıf bir arayüzü destekliyorsa ondan türeyen sınıflar da o arayüzü destekler. Bu durumda türemiş sınıf arayüz
+    listesine ilgili interface'in yazılması gerekmez. Ancak istenirse yazılabilir.
+
+    Bir sınıfın desteklediği arayüzlerin geri dönüş değeri ve imzası aynı olan bir sanal metodu varsa, override
+    edildiğinde metoda tüm arayüzler için geçerli olur.
+
+    Arayüzler birbirlerinden türetilebilirler. Bu sentaks olarak extends anahtar sözcüğü ile yapılır. Burada inheritance
+    teriminin kullanıldığına, implementation teriminin kullanılmadığına dikkat ediniz. Arayüzler arasında çoklu türetme de
+    geçerlidir. Türemiş bir arayüz içerisinde taban arayüzün tüm public elemanları da bulunur. Türemiş bir arayüzü
+    destekleyen bir sınıf taban arayüzlerini de desteklemiş olur. Taban arayüzlerin arayüz listesine yazılması gerekmez.
+    İstenirse yazılabilir
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -31706,54 +31718,315 @@ interface IZ {
 	25.02.2024
 ----------------------------------------------------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.thread.ThreadUtil;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        Factory factory = new Factory();
+
+        while (true) {
+            IX ix = factory.create();
+
+            Util.doWork(ix);
+            ThreadUtil.sleep(1000);
+        }
+    }
+}
+
+class Util {
+    public static void doWork(IX ix)
+    {
+        Console.writeLine("---------------------------------------------------------------");
+
+        Console.writeLine("Dynamic type:%s", ix.getClass().getName());
+        ix.foo();
+        Console.writeLine("---------------------------------------------------------------");
+    }
+}
+
+class Factory {
+    private final Random m_random = new Random();
+
+    public IX create()
+    {
+        return switch (m_random.nextInt(5)) {
+            case 0 -> new B();
+            case 1 -> new C();
+            case 2 -> new D();
+            case 3 -> new E();
+            default -> new F();
+        };
+    }
+}
+
+class F extends D {
+    public void foo()
+    {
+        Console.writeLine("F.foo");
+        super.foo();
+    }
+}
+
+class E extends C {
+    public void foo()
+    {
+        Console.writeLine("E.foo");
+        super.foo();
+    }
+}
+
+class D extends A {
+    public void foo()
+    {
+        Console.writeLine("D.foo");
+        super.foo();
+    }
+}
+
+class C extends B {
+    public void foo()
+    {
+        Console.writeLine("C.foo");
+        super.foo();
+    }
+}
+
+class B extends A {
+    public void foo()
+    {
+        Console.writeLine("B.foo");
+        super.foo();
+    }
+}
+
+class A implements IX {
+    public void foo()
+    {
+        Console.writeLine("A.foo");
+    }
+}
+
+interface IX {
+    void foo();
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örnekte A sınıfı foo metotlarını override etmiştir. A sınıfı içerisinde foo metodu overload edilmiş olur.
+   Dolayısıyla bu durum geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A implements IX, IY {
+    public void foo()
+    {
+        //...
+    }
+
+    public void foo(int a)
+    {
+        //...
+    }
+}
+
+interface IX {
+    void foo();
+}
+
+interface IY {
+    void foo(int a);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Aşağıdaki demo örnekte A sınıfı IX ve IY'yi desteklemek için override etmek zorunda olduğu metotlar overload edilemedği
+   için error oluşur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A implements IX, IY {
+    public void foo() //error
+    {
+        //...
+    }
+
+    public int foo() //error
+    {
+        //...
+
+        return 0;
+    }
+}
+
+interface IX {
+    void foo();
+}
+
+interface IY {
+    int foo();
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+   Yukarıdaki gibi bir durumda iki tane çözüm aşağıdaki gibi olabilir. Şüphesiz sınıflar arayüzleri doğrudan destekleyemez.
+   Farklı çözümler de söz konusu olabilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class B implements IX {
+    private final IY m_iy;
+
+    public B()
+    {
+        m_iy = new Y();
+    }
+
+    public void foo()
+    {
+        //...
+    }
+
+    public int fooY()
+    {
+        return m_iy.foo();
+    }
+}
+
+class A  {
+    private final IX m_ix;
+    private final IY m_iy;
+
+    public A()
+    {
+        m_ix = new X();
+        m_iy = new Y();
+    }
+
+    public void fooX()
+    {
+        m_ix.foo();
+    }
+
+    public int fooY()
+    {
+        return m_iy.foo();
+    }
+}
+
+class X implements IX {
+    public void foo()
+    {
+        //...
+    }
+}
+
+class Y implements IY {
+    public int foo()
+    {
+        //...
+
+        return 0;
+    }
+}
+
+interface IX {
+    void foo();
+}
+
+interface IY {
+    int foo();
+}
 
 
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+
+    }
+}
+
+class B implements IZ, IX, IY {
+    public void foo()
+    {
+        //...
+    }
+
+    public void bar()
+    {
+        //...
+    }
+
+    public void tar()
+    {
+        //...
+    }
+}
 
 
+class A implements IZ {
+    public void foo()
+    {
+        //...
+    }
 
+    public void bar()
+    {
+        //...
+    }
 
+    public void tar()
+    {
+        //...
+    }
+}
 
+interface IZ extends IX, IY {
+    void tar();
+}
 
+interface IX {
+    void foo();
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+interface IY {
+    void bar();
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
 	Arayüzler ile abstract sınıflar arasındaki farklar şunlardır:
-	- Bir arayüz interface anahtar sözcüğü ile, (abstract) bir sınıf class anahtar sözcüğü ile bildirilir
+	- Bir arayüz interface anahtar sözcüğü ile, (abstract) bir sınıf class anahtar sözcüğü ile bildirilir.
 
-	- Bir sınıf tek bir sınıftan türetilebilirken, istediği kadar arayüzü destekleyebilir
+	- Bir sınıf tek bir sınıftan türetilebilirken, istediği kadar arayüzü destekleyebilir.
 
-	- Bir arayüz içerisinde yalnızca private ve public elemanlar olabilir, (asbtract) sınıf içerisinde protected
-	veya friendly elemanlar da olabilir
+	- Bir arayüz içerisinde yalnızca private metotlar ve public elemanlar olabilir, (asbtract) sınıf içerisinde protected
+	veya friendly elemanlar da olabilir.
 
-	- Bir arayüzün non-static veri elemanı olamaz. Bir abstract sınıfın olabilir
+	- Bir arayüzün non-static veri elemanı olamaz. Bir abstract sınıfın olabilir.
 
 	- Bir arayüz nesne özelliği göstermez. Bir abstract sınıf türünden nesne, türemiş sınıf nesnesi içerisinde
-	yaratılır. Bu durumda bir arayüzün ctor'u da olamaz
+	yaratılır. Bu durumda bir arayüzün ctor'u da olamaz.
 
-	- Bir arayüzün gövdesiz metodu abstract'dır, abstract bir sınıfın abstract metodu abstract ile bildirilmelidir
+	- Bir arayüzün gövdesiz metodu abstract'dır, abstract bir sınıfın gövdesiz bir metodu abstract olarak bildirilmelidir.
 
 	- Bir arayüzün gövdeli metodu default anahtar sözcüğü ile bildirilmelidir, abstract bir sınıfın gövdeli metodu
 	doğrudan yazılır.
 
-	- Bir abstract sınıf içerisinde no-modified bir eleman friendly anlamındadır, bir interface içerisinde public
-	anlamındadır
+	- Bir abstract sınıf içerisinde no-modifier bir eleman friendly anlamındadır, bir interface içerisinde public
+	anlamındadır.
 
-	- Arayüzler arasında çoklu türetme yapılabilir, sınıflar arasında yapılamaz
+	- Arayüzler arasında çoklu türetme yapılabilir, sınıflar arasında yapılamaz.
 ----------------------------------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------------------------
 	Programcı bir soyutlama (abstraction) yapmak istediğinde soyutlayacağı türü interface'mi yoksa abstract sınıf mı
@@ -31761,12 +32034,96 @@ interface IZ {
 	ilişkin ihtiyacı karşılamıyorsa abstract sınıf olarak tasarlamalıdır. Eğer interface yapılabildiği durumda programcı
 	abstract sınıf olarak türü soyutlarsa, hem okunabilirlik/algılanabilirlik olumsuz olarak etkilenebilir hem de
 	o abstract sınıftan türetilen bir sınıf başka bir sınıftan türetilemez. Halbuki, interface yapılırsa, bir sınıf
-	başka bir sınıftan türetilip o arayüzü destekleyebilir
+	başka bir sınıftan türetilip o arayüzü de destekleyebilir
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------
+    CompanyApp demo uygulaması aşağıdaki gibi de tasarlanabilir. Burada Employee sınıfının interface olamayacağına dikkat
+    ediniz. Örnekte yalnızca değişiklikler buraya eklenmiştir
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app.company.employee;
+
+public interface IInsurance {
+    double calculateInsurancePayment();
+    String getId();
+}
+
+package org.csystem.app.company.employee;
+
+public abstract class Employee implements IInsurance {
+    private String m_name;
+    private String m_citizenId;
+    private String m_address;
+
+    //...
+
+    protected Employee(String name, String citizenId, String address)
+    {
+        m_name = name;
+        m_citizenId = citizenId;
+        m_address = address;
+    }
+
+    public String getName()
+    {
+        return m_name;
+    }
+
+    public void setName(String name)
+    {
+        m_name = name;
+    }
+
+    public String getCitizenId()
+    {
+        return m_citizenId;
+    }
+
+    public void setCitizenId(String citizenId)
+    {
+        m_citizenId = citizenId;
+    }
+
+    public String getAddress()
+    {
+        return m_address;
+    }
+
+    public void setAddress(String address)
+    {
+        m_address = address;
+    }
+
+    //...
+
+    public String getId()
+    {
+        return m_citizenId;
+    }
+
+    public String toString()
+    {
+        return String.format("[%s]%s", m_citizenId, m_name);
+    }
+}
+
+package org.csystem.app.company.hr;
+
+import org.csystem.app.company.employee.IInsurance;
+import org.csystem.util.console.Console;
+
+public class HumanResources {
+    //...
+    public void payInsurance(IInsurance insurance)
+    {
+        Console.writeLine("Citizen Id:%s", insurance.getId());
+        Console.writeLine("Insurance payment:%f", insurance.calculateInsurancePayment());
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
     Arayüzlerle İlgili Tür Dönüştürmeleri
-    Arayüzlerle ilgili tür dönüştürmeleri 4 durum olarak ele alınailir:
+    Arayüzlerle ilgili tür dönüştürmeleri 4 durumda incelenebilir:
     1. Bir sınıf referansının onun desteklediği (implementation) bir arayüz referansına dönüştürülmesi
     2. Bir arayüz referansının herhangi bir sınıf türüne dönüştürülmesi
     3. Bir arayüz referansının başka bir arayüz referansına dönüştürülmesi
@@ -31902,7 +32259,7 @@ interface IX {
 /*-----------------------------------------------------------------------------------------------------------------------
      Bir arayüz referansının başka başka bir arayüz referansına dönüştürülmesi iki şekilde incelenebilir:
      2. Kaynak arayüz hedef arayüzden türetilmemişse explicit olarak yapılablir. Bu durumda çalışma zamanı sırasında
-     kaynak arayüz referansının dinamnik türünün hedef arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı
+     kaynak arayüz referansının dinamik türünün hedef arayüzü destekleyip desteklemediğine bakılır. Destekliyorsa haklı
      dönüşümdür. Desteklemiyorsa haksız dönüşümdür. ClassCastException fırlatılır
 -----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
@@ -32031,6 +32388,14 @@ class A  {
 interface IX {
 	//...
 }
+
+/*-----------------------------------------------------------------------------------------------------------------------
+     JavaSE'de CharSequence arayüzünde karakterlerin dizilimine ilişkin çeşitli metotlar bulunur. Bu arayüzü String ve
+     StringBuilder destekler. charAt, length gibi metotlar bu arayüzden gelirler, String ve StringBuilder sınıfları
+     aslında bu metotları override ederler. Pek çok geliştirme ortamına ilişkin kütüphanelerde bu arayüzü referansını
+     isteyen metotlar bulunur.
+-----------------------------------------------------------------------------------------------------------------------*/
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
