@@ -32396,6 +32396,760 @@ interface IX {
      isteyen metotlar bulunur.
 -----------------------------------------------------------------------------------------------------------------------*/
 
+/*-----------------------------------------------------------------------------------------------------------------------
+     Aşağıdaki demo örneği ve demo sınıfı inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import com.baturhansahin.string.MyString;
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        String str = Console.readString("Input a text:");
+        MyString myStr = new MyString(Console.readString("Input a text:"));
+
+        Console.writeLine(str.contains(myStr) ? "Found" : "Not found");
+    }
+}
+
+package com.baturhansahin.string;
+
+public class MyString implements CharSequence {
+    private final char [] m_chars;
+
+    public MyString(String str)
+    {
+        m_chars = str.toCharArray();
+    }
+
+    public int length()
+    {
+        return m_chars.length;
+    }
+
+    public char charAt(int index)
+    {
+        if (index < 0 || index >= m_chars.length)
+            throw new IndexOutOfBoundsException("Invalid index");
+
+        return m_chars[index];
+    }
+
+    public CharSequence subSequence(int start, int end)
+    {
+        return String.valueOf(m_chars).subSequence(start, end);
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_chars);
+    }
+
+    //...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Java 17 ile birlikte rasgele sayı üretimine ilişkin RandomGenerator denilern bir arayüz eklenmiştir. Bu anlamda
+    bu arayüz ile birlikte farklı farklı rasgele sayı üretimi algoritmaları kullanılabilmektedir. Random gibi daha önce
+    var olan pek çok sınıf da bu arayüzü desteklemektedir. Dolayısıyla bazı metotlar da Random sınıfına dolaylı olarak
+    eklenmiştir. Örneğin iki parametre nextInt metodu aslında Random sınıfına RandomGenerator'dan gelmektedir. Aslında
+    bu arayüzün bir tane abstract metodu vardır (nextLong). Diğerleri default olarak bildirilmiştir. Bu arayüzün of
+    factory metotları ile çeşitli algoritmalara yönelik rasgele sayı üretimi yapan nesne referansları elde edilebilir.
+    Bu anlamda artık Java'da rasgele sayı üretimi daha genel ve yetenekli hale gelmiştir
+-----------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------
+	FILE NAME	: StringUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 25th February 2024
+
+	Utility class for string operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.string;
+
+import java.util.random.RandomGenerator;
+
+public final class StringUtil {
+	private static final String LETTERS_EN;
+	private static final String LETTERS_TR;
+	private static final String LETTERS_CAPITAL_EN;
+	private static final String LETTERS_CAPITAL_TR;
+	private static final String LETTERS_ALL_EN;
+	private static final String LETTERS_ALL_TR;
+
+	static {
+		LETTERS_EN = "abcdefghijklmnopqrstuvwxyz";
+		LETTERS_TR = "abcçdefgğhıijklmnoöprsştuüvyz";
+		LETTERS_CAPITAL_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		LETTERS_CAPITAL_TR = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
+		LETTERS_ALL_EN = LETTERS_EN + LETTERS_CAPITAL_EN;
+		LETTERS_ALL_TR = LETTERS_TR + LETTERS_CAPITAL_TR;
+	}
+
+	private StringUtil()
+	{
+	}
+
+	public static String capitalize(String s)
+	{
+		return s.isEmpty() ? "" : Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase();
+	}
+
+	public static int countString(String s1, String s2)
+	{
+		int count = 0;
+		int index = -1;
+
+		while ((index = s1.indexOf(s2, index + 1)) != -1)
+			++count;
+
+		return count;
+	}
+
+	public static int countStringIgnoreCase(String s1, String s2)
+	{
+		return countString(s1.toLowerCase(), s2.toLowerCase());
+	}
+
+	public static String generateRandomTextEN(RandomGenerator randomGenerator, int count)
+	{
+		return generateRandomText(randomGenerator, count, LETTERS_ALL_EN);
+	}
+
+	public static String generateRandomTextTR(RandomGenerator randomGenerator, int count)
+	{
+		return generateRandomText(randomGenerator, count, LETTERS_ALL_TR);
+	}
+
+	public static String generateRandomText(RandomGenerator randomGenerator, int count, String sourceText)
+	{
+		StringBuilder sb = new StringBuilder(count);
+		int len = sourceText.length();
+
+		for (int i = 0; i < count; ++i)
+			sb.append(sourceText.charAt(randomGenerator.nextInt(len)));
+
+		return sb.toString();
+	}
+
+	public static String [] generateRandomTextsEN(RandomGenerator randomGenerator, int count, int min, int bound)
+	{
+		return generateRandomTexts(randomGenerator, count, min, bound, LETTERS_ALL_EN);
+	}
+
+	public static String [] generateRandomTextsTR(RandomGenerator randomGenerator, int count, int min, int bound)
+	{
+		return generateRandomTexts(randomGenerator, count, min, bound, LETTERS_ALL_TR);
+	}
+
+	public static String [] generateRandomTexts(RandomGenerator randomGenerator, int count, int min, int bound, String sourceText)
+	{
+		String [] texts = new String[count];
+
+		for (int i = 0; i < count; ++i)
+			texts[i] = generateRandomText(randomGenerator, randomGenerator.nextInt(min, bound), sourceText);
+
+		return texts;
+	}
+
+	public static boolean isPalindrome(String s)
+	{
+		int left = 0;
+		int right = s.length() - 1;
+
+		while (left < right) {
+			char cLeft = Character.toLowerCase(s.charAt(left));
+
+			if (!Character.isLetter(cLeft)) {
+				++left;
+				continue;
+			}
+
+			char cRight = Character.toLowerCase(s.charAt(right));
+
+			if (!Character.isLetter(cRight)) {
+				--right;
+				continue;
+			}
+
+			if (cLeft != cRight)
+				return false;
+
+			++left;
+			--right;
+		}
+
+		return true;
+	}
+
+	public static boolean isPangramEN(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_EN);
+	}
+
+	public static boolean isPangramTR(String s)
+	{
+		return isPangram(s.toLowerCase(), LETTERS_TR);
+	}
+
+	public static boolean isPangram(String s, String alphabet)
+	{
+		int len = alphabet.length();
+
+		for (int i = 0; i < len; ++i)
+			if (s.indexOf(alphabet.charAt(i)) == -1)
+				return false;
+
+		return true;
+	}
+
+	public static String padLeading(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : String.valueOf(ch).repeat(newLen - s.length()) + s;
+	}
+
+	public static String padLeading(String s, int newLen)
+	{
+		return padLeading(s, newLen, ' ');
+	}
+
+	public static String padTrailing(String s, int newLen, char ch)
+	{
+		int len = s.length();
+
+		return newLen <= len ? s : s + String.valueOf(ch).repeat(newLen - s.length());
+	}
+
+	public static String padTrailing(String s, int newLen)
+	{
+		return padTrailing(s, newLen, ' ');
+	}
+
+	public static String reverse(String s)
+	{
+		return new StringBuilder(s).reverse().toString();
+	}
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: ArrayUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 25th February 2024
+
+	Utility class for array operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.array;
+
+import java.util.ArrayList;
+import java.util.random.RandomGenerator;
+
+
+public final class ArrayUtil {
+    private ArrayUtil()
+    {}
+
+    private static void bubbleSortAscending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k + 1] < a[k])
+                    swap(a, k, k + 1);
+    }
+
+    private static void bubbleSortDescending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k] < a[k + 1])
+                    swap(a, k, k + 1);
+    }
+
+    private static void selectionSortAscending(int [] a)
+    {
+        int min, minIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            min = a[i];
+            minIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (a[k] < min) {
+                    min = a[k];
+                    minIndex = k;
+                }
+
+            a[minIndex] = a[i];
+            a[i] = min;
+        }
+    }
+
+    private static void selectionSortDescending(int [] a)
+    {
+        int max, maxIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            max = a[i];
+            maxIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (max < a[k]) {
+                    max = a[k];
+                    maxIndex = k;
+                }
+
+            a[maxIndex] = a[i];
+            a[i] = max;
+        }
+    }
+
+    public static void addBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] += val;
+    }
+
+    public static void bubbleSort(int [] a)
+    {
+        bubbleSort(a, false);
+    }
+
+    public static void bubbleSort(int [] a, boolean desc)
+    {
+        if (desc)
+            bubbleSortDescending(a);
+        else
+            bubbleSortAscending(a);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int origin, int bound)
+    {
+        fillRandomArray(randomGenerator, a, a.length, origin, bound);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int count, int origin, int bound)
+    {
+        for (int i = 0; i < count; ++i)
+            a[i] = randomGenerator.nextInt(origin, bound);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [][] a, int origin, int bound)
+    {
+        for (int [] array : a)
+            fillRandomArray(randomGenerator, array, origin, bound);
+    }
+
+    public static int [] generateRandomArray(RandomGenerator random, int count, int origin, int bound)
+    {
+        int [] a = new int[count];
+
+        fillRandomArray(random, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [] histogramData(int [] a, int n)
+    {
+        int [] result = new int[n + 1];
+
+        for (int val : a)
+            ++result[val];
+
+        return result;
+    }
+
+    public static boolean isEmpty(int [] a)
+    {
+        return a.length == 0;
+    }
+
+    public static String join(ArrayList list, char separator)
+    {
+        return join(list, String.valueOf(separator));
+    }
+
+    public static String join(ArrayList list, String separator)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (Object o : list)
+            sb.append((String)o).append(separator);
+
+        return sb.substring(0, sb.length() - separator.length());
+    }
+
+    public static int max(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.max(val, result);
+
+        return result;
+    }
+
+    public static int min(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.min(val, result);
+
+        return result;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] *= val;
+    }
+
+    public static int partition(int [] a, int threshold)
+    {
+        int partitionIndex = 0;
+
+        while (partitionIndex != a.length && a[partitionIndex] < threshold)
+            ++partitionIndex;
+
+        if (partitionIndex == a.length)
+            return partitionIndex;
+
+        for (int i = partitionIndex + 1; i < a.length; ++i)
+            if (a[i] < threshold)
+                swap(a, i, partitionIndex++);
+
+        return partitionIndex;
+    }
+
+    public static void print(int [] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [] a)
+    {
+        print(n, a, a.length);
+    }
+
+    public static void print(int [] a, int count)
+    {
+        print(1, a, count);
+    }
+
+    public static void print(int n, int [] a, int count)
+    {
+        print(n, a, count, " ", "\n");
+    }
+
+    public static void print(int [] a, int count, String sep, String end)
+    {
+        print(1, a, count, sep, end);
+    }
+
+    public static void print(int n, int [] a, int count, String sep, String end)
+    {
+        String fmt = String.format("%%0%dd%%s", n);
+
+        for (int i = 0; i < count; ++i)
+            System.out.printf(fmt, a[i], sep);
+
+        System.out.print(end);
+    }
+
+    public static void print(int [][] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [][] a)
+    {
+        for (int [] array : a)
+            print(n, array);
+    }
+
+    public static void reverse(int [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static void reverse(char [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static int [] reversed(int [] a)
+    {
+        int [] result = new int[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static char [] reversed(char [] a)
+    {
+        char [] result = new char[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static void selectionSort(int [] a)
+    {
+        selectionSort(a, false);
+    }
+
+    public static void selectionSort(int [] a, boolean desc)
+    {
+        if (desc)
+            selectionSortDescending(a);
+        else
+            selectionSortAscending(a);
+    }
+
+    public static void subtractBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] -= val;
+    }
+
+    public static int sum(int [] a)
+    {
+        int total = 0;
+
+        for (int val : a)
+            total += val;
+
+        return total;
+    }
+
+    public static void swap(int [] a, int i, int k)
+    {
+        int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+}
+
+/*--------------------------------------------------------
+	FILE NAME	: MatrixUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 25th February 2024
+
+	Utility class for matrix operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.matrix;
+
+import org.csystem.util.array.ArrayUtil;
+
+import java.util.random.RandomGenerator;
+
+
+public final class MatrixUtil {
+    private MatrixUtil()
+    {
+    }
+
+    public static int [][] add(int [][] a, int [][] b)
+    {
+        int row = a.length;
+        int col = a[0].length;
+        int [][] total = new int[row][col];
+
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
+                total[i][j] = a[i][j] + b[i][j];
+
+        return total;
+    }
+
+    public static void addBy(int [][] a, int val)
+    {
+        ArrayUtil.addBy(a, val);
+    }
+
+    public static int [][] subtract(int [][] a, int [][] b)
+    {
+        int row = a.length;
+        int col = a[0].length;
+        int [][] total = new int[row][col];
+
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j)
+                total[i][j] = a[i][j] - b[i][j];
+
+        return total;
+    }
+
+
+
+    public static int [][] generateRandomMatrix(RandomGenerator randorandomGenerator, int row, int col, int origin, int bound)
+    {
+        int [][] a = new int[row][col];
+
+        ArrayUtil.fillRandomArray(randorandomGenerator, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [][] generateRandomSquareMatrix(RandomGenerator randomGenerator, int n, int origin, int bound)
+    {
+        return generateRandomMatrix(randomGenerator, n, n, origin, bound);
+    }
+
+    public static boolean isMatrix(int [][] a)
+    {
+        for (int i = 1; i < a.length; ++i)
+            if (a[0].length != a[i].length)
+                return false;
+
+        return true;
+    }
+
+    public static boolean isSquareMatrix(int [][] a)
+    {
+        return isMatrix(a) && a.length == a[0].length;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        ArrayUtil.multiplyBy(a, val);
+    }
+    public static void subtractBy(int [][] a, int val)
+    {
+        ArrayUtil.subtractBy(a, val);
+    }
+
+    public static int sumDiagonal(int [][] a)
+    {
+        int total = 0;
+
+        for (int i = 0; i < a.length; ++i)
+            total += a[i][i];
+
+        return total;
+    }
+
+    public static int [][] transpose(int [][] a)
+    {
+        int [][] t = new int[a[0].length][a.length];
+
+        for (int i = 0; i < a.length; ++i)
+            for (int j = 0; j < a[i].length; ++j)
+                t[j][i] = a[i][j];
+
+        return t;
+    }
+
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo MyRandom sınıfını inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import com.baturhansahin.random.MyRandom;
+import org.csystem.util.array.ArrayUtil;
+import org.csystem.util.console.Console;
+
+import java.util.Random;
+import java.util.random.RandomGenerator;
+
+class App {
+    public static void main(String[] args)
+    {
+        int count = Console.readInt("Input count:", "Invalid value!...");
+        MyRandom myRandom = new MyRandom();
+        Random random = new Random();
+        RandomGenerator randomGenerator = RandomGenerator.getDefault();
+
+        int [] a = ArrayUtil.generateRandomArray(myRandom, count, 0, 100);
+        int [] b = ArrayUtil.generateRandomArray(random, count, 0, 100);
+        int [] c = ArrayUtil.generateRandomArray(randomGenerator, count, 0, 100);
+
+        ArrayUtil.print(2, a);
+        ArrayUtil.print(2, b);
+        ArrayUtil.print(2, c);
+    }
+}
+
+package com.baturhansahin.random;
+
+import java.util.random.RandomGenerator;
+
+public class MyRandom implements RandomGenerator {
+    private long m_seed;
+
+    public MyRandom()
+    {
+        m_seed = System.currentTimeMillis();
+    }
+
+    public MyRandom(long seed)
+    {
+        m_seed = seed;
+    }
+
+    public long nextLong()
+    {
+        return (m_seed = m_seed * 123456789L / 23456789L) * 100;
+    }
+
+    //...
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Bazı sınıflar bir kaynağı (resource) kullanırlar. Bu kaynakların kullanılmaya başlamadan önce mantıksal olarak
+    açılması (open) gerekir. Burada açmak o kaynağı kullanmadan önce yapılması geereken işlemleri tamamlamak anlamında
+    kullanılır. Bu tip kaynakların işlem bittikten sonra mantıksal olarak kapatılması (close) yani geri bırakılması ile
+    ilgili işlemlerin tamamlanması gerekir. Örneğin bir dosyanın verileri üzerinde işlem yapmak için dosyanın açılması
+    gerekir, işlem bittikten sonra da kapatılması gerekir. Bir dosyanın açılması işletim sistemi düzeyinde aşağı seviyeli
+    işlemlerin de yapılması demektir, kapatılması ise yine işletim sistemi düzeyinde bir takım işlemlerin de yapılması
+    demektir.
+
+    İşte böylesi durumlar için Java dünyasında Closeable arayüzü kullanılır. Bu arayüzün aşağıdaki prototipe sahip
+    close isimli abstract bir metodu vardır:
+
+        void close() throws IOException;
+
+    Bu durumda ilgili sınıf kaynağı geri bırakma (release) işlemini bu metot içerisinde yapar. Kaynağı mantıksal olarak
+    açma işlemi sınıftan sınıfa yani senarayoya göre değişebilir. Örneğin bazı sınıflar kaynağı açma işlemi ctor içerisinde
+    yaparlar. Senayro ne olursa bir Java programcısı için Closeable arayüzünü destekleyen bir sınıfı kullanmak onun
+    close metodunun da genel olarak çağrılması gerektiği anlamına gelir. Benzer şekilde programcı böylesi bir kaynak
+    kullanan bir sınıf yazdığında da Closeable arayüzünü destekler. JavaSE'de Closeable arayüzünü destekleyen çok fazla
+    sınıf vardır. Java 7 ile birlikte tamamen aynı metoda sahip olan AutoCloseable isimli bir arayüz eklenmiştir ve
+    Java 7 ile birlikte Closeable arayüzü AutoCloseable arayüzünden türetilmiştir. Bu arayüz ileride ele alınacaktır
+-----------------------------------------------------------------------------------------------------------------------*/
 
 
 /*----------------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: StringUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 24th February 2024
+	LAST UPDATE	: 25th February 2024
 	
 	Utility class for string operations
 	
@@ -10,7 +10,7 @@
 ---------------------------------------------------------*/
 package org.csystem.util.string;
 
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
 public final class StringUtil {
 	private static final String LETTERS_EN;
@@ -54,43 +54,43 @@ public final class StringUtil {
 		return countString(s1.toLowerCase(), s2.toLowerCase());
 	}
 	
-	public static String generateRandomTextEN(Random random, int count)
+	public static String generateRandomTextEN(RandomGenerator randomGenerator, int count)
 	{
-		return generateRandomText(random, count, LETTERS_ALL_EN);
+		return generateRandomText(randomGenerator, count, LETTERS_ALL_EN);
 	}
 	
-	public static String generateRandomTextTR(Random random, int count)
+	public static String generateRandomTextTR(RandomGenerator randomGenerator, int count)
 	{
-		return generateRandomText(random, count, LETTERS_ALL_TR);
+		return generateRandomText(randomGenerator, count, LETTERS_ALL_TR);
 	}
 	
-	public static String generateRandomText(Random random, int count, String sourceText)
+	public static String generateRandomText(RandomGenerator randomGenerator, int count, String sourceText)
 	{
 		StringBuilder sb = new StringBuilder(count);
 		int len = sourceText.length();
 		
 		for (int i = 0; i < count; ++i)
-			sb.append(sourceText.charAt(random.nextInt(len)));
+			sb.append(sourceText.charAt(randomGenerator.nextInt(len)));
 		
 		return sb.toString();
 	}
 
-	public static String [] generateRandomTextsEN(Random random, int count, int min, int bound)
+	public static String [] generateRandomTextsEN(RandomGenerator randomGenerator, int count, int min, int bound)
 	{
-		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_EN);
+		return generateRandomTexts(randomGenerator, count, min, bound, LETTERS_ALL_EN);
 	}
 
-	public static String [] generateRandomTextsTR(Random random, int count, int min, int bound)
+	public static String [] generateRandomTextsTR(RandomGenerator randomGenerator, int count, int min, int bound)
 	{
-		return generateRandomTexts(random, count, min, bound, LETTERS_ALL_TR);
+		return generateRandomTexts(randomGenerator, count, min, bound, LETTERS_ALL_TR);
 	}
 
-	public static String [] generateRandomTexts(Random random, int count, int min, int bound, String sourceText)
+	public static String [] generateRandomTexts(RandomGenerator randomGenerator, int count, int min, int bound, String sourceText)
 	{
 		String [] texts = new String[count];
 
 		for (int i = 0; i < count; ++i)
-			texts[i] = generateRandomText(random, random.nextInt(min, bound), sourceText);
+			texts[i] = generateRandomText(randomGenerator, randomGenerator.nextInt(min, bound), sourceText);
 
 		return texts;
 	}

@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: ArrayUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 10th February 2024
+	LAST UPDATE	: 25th February 2024
 
 	Utility class for array operations
 
@@ -11,7 +11,8 @@
 package org.csystem.util.array;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.random.RandomGenerator;
+
 
 public final class ArrayUtil {
     private ArrayUtil()
@@ -91,35 +92,30 @@ public final class ArrayUtil {
             bubbleSortAscending(a);
     }
 
-    public static void fillRandomArray(Random random, int [] a, int origin, int bound)
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int origin, int bound)
     {
-        fillRandomArray(random, a, a.length, origin, bound);
+        fillRandomArray(randomGenerator, a, a.length, origin, bound);
     }
 
-    public static void fillRandomArray(Random random, int [] a, int count, int origin, int bound)
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int count, int origin, int bound)
     {
         for (int i = 0; i < count; ++i)
-            a[i] = random.nextInt(origin, bound);
+            a[i] = randomGenerator.nextInt(origin, bound);
     }
 
-    public static void fillRandomArray(Random random, int [][] a, int origin, int bound)
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [][] a, int origin, int bound)
     {
         for (int [] array : a)
-            fillRandomArray(random, array, origin, bound);
+            fillRandomArray(randomGenerator, array, origin, bound);
     }
 
-    public static int [] generateRandomArray(Random random, int count, int origin, int bound)
+    public static int [] generateRandomArray(RandomGenerator random, int count, int origin, int bound)
     {
         int [] a = new int[count];
 
         fillRandomArray(random, a, origin, bound);
 
         return a;
-    }
-
-    public static int [] generateRandomArray(int count, int origin, int bound)
-    {
-        return generateRandomArray(new Random(), count, origin, bound);
     }
 
     public static int [] histogramData(int [] a, int n)
