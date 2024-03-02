@@ -33128,14 +33128,18 @@ public class MyRandom implements RandomGenerator {
     //...
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    02.03.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------
     Bazı sınıflar bir kaynağı (resource) kullanırlar. Bu kaynakların kullanılmaya başlamadan önce mantıksal olarak
-    açılması (open) gerekir. Burada açmak o kaynağı kullanmadan önce yapılması geereken işlemleri tamamlamak anlamında
-    kullanılır. Bu tip kaynakların işlem bittikten sonra mantıksal olarak kapatılması (close) yani geri bırakılması ile
-    ilgili işlemlerin tamamlanması gerekir. Örneğin bir dosyanın verileri üzerinde işlem yapmak için dosyanın açılması
-    gerekir, işlem bittikten sonra da kapatılması gerekir. Bir dosyanın açılması işletim sistemi düzeyinde aşağı seviyeli
-    işlemlerin de yapılması demektir, kapatılması ise yine işletim sistemi düzeyinde bir takım işlemlerin de yapılması
-    demektir.
+    açılması (open) gerekir. Burada "açma işlemi", o kaynağı kullanmadan önce yapılması geereken işlemleri tamamlamak
+    anlamında kullanılır. Bu tip kaynakların işlem bittikten sonra mantıksal olarak kapatılması (close) yani geri
+    bırakılması (free/release) ile ilgili işlemlerin tamamlanması gerekir. Örneğin bir dosyanın verileri üzerinde işlem
+    yapmak için dosyanın açılması gerekir, işlem bittikten sonra da kapatılması gerekir. Bir dosyanın açılması işletim
+    sistemi düzeyinde aşağı seviyeli bir takım işlemlerin yapılması demektir, kapatılması ise yine işletim sistemi düzeyinde
+    bir takım işlemlerin yapılması demektir.
 
     İşte böylesi durumlar için Java dünyasında Closeable arayüzü kullanılır. Bu arayüzün aşağıdaki prototipe sahip
     close isimli abstract bir metodu vardır:
@@ -33144,12 +33148,722 @@ public class MyRandom implements RandomGenerator {
 
     Bu durumda ilgili sınıf kaynağı geri bırakma (release) işlemini bu metot içerisinde yapar. Kaynağı mantıksal olarak
     açma işlemi sınıftan sınıfa yani senarayoya göre değişebilir. Örneğin bazı sınıflar kaynağı açma işlemi ctor içerisinde
-    yaparlar. Senayro ne olursa bir Java programcısı için Closeable arayüzünü destekleyen bir sınıfı kullanmak onun
-    close metodunun da genel olarak çağrılması gerektiği anlamına gelir. Benzer şekilde programcı böylesi bir kaynak
-    kullanan bir sınıf yazdığında da Closeable arayüzünü destekler. JavaSE'de Closeable arayüzünü destekleyen çok fazla
-    sınıf vardır. Java 7 ile birlikte tamamen aynı metoda sahip olan AutoCloseable isimli bir arayüz eklenmiştir ve
-    Java 7 ile birlikte Closeable arayüzü AutoCloseable arayüzünden türetilmiştir. Bu arayüz ileride ele alınacaktır
+    yaparlar. Senaryo ne olursa bir Java programcısı için Closeable arayüzünü destekleyen bir sınıfı kullanmak onun
+    close metodunun da genel olarak çağrılması gerektiği anlamına gelir. Benzer şekilde programcı böylesi kaynak kullanan
+    bir sınıf yazdığında da Closeable arayüzünü destekler. JavaSE'de Closeable arayüzünü destekleyen çok fazla sınıf
+    vardır. Java 7 ile birlikte tamamen aynı metoda sahip olan AutoCloseable isimli bir arayüz eklenmiştir ve Java 7 ile
+    birlikte Closeable arayüzü AutoCloseable arayüzünden türetilmiştir. Bu arayüz ileride ele alınacaktır.
+
+    Anahtar Notlar: Closeable arayüzünü destekleyen bazı sınıfların close metotları throws IOException bildirerek
+    override edilse de bu exception'ın handle edilmesi gerekmeyebilir ya da handle edilse de anlamlı olmayabilir. Örneğin
+    açık olan bir dosyanın kapatılamaması durumunda oluşacak exception için programın içerisinde yapılacak çok da bir şey
+    yoktur. Yani programcı açısından bu exception'ın handle edilmesi bir anlam ifade etmez ancak close metodu IOException'ı
+    throws listesinde içerecek biçimde override edildiğinden programcının bu exception akış içerisinde handle etmesi veya
+    metodu çağırdığı yerde throws bildirimi yapması gerekir. Her iki durumda da gereksiz kod olması açısından clean code
+    yazılmamış olur. Bu durumda programcının strateji değiştirirek daha clean code yazması gerekir.
 -----------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz. Örnekte IOException handle edilmesine rağmen herhangi bir işlem yapılmamıştır ancak
+    error oluşmaması için handle edilmiştir
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            Image image = null;
+
+            try {
+                String name = Console.readString("Input image name:");
+                image = new Image(name);
+
+                image.makeBinary(Console.readInt("Input threshold:"));
+
+                //...
+
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+            finally {
+                if (image != null) {
+                    try {
+                        image.close();
+                    }
+                    catch (IOException ignore) {
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki demo örnek aşağıdaki gibi de yapılabilirdi
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args) throws IOException
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run() throws IOException
+    {
+        while (true) {
+            Image image = null;
+
+            try {
+                String name = Console.readString("Input image name:");
+                image = new Image(name);
+
+                image.makeBinary(Console.readInt("Input threshold:"));
+
+                //...
+
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+            finally {
+                if (image != null)
+                    image.close();
+            }
+        }
+    }
+}
+
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened!...", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki demo örnek Java 7'den önce aşağıdaki gibi daha clean bir şekilde yazılabilir. Bu yaklaşım yukarıdaki
+    yaklaşıma göre daha clean olmasıyla birlikte aynı zamanda close metodunun da handle edilmesi gerektiği durumda da
+    kullanılabilir
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try {
+                ImageUtil.doBinary();
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class ImageUtil {
+    public static void doBinary() throws IOException
+    {
+        Image image = null;
+
+        try {
+            String name = Console.readString("Input image name:");
+            image = new Image(name);
+
+            image.makeBinary(Console.readInt("Input threshold!..."));
+
+            //...
+        }
+        finally {
+            if (image != null)
+                image.close();
+        }
+    }
+}
+
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki yaklaşımlarda checked exception dolayısıyla programcının strateji değiştirmesi söz konusudur ayrıca kod
+    içerisinde close metodunun çağrılmasının gözden kaçtığı durumlar olabilir ve bu da senaryoya göre çeşitli bug'ların
+    oluşmasına sebep olabilir.
+
+    Java 7 ile birlikte AutoCloseable arayüzü eklenmiş, Closeable arayüzü AutoCloseable
+    arayüzünden türetilmiştir. Yani Java 7 ile birlikte Closeable arayüzünü destekleyen her sınıf aynı zamanda AutoCloseable
+    arayüzünü de destekler duruma gelmiştir. Java 7 ile birlikte ismine "try with resources (TWR)" denilen bir deyim
+    eklenmiştir. Bu deyimin genel biçimi şu şekildedir:
+        try (<AutoCloseable arayüzü türünden referans>[; <AutoCloseable arayüzü türünden referans>; ...]) {
+            //...
+        }
+        [
+            catch blokları VEYA finally bloğu VEYA catch blokları ile finally bloğu
+        ]
+    Bu deyim ile close metodu otomatik olarak çağrılır. Yani programcının bu deyim ile birlikte close metodunu çağırması
+    gerekmez. Bu durumda programcı ne strateji değiştirmek zorunda kalır ne de close metodunun çağrılmasının gözden
+    kaçabileceği durumlar oluşabilir. Java 9'dan önce bu deyimin parantezi içerisinde referansa ilk değer verilmesi
+    zorunluydu yani referansın değerinin parantez içerisinde verilmesi gerekiyordu. Java 9 ile birlikte parantez içerisinde
+    daha önce değer verilmiş referanslar da kullanılabilir duruma gelmiştir. TWR parantezi içerisindeki referansın AutoCloseable
+    arayüzünü destekleyen bir sınıf türünden ya da AutoCloseable arayüzü türünden ya da AutoCloseable arayüzünden türetilmiş
+    bir interface referansı türünden olması gerekir. Yani kısaca söylemek gerekirse buradaki referansın AutoCloseable olması
+    gerekir. Closeable arayüzü de AutoCloseable'dan türetildiğinden TWR ile kullanılabilmektedir. Programcının özel bir
+    durum yoksa TWR kullanması tavsiye edilir. Bu deyim ile close metodunun fırlattığı exception'da handle edilebilir.
+    Genel biçime dikkat edilirse TWR bloğundan sonra herhangi bir catch bloğu ya da finally bloğu gelmek zorunda değildir.
+
+    TWR deyiminde parantez içerisinde kullanılan referans'ın faaliyet alanı TWR deyiminin try bloğu boyuncadır. Ayrıca
+    bu referans final kabul edilir.
+
+    Anahtar Notlar: Bir değişkenin final olarak bildirilmemesine rağmen faaliyet alanı içerisinde final olarak kabul
+    edilmesine genel olarak "effectively final" denilmektedir.
+
+    TWR deyiminin parantezi içerisinde birden fazla referans kullanılması durumunda close metodu kullanım ile ters sırada
+    çağrılır.
+-----------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki demo örnek aşağıdaki gibi TWR ile de yapılabilir. Bu yaklaşım diğer yaklaşaımlara göre en iyisidir ve
+    programcı özel bir durum yoksa kesinlikle TWR kullanmalıdır
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try (Image image = new Image(Console.readString("Input image name:"))) {
+                image.makeBinary(Console.readInt("Input threshold:"));
+
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte Image sınıfı AutoCloseable arayüzünü desteklemediğinden error oluşur
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.IOException;
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try (Image image = new Image(Console.readString("Input image name:"))) { //error
+                image.makeBinary(Console.readInt("Input threshold:"));
+
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class Image {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte image referansı final olarak kabul edildiğinden error oluşur
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try (Image image = new Image(Console.readString("Input image name:"))) {
+                image.makeBinary(Console.readInt("Input threshold:"));
+
+                image = null; //error
+
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try (Image image = new Image(Console.readString("Input image name:"));
+                 ImageProcessing imageProcessing = new ImageProcessing(image)) {
+
+                //...
+                imageProcessing.faceRecognition();
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class ImageProcessing implements Closeable {
+    private final Image m_image;
+    //...
+
+    public ImageProcessing(Image image)
+    {
+        m_image = image;
+    }
+
+    public void faceRecognition()
+    {
+        //...
+        m_image.makeBinary(Console.readInt("Input threshold:"));
+        Console.writeLine("Identify people by faces in image!...");
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Image released!...");
+        m_image.close();
+    }
+}
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try  {
+                Image image = new Image(Console.readString("Input image name:"));
+                ImageProcessing imageProcessing = new ImageProcessing(image);
+
+                ImageUtil.doWork(image, imageProcessing);
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class ImageUtil {
+    public static void doWork(Image image, ImageProcessing imageProcessing)
+    {
+        try (image; imageProcessing) { //Since Java 9
+
+            //...
+            imageProcessing.faceRecognition();
+            //...
+        }
+        catch (Throwable ex) {
+            Console.writeLine(ex.getMessage());
+        }
+    }
+}
+
+class ImageProcessing implements Closeable {
+    private final Image m_image;
+    //...
+
+    public ImageProcessing(Image image)
+    {
+        m_image = image;
+    }
+
+    public void faceRecognition()
+    {
+        //...
+        m_image.makeBinary(Console.readInt("Input threshold:"));
+        Console.writeLine("Identify people by faces in image!...");
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Image released!...");
+        m_image.close();
+    }
+}
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+class App {
+    public static void main(String[] args)
+    {
+        DemoApp.run();
+    }
+}
+
+class DemoApp {
+    public static void run()
+    {
+        while (true) {
+            try  {
+                Image image = new Image(Console.readString("Input image name:"));
+                ImageProcessing imageProcessing = new ImageProcessing(image);
+
+                ImageUtil.doWork(image, imageProcessing);
+                //...
+            }
+            catch (Throwable ex) {
+                Console.writeLine(ex.getMessage());
+            }
+        }
+    }
+}
+
+class ImageUtil {
+    public static void doWork(Image image, ImageProcessing imageProcessing) throws IOException
+    {
+        try (image; imageProcessing) { //Since Java 9
+
+            //...
+            imageProcessing.faceRecognition();
+            //...
+        }
+    }
+}
+
+class ImageProcessing implements Closeable {
+    private final Image m_image;
+    //...
+
+    public ImageProcessing(Image image)
+    {
+        m_image = image;
+    }
+
+    public void faceRecognition()
+    {
+        //...
+        m_image.makeBinary(Console.readInt("Input threshold:"));
+        Console.writeLine("Identify people by faces in image!...");
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Image released!...");
+        m_image.close();
+    }
+}
+class Image implements Closeable {
+    private final String m_imageName;
+    //...
+
+    public Image(String imageName)
+    {
+        //...
+        m_imageName = imageName;
+        Console.writeLine("%s image opened:", m_imageName);
+    }
+
+    public void makeBinary(int threshold)
+    {
+        if (threshold < 0 || threshold > 255)
+            throw new IllegalArgumentException("threshold value must be between 0(zero) and 255");
+
+        Console.writeLine("Image processing!...");
+        Console.writeLine("%s image changed!...", m_imageName);
+    }
+
+    public void close() throws IOException
+    {
+        Console.writeLine("Release image!...");
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
