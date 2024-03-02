@@ -33864,6 +33864,409 @@ class Image implements Closeable {
     }
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------
+    Generics: Generic'ler derleme zamanı çok biçimliliğini (compile time polymorphism) (CTP) gerçekleştirmek için
+    kullanılır. Generic'ler Java 5 ile dile eklenmiştir. Generic'ler genel olarak iki gruba ayrılabilir:
+    Generic türler (generic types), generic metotlar (generic methods). Şu ana kadar görmüş olduğumuz tür bildirimleri
+    içerisinde sınıflar ve arayüzler generic olarak bildirilebilirler. Bu anlamda exception sınıfları generic olarak
+    bildirilemezler. Generic konusuna ilişkin bazı detaylı durumlar Java ile Uygulama Geliştirme 1 Kursu'nda ele alınacakır.
+
+    Generic bir sınıf bildiriminde sınıf isminde sonra açılsal parantezler içerisinde yazılan isimlere generic tür
+    parametreleri (generic type parameters) ya da kısaca tür parametreleri (type parameters) denilmektedir. Açısal
+    parantez içerisinde bildirilen isimler virgül ile listelenir. Bu isimler değişken isimlendirme kurallarına uygun
+    olmalıdır. Bu parametreler aslında bir tür belirtirler. Bu isimler tür belirttiklerinden "upper camel case" olarak
+    yazılırlar. Bu isimler çoğu zaman tek bir karakterden oluşur. Örneğin, T, K, E gibi karakterler verilebilir.
+
+    Anahtar Notlar: Generic türlere "parameterized type" da denilmektedir.
+
+    Generic tür parametrelerine ilişkin isimlerin faaliyet alanı ilgili tür boyuncadır ve ilgili tür içerisinde tür
+    olarak kullanılabilir.
+
+    Generic bir tür ismi iki şekilde kullanılabilir: Açılım (intantiation) yapılarak, doğrudan.
+    Açılım yapılarak kullanımda tür ismi ile beraber açısal parantez içerisinde generic tür parametrelerine ilişkin
+    türler açıkça belirtilir. Birden fazla generic parametre için türler yine virgül ile ayrılacak şekilde belirtilir.
+    Açılım ile aslında sınıfın ilgili generic parametrelerinin yerine geçen türler belirtilmiş olur. Bu durumda bu generic
+    tür parametrelerinin kullanıldığı her yerde derleme zamanında açılıma ilişkin türlere göre işlem yapılır. Açılımda
+    generic tür parametre sayısı kadar tür açılımı yapılmalıdır. Generic bir tür açılım yapılmadan yani açısal
+    parantezsiz kullanıldığında generic tür parametreleri Object olarak ele alınır.
+
+    Anahtar Notlar: Çalışma zamanında açılıma ilişkin türler Object olarak ele alınır. Bu anlamda aslında generic'ler
+    derleme zamanında tür kontrolü açısından önemlidir.
+
+    Anahtar Notlar: Generic türlerin doğrundan yani açılım yapılmadan ya da daha geneş bir ifade ile açısal parantez
+    olmadan kullanılması tavsiye edilen bir durum değildir. Bir generic tür parametresinin Object olması isteniyorsa
+    Object açılımı yapılması tavsiye edilir. Zaten bir çok static kod analizi aracı da generic sınıfların açılımsız yani
+    doğrudan kullanılması durumunda uyarı vermektedir.
+
+    Generic bir sınıf türünden nesne yaratılırken yine açısal parantez kullanılır. (Burada yine açısal parantez olmadığı
+    durum tavsiye edilmez). Açılım yapılırken, açılıma ilişkin türler açısal parantez içerisinde yazılır. Java 7 ile
+    birlikte new operatörü ile nesne yaratılırken, atanacak referans'da açılım yapılmışsa, açısal parantez içerisi boş
+    bırakılabilir. Burada yine de açısal parantez kullanılması tavsiye edilir. Bu kullanıma "diamond syntax" da denir.
+
+    Generic parametreler temel türler olarak açılamazlar. Generic tür parametresi için temel tür kullanımı söz konusu ise
+    ilgili temel türe karşılık gelen sarmalayan sınıf açılımı yapılır. Bu durumda temel türden kullanımlarda bir otomatik
+    kutulama (auto boxing) söz konusudur. Bu da duruma göre maliyetli olabilir. Buna göre programcı temel tür için ayrı
+    bir tür de yazabilir. Bu durum ileride ele alınacaktır. Çalışma zamanında generic bir türün her açılımı ayrı bir tür
+    belirtmez.
+-----------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        A<String> as;
+        B<String, Random> bsr;
+        A a; //Dikkat tavsiye etmiyoruz (gönlümüzün error'u)
+        A<Object> ao; //Object açılımı için Tavsiye edilen kullanım
+
+        as = new A<String>("ankara");
+        bsr = new B<String, Random>("istanbul");
+
+        bsr.doWork(new Random());
+
+        a = new A(10); //Dikkat tavsiye etmiyoruz (gönlümüzün error'u)
+
+        ao = new A<Object>(10);
+
+        //...
+    }
+}
+
+class A<T> {
+    private T m_value;
+    //...
+
+    public A(T t)
+    {
+        m_value = t;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+class B<T, K> {
+    private T m_value;
+
+    public B(T value)
+    {
+        m_value = value;
+    }
+
+    public void doWork(K k)
+    {
+        Console.writeLine("%s, %s", m_value, k);
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        A<String> as;
+        B<String, Random> bsr;
+        A<Object> ao;
+
+        as = new A<>("ankara"); //Since Java 7
+        bsr = new B<>("istanbul"); //Since Java 7
+
+        bsr.doWork(new Random());
+
+        ao = new A<>(10); //Since Java 7
+
+        //...
+    }
+}
+
+class A<T> {
+    private T m_value;
+    //...
+
+    public A(T t)
+    {
+        m_value = t;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+class B<T, K> {
+    private T m_value;
+
+    public B(T value)
+    {
+        m_value = value;
+    }
+
+    public void doWork(K k)
+    {
+        Console.writeLine("%s, %s", m_value, k);
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte temel türden açılım yapıldığında error oluşur
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        A<int> as; //error
+
+        //...
+    }
+}
+
+class A<T> {
+    private T m_value;
+    //...
+
+    public A(T t)
+    {
+        m_value = t;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örneği inceleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        A<Integer> a;
+
+        a = new A<>(10);
+
+        a.setValue(10);
+
+        //...
+    }
+}
+
+class A<T> {
+    private T m_value;
+    //...
+
+    public A(T t)
+    {
+        m_value = t;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte her açılımın ayrı bir tür belirtmediğini programı çalıştırıp gözlemleyiniz
+-----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        A<Integer> ai;
+        A<String> as;
+
+
+        ai = new A<>(10);
+        as = new A<>("ankara");
+
+        Console.writeLine(ai.getClass().getName());
+        Console.writeLine(as.getClass().getName());
+
+        //...
+    }
+}
+
+class A<T> {
+    private T m_value;
+    //...
+
+    public A(T t)
+    {
+        m_value = t;
+    }
+
+    public void setValue(T value)
+    {
+        m_value = value;
+    }
+
+    public T getValue()
+    {
+        return m_value;
+    }
+
+    public String toString()
+    {
+        return String.valueOf(m_value);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    ArrayList sınıfı da generic bir sınıftır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList<String> texts = new ArrayList<>(Console.readInt("Capacity değerini giriniz:"));
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            texts.add(StringUtil.generateRandomTextTR(random, n));
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : texts)
+            sb.append(s).append(" ");
+
+        Console.writeLine(sb);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte otomatik kutulama söz konusudur
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+class App {
+    public static void main(String[] args)
+    {
+        ArrayList<Integer> numbers = new ArrayList<>();
+        Random random = new Random();
+
+        while (true) {
+            int n = Console.readInt("Bir sayı giriniz:");
+
+            if (n <= 0)
+                break;
+
+            numbers.add(random.nextInt(n));
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int val : numbers)
+            sb.append(val).append(" ");
+
+        Console.writeLine(sb);
+    }
+}
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
