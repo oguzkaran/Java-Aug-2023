@@ -1,33 +1,20 @@
 /*----------------------------------------------------------------------------------------------------------------------
-    Generic arayüzler:
+    Yukarıdaki örnekte metodun generic tür paramtre ismi sınıfın generic tür parametre ismi ile aynı olabilir. Faaliyet
+    alanı kuralları böylesi isimlendirme geçerlidir
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
-
-import org.csystem.util.console.Console;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 class App {
     public static void main(String[] args)
     {
-        ArrayList<Integer> numbers = new ArrayList<>();
-        Random random = new Random();
+        Sample.foo(10);
+        Sample.foo("ankara");
+    }
+}
 
-        while (true) {
-            int n = Console.readInt("Bir sayı giriniz:");
-
-            if (n <= 0)
-                break;
-
-            numbers.add(random.nextInt(n));
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int val : numbers)
-            sb.append(val).append(" ");
-
-        Console.writeLine(sb);
+class Sample<T> {
+    public static <T> void foo(T t)
+    {
+        //...
     }
 }

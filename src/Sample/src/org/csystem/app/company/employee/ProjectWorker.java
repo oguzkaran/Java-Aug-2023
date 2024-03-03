@@ -35,7 +35,7 @@ public class ProjectWorker extends Worker {
 
     //...
 
-    public double calculateInsurancePayment()
+    public Double calculateInsurancePayment()
     {
         return super.calculateInsurancePayment() + m_extraFee * 30;
     }

@@ -33,7 +33,7 @@ public class Worker extends Employee {
         m_feePerHour = feePerHour;
     }
 
-    public double calculateInsurancePayment()
+    public Double calculateInsurancePayment()
     {
         return m_feePerHour * m_hourPerDay * 30;
     }

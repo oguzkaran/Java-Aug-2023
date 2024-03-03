@@ -1,6 +1,6 @@
 package org.csystem.app.company.employee;
 
-public abstract class Employee implements IInsurance {
+public abstract class Employee implements IInsurance<Double, String> {
     private String m_name;
     private String m_citizenId;
     private String m_address;

@@ -34267,15 +34267,502 @@ class App {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    03.03.2024
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    Generic sınıflarla ilgili türetme işlemi şu şekilde incelenebilir:
+    - Generic olmayan bir sınıf generic bir sınıfın bir açılımından türetilebilir: Bu durumda taban sınıfın sanal metotları
+    türemiş sınıfta açılıma uygun olarak override edilmelidir
+
+    - Generic bir sınıf generic olmayan bir sınıftan türetilebilir: Bu durumda derleme zamanı açısından türemiş sınıfın
+    her açılımı o generic olmayan taban sınıftan türetilmiş olur.
+
+    - Generic bir sınıf başka bir generic sınıfın bir açılımından türetilebilir: Bu durumda derleme zamanı açısından
+    türemiş sınıfın her açılımı ilgili taban sınıftan türetilmiş olur. Yine taban sınıfın generic tür parametrelerini
+    kullanan sanal metotları türemiş sınıfta açılıma uygun olarak override edilmelidir.
+
+    - Generic bir sınıf başka bir generic sınıftan türetilebilir: Bu durumda derleme zamnı açısından türemiş sınıfın
+    bir açılımı taban sınıfın da ilgili açılımından türetilmiş olur. Yine taban sınıfın generic tür parametrelerini
+    kullanan sanal metotları türemiş sınıfta generic tür parametrelerine uygun olarak override edilmelidir.
+
+    Aşağıdaki demo örneği inceleyiniz
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        B<String> bs = new B<>();
+        B<Integer> bi = new B<>();
+        X x;
+
+        x = bi;
+        x = bs;
+
+        C<String> cs = new C<>();
+        C<Boolean> cb = new C<>();
+
+        bs = cs;
+        bs = cb;
+
+        D<Long> dl = new D<>();
+        D<Float> df = new D<>();
+        B<Long> bl;
+        B<Float> bf;
+
+        bl = dl;
+        bf = df;
+
+        E<Integer, String> eis = new E<>();
+        A<Integer, String> ais;
+
+        ais = eis;
+    }
+}
+
+class E<T, K> extends A<T, K> {
+    public K foo(T t)
+    {
+        //...
+        return null;
+    }
+}
+
+class D<T> extends B<T> {
+    //...
+}
+
+class C<T> extends B<String> {
+    //...
+}
+
+class B<T> extends X {
+    //...
+}
+
+class X extends A<String, Integer> {
+    public Integer foo(String str)
+    {
+        //...
+
+        return str.length();
+    }
+}
+
+abstract class A<T, R> {
+    public abstract R foo(T t);
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir arayüz generic olabilir. Bu durumda bu arayüzü impelemnte eden sınıfların arayüzün sanal metotlarını generic
+    tür parametrelerine uygun olarak override etmesi gerekir. Generic arayüzler programalada çok kullanıldığından bazı
+    durumlarda bu arayüzü kullanan sınıflar açısında otomatik kutulama ve otomatik kutu açma maliyeti olmaması için
+    generic arayüzün temel ilgili temel türler için benzer arayüzleri de kütüphane içerisinde bulundurulur. Şüphesiz bu
+    durum generic sınıflar için de duruma göre yapılabilmektedir. Örneğin, Java 8'de çok kullanışan Predicate<T> arayüzünün
+    kullanıldığı yerlerde kutulama bir maliyet oluşturabileceğinden JavaSE'de ayrıca IntPredicate, LongPredicate ve
+    DoublePredicate gibi 3 tane daha benzer arayüz bulunur. Bu gruptaki arayüzlerin test isimli abstract metotları
+    Predicate<T> için T türden, IntPredicate için int türden, LongPredicate için long türden ve DoublePredicate için
+    double türden prametreye sahiptir.
+
+    Generic arayüzlerin de açılımsız kullanımı tavsiye edilmez. Generic bir arayüz taban sınıf referansı olarak
+    kullanıldığında yine uygun açılım yapılmalıdır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        B b = new B();
+        IX<String> xo;
+
+        xo = b;
+    }
+}
+
+class C implements IX<Object> {
+    public void foo(Object o)
+    {
+        //...
+    }
+}
+
+class B implements IX<String> {
+    public void foo(String str)
+    {
+        //...
+    }
+}
+class A<T> implements IX<T> {
+    public void foo(T t)
+    {
+
+    }
+}
+
+interface IX<T> {
+    void foo(T t);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte gerneric bir türün her açılımı ayrı bir tür belitmediğinden A sınıfı aynı interface'i implemente
+    etmiş olur ve bu durum da geçersizdir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A implements IX<Integer>, IX<String> { //error
+    //...
+    public void foo(Integer i)
+    {
+        //...
+    }
+
+    public void foo(String s)
+    {
+        //...
+    }
+}
+
+interface IX<T> {
+    void foo(T t);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnek geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A implements IX<Integer>, IY<Integer> {
+    //...
+    public void foo(Integer i)
+    {
+        //...
+    }
+}
+
+interface IX<T> {
+    void foo(T t);
+}
+
+interface IY<T> {
+    void foo(T t);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki örnekte aynı metot yazıldığı için error oluşur. Çünkü ilgili metotların parametreleri çalışma zamanında
+    Object olarak değerlendirilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class A implements IX<Integer>, IY<String> {
+    //...
+    public void foo(Integer i)
+    {
+        //...
+    }
+
+    public void foo(String s)
+    {
+        //...
+    }
+}
+interface IX<T> {
+    void foo(T t);
+}
+
+interface IY<T> {
+    void foo(T t);
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    enum sınıfları ve exception sınıfları generic olarak bildirilemez
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class MyException<T> extends RuntimeException { //error
+
+}
+
+enum Color<T> { //error
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir metot generic olarak bildirilebilir. Generic bir metodun generic tür pametreleri metodun geri dönüş değerinden
+    önce açısal parantez içerisinde bildirilir. Generic bir metot çağrısında generic parametrelerin türleri çağrı
+    sırasında tespit edilebiliyorsa (type inference/deduction) bu durumda açılım yapmaya gerek yoktur. Açılım metot
+    isminden önce açısal parantez içerisinde yapılır
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample();
+
+        s.foo(6, "ankara");
+        s.<Integer, String>foo(6, "ankara");
+    }
+}
+
+class Sample {
+    public <T, K> void foo(T t, K k)
+    {
+        Console.writeLine(t);
+        Console.writeLine(k);
+    }
+}
 
 
 /*----------------------------------------------------------------------------------------------------------------------
+    Aşağıdaki demo örnekte açılım yapılarak generic metodun çağrılması sağlanamaz. Bu durumda derleyici argümanın
+    türüne göre seçim yapar. Örnekte generic metodun ilgili int türden argüman ile çağrılabilmesi için kutulama
+    yapılabilir. Örnekte Sample sınıfının foo metotlarını yazan programcı int türü için foo işlemini özelleştirmiştir.
+    Bu anlamda bu kavrama "generic parameter type specialization" da denebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
 
+import org.csystem.util.console.Console;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample s = new Sample();
+
+        s.foo(10);
+        s.<Integer>foo(10);
+        s.foo(Integer.valueOf(10));
+    }
+}
+
+class Sample {
+    public <T, K> void foo(T t)
+    {
+        Console.writeLine("Generic");
+        Console.writeLine(t);
+    }
+
+    public void foo(int a)
+    {
+        Console.writeLine("int");
+        Console.writeLine(a);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Generic bir sınıfın generic metodu olabilir. Buna "member generic" de denilmektedir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample<String> ss = new Sample<>();
+        Sample<Integer> si = new Sample<>();
+
+        ss.foo("ankara", true);
+        ss.foo("istanbul", "ankara");
+        ss.foo("zonguldak", 67);
+
+        si.foo(6, "ankara");
+    }
+}
+
+class Sample<T> {
+    public <K> void foo(T t, K k)
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Generic bir sınıfın generic tür parametresi static bir metot içerisinde kullanılamaz. Yani generic sınıfın generic
+    tür parametre isminin faaliyet alanına (scope) static metotlar dahil değildir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class Sample<T> {
+    public static void foo(T t) //error
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki problem static metot generic yapılarak çözülebilir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample.foo(10);
+        Sample.foo("ankara");
+    }
+}
+
+class Sample<T> {
+    public static <K> void foo(K k)
+    {
+        //...
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Yukarıdaki örnekte metodun generic tür paramtre ismi sınıfın generic tür parametre ismi ile aynı olabilir. Faaliyet
+    alanı kuralları böylesi isimlendirme geçerlidir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample.foo(10);
+        Sample.foo("ankara");
+    }
+}
+
+class Sample<T> {
+    public static <T> void foo(T t)
+    {
+        //...
+    }
+}
+
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Programlamada bir n-liyi (n-ary) temsil eden veri yapılarına genel olarak "tuple" denilmektedir. JavaSE'de "tuple"'ı
+    temsil eden sınıflar doğrudan bulunmamaktadır. Böylesi sınıflar pratikte gerektiğinde programcı ya kendisi bir
+    kütüphane yazar ve projelerinde kullanır ya da yazılmış olan iyi kütüphaneleri projelerinde kullanır. Şüphesiz
+    bir tuple'ın generic olması daha uygundur.
+----------------------------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Generic bir sınıfın generic tür parametreleri için açılımda ? (wildcard) kullanılabilir. Bu generic
+    tür anlamında "any type" demektir. Türün kullanımının önemli olmadığı durumlar için düşünülmüştür. "Wildcard" kullanımına
+    ilişkin detaylar uygulama kurslarında ele alınacaktır
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
-
+    Pair sınıfı
 ----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.tuple.test;
+
+import org.csystem.tuple.Pair;
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class PairCtorTest {
+    public static void run()
+    {
+        ArrayList<Pair<Integer, String>> pairs = new ArrayList<>();
+        Random random = new Random();
+
+
+        while (true) {
+            int val = random.nextInt(-100, 100);
+
+            if (val == 0)
+                break;
+
+            pairs.add(new Pair<>(val, StringUtil.generateRandomTextTR(random, random.nextInt(5, 11))));
+        }
+
+        for (Pair<Integer, String> p : pairs)
+            Console.writeLine(p);
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.tuple.test;
+
+import org.csystem.tuple.Pair;
+import org.csystem.util.console.Console;
+import org.csystem.util.string.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class PairOfTest {
+    public static void run()
+    {
+        ArrayList<Pair<Integer, String>> pairs = new ArrayList<>();
+        Random random = new Random();
+
+
+        while (true) {
+            int val = random.nextInt(-100, 100);
+
+            if (val == 0)
+                break;
+
+            pairs.add(Pair.of(val, StringUtil.generateRandomTextTR(random, random.nextInt(5, 11))));
+        }
+
+        for (Pair<Integer, String> p : pairs)
+            Console.writeLine(p);
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+
+/*--------------------------------------------------------
+	FILE NAME	: Pair.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 3rd March 2024
+
+	Pair class that represents a tuple
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.tuple;
+
+public final class Pair<F, S> {
+    public final F first;
+    public final S second;
+
+    public Pair(F first, S second)
+    {
+        this.first = first;
+        this.second = second;
+    }
+
+    public static <F, S> Pair<F, S> of(F first, S second)
+    {
+        return new Pair<>(first, second);
+    }
+
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Pair<?, ?> p && first.equals(p.first) && second.equals(p.second);
+    }
+
+    //...
+
+    public String toString()
+    {
+        return String.format("(%s, %s)", first, second);
+    }
+}
+
+
+
 /*----------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------*/

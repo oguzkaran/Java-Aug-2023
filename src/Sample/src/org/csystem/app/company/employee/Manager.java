@@ -35,7 +35,7 @@ public class Manager extends Employee {
 
     //...
 
-    public double calculateInsurancePayment()
+    public Double calculateInsurancePayment()
     {
         return m_salary * 1.5;
     }

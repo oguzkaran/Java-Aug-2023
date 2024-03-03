@@ -1,6 +1,6 @@
 package org.csystem.app.company.employee;
 
-public interface IInsurance {
-    double calculateInsurancePayment();
-    String getId();
+public interface IInsurance<P, ID> {
+    P calculateInsurancePayment();
+    ID getId();
 }

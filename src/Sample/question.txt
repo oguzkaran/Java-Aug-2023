@@ -1,0 +1,21 @@
+interface IX<T> {
+    void foo(T t);
+}
+
+interface IY<T> {
+    void foo(T t);
+}
+
+
+class A implements IX<Integer>, IY<String> {
+    //...
+    public void foo(Integer i)
+    {
+        //...
+    }
+
+    public void foo(String s)
+    {
+        //...
+    }
+}
