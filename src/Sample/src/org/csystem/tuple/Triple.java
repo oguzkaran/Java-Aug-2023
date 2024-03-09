@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Triple.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 3rd March 2024
+	LAST UPDATE	: 9th March 2024
 
 	Triple class that represents a tuple
 
@@ -11,25 +11,32 @@
 package org.csystem.tuple;
 
 public final class Triple<F, S, T> {
+    public final F first;
+    public final S second;
+    public final T third;
+
     public Triple(F first, S second, T third)
     {
-        throw new UnsupportedOperationException("Not yet implemented!...");
+        this.first = first;
+        this.second = second;
+        this.third = third;
     }
 
     public static <F, S, T> Triple<F, S, T> of(F first, S second, T third)
     {
-        throw new UnsupportedOperationException("Not yet implemented!...");
+        return new Triple<>(first, second, third);
     }
 
     public boolean equals(Object other)
     {
-        throw new UnsupportedOperationException("Not yet implemented!...");
+        return other instanceof Triple<?,?,?> t
+                && first.equals(t.first) && second.equals(t.second) && third.equals(t.third);
     }
 
     //...
 
     public String toString()
     {
-        throw new UnsupportedOperationException("Not yet implemented!...");
+        return String.format("(%s, %s, %s)", first, second, third);
     }
 }

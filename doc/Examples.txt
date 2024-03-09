@@ -34719,7 +34719,6 @@ public class PairOfTest {
     }
 }
 
-
 /*--------------------------------------------------------
 	FILE NAME	: Pair.java
 	AUTHOR		: Java-Aug-2023 Group
@@ -34747,7 +34746,6 @@ public final class Pair<F, S> {
         return new Pair<>(first, second);
     }
 
-
     public boolean equals(Object other)
     {
         return other instanceof Pair<?, ?> p && first.equals(p.first) && second.equals(p.second);
@@ -34761,7 +34759,166 @@ public final class Pair<F, S> {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+    09.03.2024
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.tuple.test;
 
+import org.csystem.tuple.Triple;
+import org.csystem.util.console.Console;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class TripleOfTest {
+    public static void run()
+    {
+        ArrayList<Triple<Integer, Integer, Integer>> points = new ArrayList<>();
+        Random random = new Random();
+
+        while (true) {
+            int val = random.nextInt(-100, 100);
+
+            if (val == 0)
+                break;
+
+            points.add(Triple.of(random.nextInt(-100, 100), random.nextInt(-100, 100), random.nextInt(-100, 100)));
+        }
+
+        for (Triple<Integer, Integer, Integer> point : points)
+            Console.writeLine(point);
+    }
+
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+/*--------------------------------------------------------
+	FILE NAME	: Triple.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 9th March 2024
+
+	Triple class that represents a tuple
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.tuple;
+
+public final class Triple<F, S, T> {
+    public final F first;
+    public final S second;
+    public final T third;
+
+    public Triple(F first, S second, T third)
+    {
+        this.first = first;
+        this.second = second;
+        this.third = third;
+    }
+
+    public static <F, S, T> Triple<F, S, T> of(F first, S second, T third)
+    {
+        return new Triple<>(first, second, third);
+    }
+
+    public boolean equals(Object other)
+    {
+        return other instanceof Triple<?,?,?> t
+                && first.equals(t.first) && second.equals(t.second) && third.equals(t.third);
+    }
+
+    //...
+
+    public String toString()
+    {
+        return String.format("(%s, %s, %s)", first, second, third);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Bir sınıf ya da bir metodun generic tür parametresi için bir kısıt verilebilir. Örneğin bir sınıf generic tür
+    parametresi için TWR kullanmak isteyebilir. Yani genric türün AutoCloseable olması tasarımdan dolayı gerekebilir. Bu
+    durumda derleyici generic tür parametresinin AutoCloseable olduğunu nasıl anlayacaktır? Bu durumda generic tür
+    parametreleri için kısıtlar (constraint) verilebilir. Bunun için genel olarak extends anahtar söcüğü kullanılır.
+    Kısıt verilen generic tür parametreleri, verilen kısıtlara uygun olarak açılmalıdır. Aksi durumda error oluşur.
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.app;
+
+import java.io.Closeable;
+import java.io.FileOutputStream;
+
+class App {
+    public static void main(String[] args)
+    {
+        Sample<FileOutputStream, MyRunnable> s1 = new Sample<>();
+        Sample<Closeable, Runnable> s2 = new Sample<>();
+        Sample<String, Runnable> s3; //error
+        //...
+    }
+}
+
+class MyRunnable implements Runnable {
+    public void run()
+    {
+        //...
+    }
+}
+
+class Sample<T extends AutoCloseable, K extends Runnable> {
+    //...
+    public void foo(T t, K k)
+    {
+        try (t) {
+            k.run();
+        }
+        catch (Exception ex)  {
+            //...
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Generic parametrelere ilişkin kısıtların diğer detayları Java ile Uygulama Geliştirme kurslarında
+    ele alınacaktır.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Generic türden bir nesne new operatörü ile doğrudan yaratılamaz. Benzer şekilde generi türden bir dizi de new
+    operatörü ile doğrudan yaratılamaz. Bunun için pek çok yöntem vardır. Burada aşağıdaki yöntemle nesne yaratma ele
+    alınacaktır. Aşağıdaki yöntemde nesne için önce Object türden nesne yaratılmış sonra tür dönüştürme operatörü ile
+    generic türe dönüştürülmüştür. Benzer şekilde dizi için önce Object türden bir dizi yaratılmış sonra generic dizi
+    referansına explicit olarak dönüştürülmüştür. Diğer yöntemler burada ele alınmayacaktır.
+
+    Anahtar Notlar: Bu yöntemde bir çok static kod analizi aracı uyarı verebilecektir. Bu uyarı ve nedeni şu aşamda
+    önemsizdir
+----------------------------------------------------------------------------------------------------------------------*/
+class Sample<T> {
+    private T m_t;
+    private T [] m_a;
+
+    public Sample(int size)
+    {
+        m_t = (T)new Object();
+        m_a = (T[])new Object[size];
+    }
+
+    //...
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Sınıf Çalışması: CSDArrayList<E> sınıfını aşağıdaki açıklamalara göre yazınız:
+    Açıklamalar:
+        - Sınıfın metotları ArrayList<E> sınıfındaki metotların yaptığı işleri yapacaktır.
+        - Metotların karmaşıklıklarının ArrayList<E> ile aynı olması gerekir.
+        - Metotlarda fırlatılacak exception'lar yine ArrayList<E> ile aynı olacaktır.
+        - Sınıfın public bölümünü değiştirmeden istediğiniz eklemeyi yapabilirsiniz.
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
 

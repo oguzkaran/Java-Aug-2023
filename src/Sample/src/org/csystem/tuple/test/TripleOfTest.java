@@ -1,29 +1,28 @@
 package org.csystem.tuple.test;
 
-import org.csystem.tuple.Pair;
+import org.csystem.tuple.Triple;
 import org.csystem.util.console.Console;
-import org.csystem.util.string.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PairOfTest {
+public class TripleOfTest {
     public static void run()
     {
-        ArrayList<Pair<Integer, String>> pairs = new ArrayList<>();
+        ArrayList<Triple<Integer, Integer, Integer>> points = new ArrayList<>();
         Random random = new Random();
-
+        
         while (true) {
             int val = random.nextInt(-100, 100);
 
             if (val == 0)
                 break;
 
-            pairs.add(Pair.of(val, StringUtil.generateRandomTextTR(random, random.nextInt(5, 11))));
+            points.add(Triple.of(random.nextInt(-100, 100), random.nextInt(-100, 100), random.nextInt(-100, 100)));
         }
 
-        for (Pair<Integer, String> p : pairs)
-            Console.writeLine(p);
+        for (Triple<Integer, Integer, Integer> point : points)
+            Console.writeLine(point);
     }
 
     public static void main(String[] args)

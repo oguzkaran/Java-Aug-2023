@@ -25,7 +25,6 @@ public final class Pair<F, S> {
         return new Pair<>(first, second);
     }
 
-
     public boolean equals(Object other)
     {
         return other instanceof Pair<?, ?> p && first.equals(p.first) && second.equals(p.second);
