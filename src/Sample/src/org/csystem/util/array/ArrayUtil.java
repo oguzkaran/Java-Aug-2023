@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: ArrayUtil.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 25th February 2024
+	LAST UPDATE	: 17th March 2024
 
 	Utility class for array operations
 
@@ -133,17 +133,17 @@ public final class ArrayUtil {
         return a.length == 0;
     }
 
-    public static String join(ArrayList list, char separator)
+    public static String join(ArrayList<String> list, char separator)
     {
         return join(list, String.valueOf(separator));
     }
 
-    public static String join(ArrayList list, String separator)
+    public static String join(ArrayList<String> list, String separator)
     {
         StringBuilder sb = new StringBuilder();
 
-        for (Object o : list)
-            sb.append((String)o).append(separator);
+        for (String s : list)
+            sb.append(s).append(separator);
 
         return sb.substring(0, sb.length() - separator.length());
     }

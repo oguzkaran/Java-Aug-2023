@@ -34908,6 +34908,330 @@ class Sample<T> {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
+    17.03.2024
+----------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------
+	FILE NAME	: ArrayUtil.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 17th March 2024
+
+	Utility class for array operations
+
+	Copyleft C and System Programmers Association (CSD)
+	All Rights Free
+---------------------------------------------------------*/
+package org.csystem.util.array;
+
+import java.util.ArrayList;
+import java.util.random.RandomGenerator;
+
+
+public final class ArrayUtil {
+    private ArrayUtil()
+    {}
+
+    private static void bubbleSortAscending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k + 1] < a[k])
+                    swap(a, k, k + 1);
+    }
+
+    private static void bubbleSortDescending(int [] a)
+    {
+        for (int i = 0; i < a.length - 1; ++i)
+            for (int k = 0; k < a.length - 1 - i; ++k)
+                if (a[k] < a[k + 1])
+                    swap(a, k, k + 1);
+    }
+
+    private static void selectionSortAscending(int [] a)
+    {
+        int min, minIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            min = a[i];
+            minIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (a[k] < min) {
+                    min = a[k];
+                    minIndex = k;
+                }
+
+            a[minIndex] = a[i];
+            a[i] = min;
+        }
+    }
+
+    private static void selectionSortDescending(int [] a)
+    {
+        int max, maxIndex;
+
+        for (int i = 0; i < a.length - 1; ++i) {
+            max = a[i];
+            maxIndex = i;
+
+            for (int k = i + 1; k < a.length; ++k)
+                if (max < a[k]) {
+                    max = a[k];
+                    maxIndex = k;
+                }
+
+            a[maxIndex] = a[i];
+            a[i] = max;
+        }
+    }
+
+    public static void addBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] += val;
+    }
+
+    public static void bubbleSort(int [] a)
+    {
+        bubbleSort(a, false);
+    }
+
+    public static void bubbleSort(int [] a, boolean desc)
+    {
+        if (desc)
+            bubbleSortDescending(a);
+        else
+            bubbleSortAscending(a);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int origin, int bound)
+    {
+        fillRandomArray(randomGenerator, a, a.length, origin, bound);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [] a, int count, int origin, int bound)
+    {
+        for (int i = 0; i < count; ++i)
+            a[i] = randomGenerator.nextInt(origin, bound);
+    }
+
+    public static void fillRandomArray(RandomGenerator randomGenerator, int [][] a, int origin, int bound)
+    {
+        for (int [] array : a)
+            fillRandomArray(randomGenerator, array, origin, bound);
+    }
+
+    public static int [] generateRandomArray(RandomGenerator random, int count, int origin, int bound)
+    {
+        int [] a = new int[count];
+
+        fillRandomArray(random, a, origin, bound);
+
+        return a;
+    }
+
+    public static int [] histogramData(int [] a, int n)
+    {
+        int [] result = new int[n + 1];
+
+        for (int val : a)
+            ++result[val];
+
+        return result;
+    }
+
+    public static boolean isEmpty(int [] a)
+    {
+        return a.length == 0;
+    }
+
+    public static String join(ArrayList<String> list, char separator)
+    {
+        return join(list, String.valueOf(separator));
+    }
+
+    public static String join(ArrayList<String> list, String separator)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : list)
+            sb.append(s).append(separator);
+
+        return sb.substring(0, sb.length() - separator.length());
+    }
+
+    public static int max(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.max(val, result);
+
+        return result;
+    }
+
+    public static int min(int [] a)
+    {
+        int result = a[0];
+
+        for (int val : a)
+            result = Math.min(val, result);
+
+        return result;
+    }
+
+    public static void multiplyBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] *= val;
+    }
+
+    public static int partition(int [] a, int threshold)
+    {
+        int partitionIndex = 0;
+
+        while (partitionIndex != a.length && a[partitionIndex] < threshold)
+            ++partitionIndex;
+
+        if (partitionIndex == a.length)
+            return partitionIndex;
+
+        for (int i = partitionIndex + 1; i < a.length; ++i)
+            if (a[i] < threshold)
+                swap(a, i, partitionIndex++);
+
+        return partitionIndex;
+    }
+
+    public static void print(int [] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [] a)
+    {
+        print(n, a, a.length);
+    }
+
+    public static void print(int [] a, int count)
+    {
+        print(1, a, count);
+    }
+
+    public static void print(int n, int [] a, int count)
+    {
+        print(n, a, count, " ", "\n");
+    }
+
+    public static void print(int [] a, int count, String sep, String end)
+    {
+        print(1, a, count, sep, end);
+    }
+
+    public static void print(int n, int [] a, int count, String sep, String end)
+    {
+        String fmt = String.format("%%0%dd%%s", n);
+
+        for (int i = 0; i < count; ++i)
+            System.out.printf(fmt, a[i], sep);
+
+        System.out.print(end);
+    }
+
+    public static void print(int [][] a)
+    {
+        print(1, a);
+    }
+
+    public static void print(int n, int [][] a)
+    {
+        for (int [] array : a)
+            print(n, array);
+    }
+
+    public static void reverse(int [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static void reverse(char [] a)
+    {
+        for (int i = 0; i < a.length / 2; ++i)
+            swap(a, i, a.length - 1 - i);
+    }
+
+    public static int [] reversed(int [] a)
+    {
+        int [] result = new int[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static char [] reversed(char [] a)
+    {
+        char [] result = new char[a.length];
+
+        for (int i = a.length - 1; i >= 0; --i)
+            result[result.length - 1 - i] = a[i];
+
+        return result;
+    }
+
+    public static void selectionSort(int [] a)
+    {
+        selectionSort(a, false);
+    }
+
+    public static void selectionSort(int [] a, boolean desc)
+    {
+        if (desc)
+            selectionSortDescending(a);
+        else
+            selectionSortAscending(a);
+    }
+
+    public static void subtractBy(int [][] a, int val)
+    {
+        for (int i = 0; i < a.length; ++i)
+            for (int k = 0; k < a[i].length; ++k)
+                a[i][k] -= val;
+    }
+
+    public static int sum(int [] a)
+    {
+        int total = 0;
+
+        for (int val : a)
+            total += val;
+
+        return total;
+    }
+
+    public static void swap(int [] a, int i, int k)
+    {
+        int temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+
+    public static void swap(char [] a, int i, int k)
+    {
+        char temp = a[i];
+
+        a[i] = a[k];
+        a[k] = temp;
+    }
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------------
     Sınıf Çalışması: CSDArrayList<E> sınıfını aşağıdaki açıklamalara göre yazınız:
     Açıklamalar:
         - Sınıfın metotları ArrayList<E> sınıfındaki metotların yaptığı işleri yapacaktır.
@@ -34915,6 +35239,281 @@ class Sample<T> {
         - Metotlarda fırlatılacak exception'lar yine ArrayList<E> ile aynı olacaktır.
         - Sınıfın public bölümünü değiştirmeden istediğiniz eklemeyi yapabilirsiniz.
 ----------------------------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------------------------
+    Anahtar Notlar: Anımsanacağı gibi bir nesneyi gösteren en az bir tane referans kaldığında nesne eligible duruma
+    geçemez. Bu durumda GC devreye girdiğinde nesneyi çöp olarak kabul etmez. Bazı durumlarda programcı nesneyi referanstan
+    kopartmayı gözden kaçırırsa bu durumda nesne hiç bir zaman eligible duruma gelemez. ArrayList sınıfının clear metodunda
+    ve remove metodunda böylesi bir durum oluşmaması için referanslar null'a çekilmiştir
+----------------------------------------------------------------------------------------------------------------------*/
+package org.csystem.collection.test;
+
+import org.csystem.collection.CSDArrayList;
+import org.csystem.util.console.Console;
+
+public class CSDArrayListConstructorTest {
+    public static void run()
+    {
+        CSDArrayList<String> list = new CSDArrayList<>(11);
+
+        Console.writeLine("Size:%d", list.size());
+        Console.writeLine("Capacity:%d", list.capacity());
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.collection.test;
+
+import org.csystem.collection.CSDArrayList;
+import org.csystem.util.console.Console;
+
+public class CSDArrayListAddTest {
+    public static void run()
+    {
+        CSDArrayList<String> list = new CSDArrayList<>(3);
+
+        while (true) {
+            String str = Console.readString("Bir yazı giriniz:");
+
+            if ("elma".equals(str))
+                break;
+
+            list.add(str);
+        }
+
+        Console.writeLine(list);
+        Console.writeLine("Size:%d", list.size());
+        Console.writeLine("Capacity:%d", list.capacity());
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.collection.test;
+
+import org.csystem.collection.CSDArrayList;
+import org.csystem.util.console.Console;
+
+public class CSDArrayListAddWithIndexTest {
+    public static void run()
+    {
+        CSDArrayList<String> list = new CSDArrayList<>(3);
+
+        while (true) {
+            String str = Console.readString("Bir yazı giriniz:");
+
+            if ("elma".equals(str))
+                break;
+
+            list.add(0, str);
+        }
+
+        Console.writeLine(list);
+        Console.writeLine("Size:%d", list.size());
+        Console.writeLine("Capacity:%d", list.capacity());
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+package org.csystem.collection.test;
+
+import org.csystem.collection.CSDArrayList;
+import org.csystem.util.console.Console;
+
+public class CSDArrayListRemoveTest {
+    public static void run()
+    {
+        CSDArrayList<String> list = new CSDArrayList<>(3);
+
+        while (true) {
+            String str = Console.readString("Bir yazı giriniz:");
+
+            if ("elma".equals(str))
+                break;
+
+            list.add(str);
+        }
+
+        Console.writeLine(list);
+
+        try {
+            String old = list.remove(3);
+
+            Console.writeLine("Silinen eleman:%s", old);
+        }
+        catch (IndexOutOfBoundsException ex) {
+            Console.writeLine(ex.getMessage());
+        }
+
+        Console.writeLine(list);
+    }
+    public static void main(String[] args)
+    {
+        run();
+    }
+}
+
+/*----------------------------------------------------------------
+	FILE		: CSDArrayList.java
+	AUTHOR		: Java-Aug-2023 Group
+	LAST UPDATE	: 17th Mar 2024
+
+	CSDArrayList collection class that represents a dynamic array
+
+	Copyleft (c) 1993 C and System Programmers Association
+	All Rights Free
+----------------------------------------------------------------*/
+package org.csystem.collection;
+
+import java.util.Arrays;
+
+public class CSDArrayList<E> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private E [] m_elements;
+    private int m_index;
+
+    private void throwIllegalArgumentException(String message)
+    {
+        throw new IllegalArgumentException(message);
+    }
+
+    private void throwIndexOutOfBoundsException(String message)
+    {
+        throw new IndexOutOfBoundsException(message);
+    }
+
+    private void checkCapacity(int capacity)
+    {
+        if (capacity < 0)
+            throwIllegalArgumentException(String.format("Capacity must be non-negative:%d", capacity));
+    }
+
+    private void checkIndex(int index)
+    {
+        if (index < 0 || index >= m_index)
+            throwIndexOutOfBoundsException(String.format("Index out of bounds:%d", index));
+    }
+
+    private void changeCapacity(int capacity)
+    {
+        m_elements = Arrays.copyOf(m_elements, capacity);
+    }
+
+    private void increaseCapacityIfNecessary()
+    {
+        if (m_elements.length == m_index)
+            changeCapacity(m_elements.length == 0 ? 1 : m_elements.length * 2);
+    }
+
+    public CSDArrayList()
+    {
+        m_elements = (E[])new Object[DEFAULT_CAPACITY];
+    }
+
+    public CSDArrayList(int initialCapacity)
+    {
+        checkCapacity(initialCapacity);
+        m_elements = (E[])new Object[initialCapacity];
+    }
+
+    public boolean add(E element)
+    {
+        increaseCapacityIfNecessary();
+        m_elements[m_index++] = element;
+
+        return true;
+    }
+
+    public void add(int index, E element)
+    {
+        increaseCapacityIfNecessary();
+
+        for (int i = m_index++; i > index; --i)
+            m_elements[i] = m_elements[i - 1];
+
+        m_elements[index] = element;
+    }
+
+    public int capacity()
+    {
+        return m_elements.length;
+    }
+
+    public void clear()
+    {
+        for (int i = 0; i < m_index; ++i)
+            m_elements[i] = null;
+
+        m_index = 0;
+    }
+
+    public void ensureCapacity(int minCapacity)
+    {
+        if (minCapacity > m_elements.length)
+            changeCapacity(Math.max(minCapacity, m_elements.length * 2));
+    }
+
+    public E get(int index)
+    {
+        checkIndex(index);
+
+        return m_elements[index];
+    }
+
+    public E remove(int index)
+    {
+        checkIndex(index);
+        E oldElement = m_elements[index];
+
+        for (int i = index; i < m_index - 1; ++i)
+            m_elements[i] = m_elements[i + 1];
+
+        m_elements[--m_index] = null;
+
+        return oldElement;
+    }
+
+    public E set(int index, E element)
+    {
+        checkIndex(index);
+        E oldElement = m_elements[index];
+
+        m_elements[index] = element;
+
+        return oldElement;
+    }
+
+    public int size()
+    {
+        return m_index;
+    }
+
+    public void trimToSize()
+    {
+        if (m_elements.length != m_index)
+            changeCapacity(m_index);
+    }
+
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder("[");
+
+        for (int i = 0; i < m_index; ++i)
+            sb.append(m_elements[i]).append(", ");
+
+        return (m_index != 0 ? sb.substring(0, sb.length() - 2) : sb.toString()) + "]";
+    }
+}
+
+
 
 /*----------------------------------------------------------------------------------------------------------------------
 
