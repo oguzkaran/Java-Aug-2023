@@ -10,12 +10,7 @@
 ----------------------------------------------------------------*/
 package org.csystem.math;
 
-import java.io.Serial;
-import java.io.Serializable;
-
-public class Fraction implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -1L;
+public class Fraction {
     private int m_a;
     private int m_b;
 
