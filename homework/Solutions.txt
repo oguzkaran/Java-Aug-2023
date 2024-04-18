@@ -2098,6 +2098,341 @@ class DateUtil {
 	}
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-1. sorunun bir çözümü
+	Aşağıdaki örnek yazıları kopyalayıp yapıştırabilirsiniz:
+	- Bu örnek {aslında {hiç zor} değil}
+	- Bu örnekten {daha {zor {örnekler de yapacağız} değil}} mi?
+	- Yanlış bir {giriş için hata mesajı yazdırılacak
+	- Bu örnekten {daha
+	- Bu örnekten daha zor }örnekler
+	- {test}
+	- {{test}}
+	- {}
+	- Bu örnekten }daha zor {örnekler
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        FindTextInCurlyApp.run();
+    }
+}
+
+class FindTextInCurlyApp {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Bir yazı giriniz:");
+            String s = kb.nextLine();
+
+            if ("elma".equals(s))
+                break;
+
+            FindTextInCurly findTextInCurly = new FindTextInCurly(s);
+
+            findTextInCurly.parse();
+
+            System.out.println(findTextInCurly.isValid ? findTextInCurly.result : "yanlış bir giriş");
+        }
+
+        System.out.println("Tekrar yapıyor musunuz?");
+    }
+}
+
+class FindTextInCurly {
+    public String text;
+    public String result;
+    public boolean isValid;
+
+    public FindTextInCurly(String txt)
+    {
+        text = txt;
+        result = text;
+        isValid = true;
+    }
+
+    public void parse()
+    {
+        for (;;) {
+            int open = result.indexOf('{');
+            int close = result.lastIndexOf('}');
+
+            if (open == -1 && close != -1 || open > close) {
+                isValid = false;
+                break;
+            }
+
+            if (close == -1)
+                break;
+
+            result = result.substring(open + 1, close);
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-2. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        PrintTextApp.run();
+    }
+}
+
+class PrintTextApp {
+    public static void printText(String text)
+    {
+        int len = text.length();
+
+        for (int i = 0; i < len; ++i)
+            System.out.println(text.substring(0, i + 1));
+    }
+
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        System.out.print("Bir yazı giriniz:");
+        String s = kb.nextLine();
+
+        printText(s);
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-3. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        WrapWithBracesApp.run();
+    }
+}
+
+class WrapWithBracesApp {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Bir yazı giriniz:");
+            String s = kb.nextLine();
+
+            System.out.println(StringUtil.wrapWithBraces(s));
+
+            if ("elma".equals(s))
+                break;
+        }
+    }
+}
+
+class StringUtil {
+    public static String wrapWithBraces(String s)
+    {
+        return String.format("(%s)", s.strip());
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-3. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        WrapWithBracesApp.run();
+    }
+}
+
+class WrapWithBracesApp {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Bir yazı giriniz:");
+            String s = kb.nextLine();
+
+            System.out.println(StringUtil.wrapWithBraces(s));
+
+            if ("elma".equals(s))
+                break;
+        }
+    }
+}
+
+class StringUtil {
+    public static String wrapWithBraces(String s)
+    {
+        return "(" + s.strip() + ")";
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-4. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        SqueezeTest.run();
+    }
+}
+
+class SqueezeTest {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Birinci yazıyı giriniz:");
+            String s1 = kb.nextLine();
+
+            System.out.print("İkinci yazıyı giriniz:");
+            String s2 = kb.nextLine();
+
+            System.out.println(StringUtil.squeeze(s1, s2));
+            if ("elma".equals(s1))
+                break;
+        }
+    }
+}
+
+class StringUtil {
+    public static String squeeze(String s1, String s2)
+    {
+        String str = "";
+        int len = s1.length();
+
+        for (int i = 0; i < len; ++i) {
+            char c = s1.charAt(i);
+
+            if (!s2.contains(c + ""))
+                str += c;
+        }
+
+        return str;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-5. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        ChangeCaseTest.run();
+    }
+}
+
+class ChangeCaseTest {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Bir yazı giriniz:");
+            String s = kb.nextLine();
+
+            System.out.println(StringUtil.changeCase(s));
+
+            if ("elma".equals(s))
+                break;
+        }
+    }
+}
+
+class StringUtil {
+    public static String changeCase(String s)
+    {
+        String str = "";
+
+        int len = s.length();
+
+        for (int i = 0; i < len; ++i) {
+            char c = s.charAt(i);
+
+            str += Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c);
+        }
+
+        return str;
+    }
+}
+
+/*----------------------------------------------------------------------------------------------------------------------
+	Homework-008-6. sorunun bir çözümü
+	(Not: Çözüm çalışma sorusunun verildiği tarihte işlenmiş olan konulara göre yazılmıştır)
+-----------------------------------------------------------------------------------------------------------------------*/
+package csd;
+
+class App {
+    public static void main(String[] args)
+    {
+        IsIdentifierTest.run();
+    }
+}
+
+class IsIdentifierTest {
+    public static void run()
+    {
+        java.util.Scanner kb = new java.util.Scanner(System.in);
+
+        for (;;) {
+            System.out.print("Değişken ismini giriniz:");
+            String s = kb.nextLine();
+
+            System.out.println(StringUtil.isIdentifier(s) ? "Geçerli" : "Geçersiz");
+
+            if ("elma".equals(s))
+                break;
+        }
+    }
+}
+
+class StringUtil {
+    public static boolean isIdentifier(String s)
+    {
+        if (s.isBlank() || s.equals("_"))
+            return false;
+
+        char ch = s.charAt(0);
+
+        if (!Character.isLetter(ch) && ch != '_' && ch != '$')
+            return false;
+
+        int len = s.length();
+
+        for (int i = 1; i < len; ++i) {
+            ch = s.charAt(i);
+
+            if (!Character.isLetter(ch) && !Character.isDigit(ch) && ch != '_' && ch != '$')
+                return false;
+        }
+
+        return true;
+    }
+}
+
+
 
 
 /*----------------------------------------------------------------------------------------------------------------------
