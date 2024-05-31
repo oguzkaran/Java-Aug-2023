@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: Console.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 25th May 2024
+	LAST UPDATE	: 31st May 2024
 
 	Utility class for console operations
 
@@ -157,28 +157,21 @@ public final class Console {
         }
     }
 
-    public static char readChar()
+    public static char readChar(String message)
     {
-        return readChar("");
+        return readChar(message, "");
     }
 
-    public static char readChar(String prompt)
+    public static char readChar(String message, String errorMessage)
     {
-        return readChar(prompt, "");
+        String str;
+
+        while (!(str = readString(message)).isEmpty() && str.length() != 1)
+            write(errorMessage);
+
+        return str.isEmpty() ? '\n' : str.charAt(0);
     }
 
-    public static char readChar(String prompt, String errorPrompt)
-    {
-        while (true) {
-            write(prompt);
-            String str = KB.nextLine();
-
-            if (str.length() <= 1)
-                return str.isEmpty() ? '\n' : str.charAt(0);
-
-            write(errorPrompt);
-        }
-    }
 
     public static String readString(String prompt)
     {
