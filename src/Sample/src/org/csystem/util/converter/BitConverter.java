@@ -1,7 +1,7 @@
 /*--------------------------------------------------------
 	FILE NAME	: BitConverter.java
 	AUTHOR		: Java-Aug-2023 Group
-	LAST UPDATE	: 26th June 2024
+	LAST UPDATE	: 29th June 2024
 
 	Utility class for converting primitive types and
 	String to/from byte array
@@ -12,6 +12,8 @@
 package org.csystem.util.converter;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public final class BitConverter {
     private BitConverter()
@@ -51,6 +53,16 @@ public final class BitConverter {
     public static byte[] getBytes(char a)
     {
         return ByteBuffer.allocate(Character.BYTES).putChar(a).array();
+    }
+
+    public static byte [] getBytes(String str)
+    {
+        return getBytes(str, StandardCharsets.UTF_8);
+    }
+
+    public static byte [] getBytes(String str, Charset charset)
+    {
+        return str.getBytes(charset);
     }
 
     public static byte[] getBytes(boolean a)
@@ -98,5 +110,13 @@ public final class BitConverter {
         return buf[0] == 1;
     }
 
-    //...
+    public static String getString(byte [] buf)
+    {
+        return getString(buf, StandardCharsets.UTF_8);
+    }
+
+    public static String getString(byte [] buf, Charset charset)
+    {
+        return new String(buf, charset);
+    }
 }
