@@ -3,9 +3,11 @@ package org.csystem.app.io.file.output;
 import org.csystem.util.string.StringUtil;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import static org.csystem.util.console.CommandLineUtil.checkLengthEquals;
@@ -16,7 +18,8 @@ public class AppendRandomLinesApp {
     {
         Random random = new Random();
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, StandardCharsets.UTF_8, true))) {
+        try (BufferedWriter bw = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8,
+                StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
             for (int i = 0; i < count; ++i)
                 bw.write(StringUtil.generateRandomTextEN(random, random.nextInt(5, 16)) + "\r\n");
         }

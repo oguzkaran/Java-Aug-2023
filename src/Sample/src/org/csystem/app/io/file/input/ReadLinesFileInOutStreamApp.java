@@ -1,19 +1,20 @@
 package org.csystem.app.io.file.input;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.csystem.util.console.CommandLineUtil.checkLengthEquals;
 import static org.csystem.util.console.Console.writeErrLine;
 import static org.csystem.util.console.Console.writeLine;
 
-public class ReadLinesApp {
+public class ReadLinesFileInOutStreamApp {
     private static void readFile(String path)
     {
-        try (BufferedReader br = Files.newBufferedReader(Path.of(path), StandardCharsets.UTF_8)) {
+        try (FileInputStream fis = new FileInputStream(path);
+             BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8))) {
             String line;
 
             while ((line = br.readLine()) != null)
