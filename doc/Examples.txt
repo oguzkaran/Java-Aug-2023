@@ -22496,7 +22496,7 @@ enum Month {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	enum sınıfının valuOf static metodu parametresi ile aldığı yazıyla aynı isimde enum sabiti varsa o sabite ilişkin
+	enum sınıfının valueOf static metodu parametresi ile aldığı yazıyla aynı isimde enum sabiti varsa o sabite ilişkin
 	referansa geri döner. Aksi durumda exception oluşur
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
