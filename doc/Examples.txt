@@ -23409,7 +23409,7 @@ class A {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Anımsanacağı gibi bir nesnenin yaratılmasının tamamlanması için en sıon noktada ilgili ctor'unun da çağrılması
+	Anımsanacağı gibi bir nesnenin yaratılmasının tamamlanması için en son aşamada ilgili ctor'unun da çağrılması
 	gerekir. Bu durumda türemiş sınıf nesnesi yaratıldığında içerisindeki taban sınıf nesnesinin da yaratılması yani
 	taban sınıf nesnesi için de ilgili ctor'un çağrılması gerekir. Türemiş sınıf ctor'undan önce, türemiş sınıfın ctor'unda
 	herhangi bir belirtme yapılmamışsa, taban sınıfın default ctor'u çağrılır. Yani aslında derleyici türemiş sınıfın
@@ -23655,7 +23655,7 @@ class A {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-	Bir sınıf extends anahtar sözcüğü hiç bir sınıftan türetilmese de java.lang paketi içerisinde bulunan Objecy isimli
+	Bir sınıf extends anahtar sözcüğü hiç bir sınıftan türetilmese de java.lang paketi içerisinde bulunan Object isimli
 	sınıftan türetilmiş olur. Bu durumda Object sınıfı her sınıfın doğrudan ya da dolaylı taban sınıfıdır. Böyle bir
 	tasarımın yani Object sınıfının anlamı ileride ele alınacaktır. Object sınıfı extends ile yazılabilir, yazılmasa da
 	aynı anlamda olduğundan yazmamayı tercih edeceğiz. Bu durumda Java'da taban sınıfı olmayan tek sınıf Object sınıfıdır
@@ -23724,7 +23724,7 @@ class A {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Anımsanacağı gibi sınıfın protected bölümü firendly sınıflar için public, farklı paketteki sınıflar için türetme
+    Anımsanacağı gibi sınıfın protected bölümü friendly sınıflar için public, farklı paketteki sınıflar için türetme
     söz konusu değilse private anlamındadır. Ancak türetme söz konusu ise protected bölüme erişim aşağıdaki gibi yine
     yapılamaz
 ----------------------------------------------------------------------------------------------------------------------*/
