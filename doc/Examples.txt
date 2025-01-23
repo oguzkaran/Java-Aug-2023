@@ -27099,7 +27099,7 @@ class App {
 
 /*----------------------------------------------------------------------------------------------------------------------
     ArrayList sınıfının set metodu ilgili indeksteki elemanı değiştirmek kullanılır. Bu metot O(1) karamaşıklıktadır.
-    Indek olarak [0, size) aralığı dışında bir değer verildiğinde exception oluşur. Metot değiştirme yapmadan önce tutulan
+    Indeks olarak [0, size) aralığı dışında bir değer verildiğinde exception oluşur. Metot değiştirme yapmadan önce tutulan
     elemana ilişkin referansa geri döner
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
