@@ -27714,14 +27714,14 @@ class A {
     dinamik türe göre metodun çağrılması sağlanabilir. Bu durumda oyuna yeni bir top da eklense topun karaktere gelip
     vurulması kodlarında değişiklik gerekmez.
 
-    2. Popüler tuğla kırma oyununda (birick world) top tuğlaya çarptığında tuğlanın şekline göre olay gerçekleşmektedir.
+    2. Popüler tuğla kırma oyununda (bricks world) top tuğlaya çarptığında tuğlanın şekline göre olay gerçekleşmektedir.
     Bu durumda çeşitli tuğlalar için çeşitli davranışlar söz konusu olmaktadır. Bu durumda topun tuğlaya çarptığı sırada
     tuğlanın ne olduğuna işlem yapmak yerine bir taban sınıf ve bir sanal metot (örneğin Brick sınıf ve hit metodu gibi)
     ile tüm tuğlalar bir matris düşünülüp ilgili elema top çarptığında sanal metot çağrılarak dinamik türe işlem yapılması
     sağlanabilir. Bu durumda yeni bir tuğla eklense de topun tuğlaya çarpması kodlarınde değişiklik gerekmez
 
     3. Popüler "angry birds" oyununda çeşitli kuşlar bir sapandan atılmaktadır. Oyunda atıldığında değişik davranışlar
-    gösteren kulşar bulunmaktadır. Bu durumda kuşun davranışının atıldıktan sonra kuşun türüne bakarak gerçekleştirilmesi
+    gösteren kuşlar bulunmaktadır. Bu durumda kuşun davranışının atıldıktan sonra kuşun türüne bakarak gerçekleştirilmesi
     yerine kuş için bir taban sınıf ve bir sanal metot (örneğin Bird sınıfı ve throwBird gibi) belirlenerek fırlatma işlemi
     için taban sınıf referansı kullanılarak yapılabilir. Bu durumda dinamik türe göre işlem yapılmış olur. Yeni bir kuş
     türü eklendiğinde fırlatma kodlarında değişiklik gerekmez.
