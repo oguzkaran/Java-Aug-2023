@@ -29708,7 +29708,7 @@ class IndeterminateException extends RuntimeException {
 ----------------------------------------------------------------------------------------------------------------------*/
 
 /*----------------------------------------------------------------------------------------------------------------------
-    try deyiminde finaly bloğu hiç catch bloğu olmadan da yazılabilir. Bu durumda programce exception oluşsa da oluşmasa
+    try deyiminde finaly bloğu hiç catch bloğu olmadan da yazılabilir. Bu durumda programcı exception oluşsa da oluşmasa
     da yapacağı işi finally bloğuna yazmıştır. Ancak fırlatılan exceptionn'ı yakalamamıştır. Aşağıdaki demo örneği
     inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
@@ -30511,7 +30511,7 @@ enum MathExceptionStatus {
 
 /*----------------------------------------------------------------------------------------------------------------------
    throws listesinde taban exception sınıfı varsa ondan türemiş exception listeye konmayabilir. Konması error oluşturmaz.
-   Ancak böyle durumda bir koymamayı tercih edeceğiz. Aşağıdaki demo örneği inceleyiniz
+   Ancak böyle durumda biz koymamayı tercih edeceğiz. Aşağıdaki demo örneği inceleyiniz
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
 
@@ -31579,7 +31579,7 @@ public final class StringUtil {
     aslında bir anlaşma (contract) belirtmek için kullanılır.
 
     Anahtar Notlar: Arayüzleri diğer tür bildirimlerinden ayırmak için isimlendirmede I ile başlatılması bazı programcılar
-    tarafınden bir convantion olarak kullanılmaktadır. Biz de arayüz isimlerimizi I ile başlatacağız. JavaSE'deki arayüzlerde
+    tarafınden bir convention olarak kullanılmaktadır. Biz de arayüz isimlerimizi I ile başlatacağız. JavaSE'deki arayüzlerde
     bu isimlendirme biçimine uyulmamaktadır.
 
     Bir arayüz içerisinde veri elemanı olabilir. Arayüz içerisinde bildirilen veri elemanları yazılsa da yazılmasa da
