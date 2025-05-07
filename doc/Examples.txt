@@ -32451,7 +32451,7 @@ public class MyString implements CharSequence {
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------
-    Java 17 ile birlikte rasgele sayı üretimine ilişkin RandomGenerator denilern bir arayüz eklenmiştir. Bu anlamda
+    Java 17 ile birlikte rasgele sayı üretimine ilişkin RandomGenerator denilen bir arayüz eklenmiştir. Bu anlamda
     bu arayüz ile birlikte farklı farklı rasgele sayı üretimi algoritmaları kullanılabilmektedir. Random gibi daha önce
     var olan pek çok sınıf da bu arayüzü desteklemektedir. Dolayısıyla bazı metotlar da Random sınıfına dolaylı olarak
     eklenmiştir. Örneğin iki parametre nextInt metodu aslında Random sınıfına RandomGenerator'dan gelmektedir. Aslında
