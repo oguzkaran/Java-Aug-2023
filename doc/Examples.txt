@@ -34489,7 +34489,7 @@ enum Color<T> { //error
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Bir metot generic olarak bildirilebilir. Generic bir metodun generic tür pametreleri metodun geri dönüş değerinden
+    Bir metot generic olarak bildirilebilir. Generic bir metodun generic tür parametreleri metodun geri dönüş değerinden
     önce açısal parantez içerisinde bildirilir. Generic bir metot çağrısında generic parametrelerin türleri çağrı
     sırasında tespit edilebiliyorsa (type inference/deduction) bu durumda açılım yapmaya gerek yoktur. Açılım metot
     isminden önce açısal parantez içerisinde yapılır
@@ -34663,7 +34663,6 @@ public class PairCtorTest {
     {
         ArrayList<Pair<Integer, String>> pairs = new ArrayList<>();
         Random random = new Random();
-
 
         while (true) {
             int val = random.nextInt(-100, 100);
@@ -34839,7 +34838,7 @@ public final class Triple<F, S, T> {
 
 /*----------------------------------------------------------------------------------------------------------------------
     Bir sınıf ya da bir metodun generic tür parametresi için bir kısıt verilebilir. Örneğin bir sınıf generic tür
-    parametresi için TWR kullanmak isteyebilir. Yani genric türün AutoCloseable olması tasarımdan dolayı gerekebilir. Bu
+    parametresi için TWR kullanmak isteyebilir. Yani generic türün AutoCloseable olması tasarımdan dolayı gerekebilir. Bu
     durumda derleyici generic tür parametresinin AutoCloseable olduğunu nasıl anlayacaktır? Bu durumda generic tür
     parametreleri için kısıtlar (constraint) verilebilir. Bunun için genel olarak extends anahtar söcüğü kullanılır.
     Kısıt verilen generic tür parametreleri, verilen kısıtlara uygun olarak açılmalıdır. Aksi durumda error oluşur.
