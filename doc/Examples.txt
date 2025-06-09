@@ -34357,14 +34357,14 @@ abstract class A<T, R> {
 
 /*----------------------------------------------------------------------------------------------------------------------
     Bir arayüz generic olabilir. Bu durumda bu arayüzü impelemnte eden sınıfların arayüzün sanal metotlarını generic
-    tür parametrelerine uygun olarak override etmesi gerekir. Generic arayüzler programalada çok kullanıldığından bazı
+    tür parametrelerine uygun olarak override etmesi gerekir. Generic arayüzler programlamada çok kullanıldığından bazı
     durumlarda bu arayüzü kullanan sınıflar açısında otomatik kutulama ve otomatik kutu açma maliyeti olmaması için
     generic arayüzün temel ilgili temel türler için benzer arayüzleri de kütüphane içerisinde bulundurulur. Şüphesiz bu
     durum generic sınıflar için de duruma göre yapılabilmektedir. Örneğin, Java 8'de çok kullanışan Predicate<T> arayüzünün
     kullanıldığı yerlerde kutulama bir maliyet oluşturabileceğinden JavaSE'de ayrıca IntPredicate, LongPredicate ve
     DoublePredicate gibi 3 tane daha benzer arayüz bulunur. Bu gruptaki arayüzlerin test isimli abstract metotları
     Predicate<T> için T türden, IntPredicate için int türden, LongPredicate için long türden ve DoublePredicate için
-    double türden prametreye sahiptir.
+    double türden parametreye sahiptir.
 
     Generic arayüzlerin de açılımsız kullanımı tavsiye edilmez. Generic bir arayüz taban sınıf referansı olarak
     kullanıldığında yine uygun açılım yapılmalıdır
