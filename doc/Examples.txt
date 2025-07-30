@@ -34406,7 +34406,7 @@ interface IX<T> {
 }
 
 /*----------------------------------------------------------------------------------------------------------------------
-    Aşağıdaki örnekte gerneric bir türün her açılımı ayrı bir tür belirtmediğinden A sınıfı aynı interface'i implemente
+    Aşağıdaki örnekte generic bir türün her açılımı ayrı bir tür belirtmediğinden A sınıfı aynı interface'i implemente
     etmiş olur ve bu durum da geçersizdir
 ----------------------------------------------------------------------------------------------------------------------*/
 package org.csystem.app;
@@ -34631,8 +34631,6 @@ class Sample<T> {
         //...
     }
 }
-
-
 
 /*----------------------------------------------------------------------------------------------------------------------
     Programlamada bir n-liyi (n-ary) temsil eden veri yapılarına genel olarak "tuple" denilmektedir. JavaSE'de "tuple"'ı
